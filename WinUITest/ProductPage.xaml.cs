@@ -80,5 +80,11 @@ namespace WinUITest
             await AddEditDialog.ShowAsync();
             ViewModel.IsEditing = false;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var pmw = new ProductMaintenanceWindow();
+            pmw.Activate();
+        }
     }
 }

@@ -78,7 +78,10 @@
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
-
+        <Button
+            Grid.Row="3"
+            Click="Button_Click"
+            Content="Press" />
         <ContentDialog
             x:Name="AddEditDialog"
             Grid.Row="3"
