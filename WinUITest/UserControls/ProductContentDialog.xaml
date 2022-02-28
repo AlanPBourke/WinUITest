@@ -20,11 +20,14 @@
     <RelativePanel>
         <TextBox
             x:Name="ProductCodeTextBox"
+            CharacterCasing="Upper"
             Header="Code"
+            MaxLength="16"
             Text="{Binding Path=ProductCode, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
         <TextBox
             x:Name="ProductNameTextBox"
             Header="Name"
+            MaxLength="100"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.RightOf="ProductCodeTextBox"
             Text="{Binding Path=ProductName, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
@@ -33,6 +36,8 @@
             Header="Price"
             RelativePanel.AlignLeftWith="ProductCodeTextBox"
             RelativePanel.Below="ProductCodeTextBox"
-            Text="{Binding Path=Price, UpdateSourceTrigger=Explicit, Mode=TwoWay, Converter={StaticResource PriceDecimalConverter}}" />
+            Text="{Binding Path=PriceString, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
     </RelativePanel>
 </ContentDialog>
+
+<!--  Text="{Binding Path=Price, UpdateSourceTrigger=Explicit, Mode=TwoWay, Converter={StaticResource PriceDecimalConverter}}" />  -->

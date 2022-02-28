@@ -10,26 +10,16 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Page.Resources>
-
+    <!--<Page.Resources>
         <converters:PriceDecimalConverter x:Name="PriceDecimalConverter" />
-
-        <!--<StandardUICommand
-            x:Name="UpdateCommand"
-            Command="{x:Bind ViewModel.Update}"
-            Kind="Save" />-->
-
-        <!--<XamlUICommand x:Name="AddCommand" Command="{x:Bind ViewModel.AddCommand}" />-->
-
-    </Page.Resources>
+    </Page.Resources>-->
 
     <Grid BorderThickness="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="200" />
-            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -54,6 +44,11 @@
                 Command="{x:Bind EditCommand}"
                 Icon="Edit"
                 Label="Edit" />
+            <AppBarButton
+                Name="DeleteButton"
+                Command="{x:Bind DeleteCommand}"
+                Icon="Delete"
+                Label="Delete" />
         </CommandBar>
 
         <controls:DataGrid

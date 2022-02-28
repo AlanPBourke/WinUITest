@@ -62,6 +62,19 @@ namespace WinUITest.ViewModel
             }
         }
 
+        public string PriceString
+        {
+            get => _product.Price.ToString();
+            set
+            {
+                if (_product.Price != Convert.ToDecimal(value))
+                {
+                    _product.Price = Convert.ToDecimal(value);
+                    RaisePropertyChanged(nameof(Price));
+                }
+            }
+        }
+
         public ProductViewModel(Product product)
         {
             _product = product;
@@ -70,6 +83,11 @@ namespace WinUITest.ViewModel
         public void Save()
         {
             App.DataProvider.Products.Save(_product);
+        }
+
+        public void Delete()
+        {
+            App.DataProvider.Products.Delete(_product.ProductId);
         }
     }
 }

@@ -30,5 +30,15 @@ namespace WinUITest.Data
         {
             return DataContext.Products;
         }
+
+        public void Delete(int id)
+        {
+            var product = DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
+            if (product != null)
+            {
+                DataContext.Products.Remove(product);
+                DataContext.SaveChanges();
+            }
+        }
     }
 }

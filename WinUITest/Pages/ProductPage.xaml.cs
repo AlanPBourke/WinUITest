@@ -32,6 +32,7 @@ namespace WinUITest
     {
         public ICommand AddCommand => new AsyncRelayCommand(OpenAddDialog);
         public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
+        public ICommand DeleteCommand => new AsyncRelayCommand(DeleteProduct);
 
         public ProductMaintenanceViewModel ViewModel;
         //private ProductViewModel SelectedProduct { get; set; }
@@ -48,7 +49,6 @@ namespace WinUITest
             if (g != null)
             {
                 ViewModel.SelectedProduct = g.SelectedItem as ProductViewModel;
-                System.Diagnostics.Debug.WriteLine($"SelectionChanged:{ViewModel.SelectedProduct.ProductCode}");
             }
         }
 
@@ -63,15 +63,16 @@ namespace WinUITest
 
         public async Task OpenAddDialog()
         {
-            ProductContentDialog pcd = new ProductContentDialog();
-            pcd.Title = "New Product";
-            pcd.DataContext = new ProductViewModel(new Product());
-            pcd.XamlRoot = this.Content.XamlRoot;
+            ProductContentDialog NewProductDialog = new ProductContentDialog(ViewModel);
+            NewProductDialog.Title = "New Product";
+            NewProductDialog.DataContext = new ProductViewModel(new Product());
+            NewProductDialog.XamlRoot = this.Content.XamlRoot;
             ViewModel.IsAdding = true;
-            await pcd.ShowAsync();
+            await NewProductDialog.ShowAsync();
             ViewModel.IsAdding = false;
-            ViewModel.SelectedProduct = pcd.DataContext as ProductViewModel;
+            ViewModel.SelectedProduct = NewProductDialog.DataContext as ProductViewModel;
             ViewModel.SelectedProduct.Save();
+            ViewModel.Load();
 
         }
 
@@ -79,14 +80,35 @@ namespace WinUITest
         {
             if (ViewModel.SelectedProduct != null)
             {
-                ProductContentDialog pcd = new ProductContentDialog();
-                pcd.Title = "Edit Product";
-                pcd.DataContext = ViewModel.SelectedProduct;
-                pcd.XamlRoot = this.Content.XamlRoot;
+                ProductContentDialog EditProductDialog = new ProductContentDialog(ViewModel);
+                EditProductDialog.Title = "Edit Product";
+                EditProductDialog.DataContext = ViewModel.SelectedProduct;
+                EditProductDialog.XamlRoot = this.Content.XamlRoot;
                 ViewModel.IsEditing = true;
-                await pcd.ShowAsync();
+                await EditProductDialog.ShowAsync();
                 ViewModel.IsEditing = false;
                 ViewModel.SelectedProduct.Save();
+            }
+        }
+
+        public async Task DeleteProduct()
+        {
+            if (ViewModel.SelectedProduct != null)
+            {
+                ContentDialog ConfirmDialog = new ContentDialog();
+                ConfirmDialog.Title = $"Delete {ViewModel.SelectedProduct.ProductCode} ?";
+                ConfirmDialog.PrimaryButtonText = "Delete";
+                ConfirmDialog.CloseButtonText = "Cancel";
+                ConfirmDialog.DefaultButton = ContentDialogButton.Secondary;
+                ConfirmDialog.XamlRoot = this.Content.XamlRoot;
+
+                var result = await ConfirmDialog.ShowAsync();
+                
+                if (result== ContentDialogResult.Primary)
+                {
+                    ViewModel.SelectedProduct.Delete();
+                    ViewModel.Load();
+                }
             }
         }
 

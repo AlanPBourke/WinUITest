@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using WinUITest.ViewModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,8 +21,10 @@ namespace WinUITest
 {
     public sealed partial class ProductContentDialog : ContentDialog
     {
-        public ProductContentDialog()
+        public ProductMaintenanceViewModel ViewModel;
+        public ProductContentDialog(ProductMaintenanceViewModel viewModel)
         {
+            ViewModel = viewModel;
             this.InitializeComponent();
         }
 

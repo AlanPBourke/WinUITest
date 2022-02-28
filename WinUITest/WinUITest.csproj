@@ -16,7 +16,7 @@
   <ItemGroup>
     <None Remove="CustomerPage.xaml" />
     <None Remove="InvoicingPage.xaml" />
-    <None Remove="MainWindow2.xaml" />
+    <None Remove="MainWindow.xaml" />
     <None Remove="ProductContentDialog.xaml" />
     <None Remove="ProductPage.xaml" />
     <None Remove="ResourceDictionary.xaml" />
@@ -60,22 +60,22 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="ProductPage.xaml">
+    <Page Update="Pages\ProductPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="InvoicingPage.xaml">
+    <Page Update="Pages\InvoicingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="CustomerPage.xaml">
+    <Page Update="Pages\CustomerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MainWindow2.xaml">
+    <Page Update="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

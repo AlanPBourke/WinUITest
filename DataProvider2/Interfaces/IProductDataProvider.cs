@@ -11,5 +11,6 @@ namespace WinUITest.Data
         IEnumerable<Product> GetAll();
         Product Get(int id);
         void Save(Product p);
+        void Delete(int id);
     }
 }
