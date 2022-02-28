@@ -8,3 +8,4 @@ https://www.learnentityframeworkcore.com/configuration/fluent-api/hasforeignkey-
 https://github.com/Microsoft/InventorySample
 
 https://xamlbrewer.wordpress.com/   <--
+https://github.com/nickrandolph/old-wpf-blog/tree/master/12-DataBoundDialogBox

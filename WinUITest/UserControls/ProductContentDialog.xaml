@@ -1,0 +1,38 @@
+﻿<ContentDialog
+    x:Class="WinUITest.ProductContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:WinUITest.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:WinUITest"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Product"
+    DefaultButton="Primary"
+    PrimaryButtonClick="OKHandler"
+    PrimaryButtonText="Ok"
+    SecondaryButtonText="Cancel"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <converters:PriceDecimalConverter x:Name="PriceDecimalConverter" />
+    </ContentDialog.Resources>
+
+    <RelativePanel>
+        <TextBox
+            x:Name="ProductCodeTextBox"
+            Header="Code"
+            Text="{Binding Path=ProductCode, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
+        <TextBox
+            x:Name="ProductNameTextBox"
+            Header="Name"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.RightOf="ProductCodeTextBox"
+            Text="{Binding Path=ProductName, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
+        <TextBox
+            x:Name="ProductPriceTextBox"
+            Header="Price"
+            RelativePanel.AlignLeftWith="ProductCodeTextBox"
+            RelativePanel.Below="ProductCodeTextBox"
+            Text="{Binding Path=Price, UpdateSourceTrigger=Explicit, Mode=TwoWay, Converter={StaticResource PriceDecimalConverter}}" />
+    </RelativePanel>
+</ContentDialog>

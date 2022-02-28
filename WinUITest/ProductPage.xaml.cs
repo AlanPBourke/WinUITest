@@ -63,28 +63,32 @@ namespace WinUITest
 
         public async Task OpenAddDialog()
         {
-            AddEditDialog.Title = "New Product";
-            AddEditDialog.DataContext = new Product();
+            ProductContentDialog pcd = new ProductContentDialog();
+            pcd.Title = "New Product";
+            pcd.DataContext = new ProductViewModel(new Product());
+            pcd.XamlRoot = this.Content.XamlRoot;
             ViewModel.IsAdding = true;
-            //  makes no difference: AddEditDialog.XamlRoot = this.Content.XamlRoot;
-            await AddEditDialog.ShowAsync();
+            await pcd.ShowAsync();
             ViewModel.IsAdding = false;
+            ViewModel.SelectedProduct = pcd.DataContext as ProductViewModel;
+            ViewModel.SelectedProduct.Save();
+
         }
 
         public async Task OpenEditDialog()
         {
-            AddEditDialog.Title = "Edit Product";
-            AddEditDialog.DataContext = ViewModel.SelectedProduct;
-            ViewModel.IsEditing = true;
-            //  makes no difference: AddEditDialog.XamlRoot = this.Content.XamlRoot;
-            await AddEditDialog.ShowAsync();
-            ViewModel.IsEditing = false;
+            if (ViewModel.SelectedProduct != null)
+            {
+                ProductContentDialog pcd = new ProductContentDialog();
+                pcd.Title = "Edit Product";
+                pcd.DataContext = ViewModel.SelectedProduct;
+                pcd.XamlRoot = this.Content.XamlRoot;
+                ViewModel.IsEditing = true;
+                await pcd.ShowAsync();
+                ViewModel.IsEditing = false;
+                ViewModel.SelectedProduct.Save();
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var pmw = new ProductMaintenanceWindow();
-            pmw.Activate();
-        }
     }
 }

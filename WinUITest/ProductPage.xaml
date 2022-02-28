@@ -78,39 +78,6 @@
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
-        <Button
-            Grid.Row="3"
-            Click="Button_Click"
-            Content="Press" />
-        <ContentDialog
-            x:Name="AddEditDialog"
-            Grid.Row="3"
-            Width="500"
-            CloseButtonText="Cancel"
-            IsPrimaryButtonEnabled="true"
-            IsSecondaryButtonEnabled="true"
-            PrimaryButtonText="Save">
-
-            <RelativePanel>
-                <TextBox
-                    x:Name="ProductCodeTextBox"
-                    Header="Code"
-                    Text="{Binding ProductCode, Mode=TwoWay}" />
-                <TextBox
-                    x:Name="ProductNameTextBox"
-                    Header="Name"
-                    RelativePanel.AlignRightWithPanel="True"
-                    RelativePanel.RightOf="ProductCodeTextBox"
-                    Text="{Binding ProductName, Mode=TwoWay}" />
-                <TextBox
-                    x:Name="ProductPriceTextBox"
-                    Header="Price"
-                    RelativePanel.AlignLeftWith="ProductCodeTextBox"
-                    RelativePanel.Below="ProductCodeTextBox"
-                    Text="{Binding Price, Mode=TwoWay, Converter={StaticResource PriceDecimalConverter}}" />
-            </RelativePanel>
-
-        </ContentDialog>
 
     </Grid>
 </Page>
