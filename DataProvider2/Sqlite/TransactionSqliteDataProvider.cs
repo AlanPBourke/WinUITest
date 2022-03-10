@@ -30,5 +30,10 @@ namespace WinUITest.Data
             DataContext.Transactions.Update(p);
             DataContext.SaveChanges();
         }
+
+        public IEnumerable<TransactionDetail> GetTransactionDetailsForTransaction(int transactionId)
+        {
+            return DataContext.TransactionDetails.Where(td => td.TransactionId == transactionId);
+        }
     }
 }

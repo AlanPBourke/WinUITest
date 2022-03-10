@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 // https://github.com/CommunityToolkit/MVVM-Samples/blob/master/docs/mvvm/PuttingThingsTogether.md
 
-namespace WinUITest.ViewModel
+namespace WinUITest.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

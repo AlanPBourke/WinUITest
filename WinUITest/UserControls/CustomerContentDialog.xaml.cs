@@ -17,25 +17,23 @@ using WinUITest.ViewModels;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace WinUITest
+namespace WinUITest.UserControls
 {
-    public sealed partial class ProductContentDialog : ContentDialog
+    public sealed partial class CustomerContentDialog : ContentDialog
     {
-        public ProductMaintenanceViewModel ViewModel;
-        public ProductContentDialog(ProductMaintenanceViewModel viewModel)
+        public CustomerMaintenanceViewModel ViewModel;
+        public CustomerContentDialog(CustomerMaintenanceViewModel viewModel)
         {
             ViewModel = viewModel;
             this.InitializeComponent();
         }
 
-        private void OKHandler(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            BindingExpression bindingExpressionCode = ProductCodeTextBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpressionCode.UpdateSource();
-            BindingExpression bindingExpressionName = ProductNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression bindingExpressionCustomerCode = CustomerCodeTextBox.GetBindingExpression(TextBox.TextProperty);
+            bindingExpressionCustomerCode.UpdateSource();
+            BindingExpression bindingExpressionName = NameTextBox.GetBindingExpression(TextBox.TextProperty);
             bindingExpressionName.UpdateSource();
-            BindingExpression bindingExpressionPrice = ProductNameTextBox.GetBindingExpression(TextBox.TextProperty);
-            bindingExpressionPrice.UpdateSource();
         }
     }
 }

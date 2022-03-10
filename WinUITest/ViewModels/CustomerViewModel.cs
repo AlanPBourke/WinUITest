@@ -17,7 +17,7 @@ using WinUITest.Data;
 
 // https://github.com/CommunityToolkit/MVVM-Samples/blob/master/docs/mvvm/PuttingThingsTogether.md
 
-namespace WinUITest.ViewModel
+namespace WinUITest.ViewModels
 {
     public class CustomerViewModel : ViewModelBase
     {
@@ -50,6 +50,12 @@ namespace WinUITest.ViewModel
                 }
             }
         }
+
+        public string BalanceString
+        {
+            get => _customer.Balance.ToString();
+        }
+
         public int CustomerId
         {
             get => _customer.CustomerId;

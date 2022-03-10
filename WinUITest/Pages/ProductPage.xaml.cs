@@ -13,7 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinUITest.DataProvider;
-using WinUITest.ViewModel;
+using WinUITest.ViewModels;
 using CommunityToolkit.WinUI.UI.Controls;
 using WinUITest.Data;
 using System.Windows.Input;
@@ -50,15 +50,6 @@ namespace WinUITest
             {
                 ViewModel.SelectedProduct = g.SelectedItem as ProductViewModel;
             }
-        }
-
-         public bool IsAddingOrEditing()
-        {
-            bool ret = false;
-            if (ViewModel.SelectedProduct != null)
-                ret = (ViewModel.IsEditing || ViewModel.IsAdding);
-            System.Diagnostics.Debug.WriteLine($"AddOrEdit:{ret}");
-            return ret; 
         }
 
         public async Task OpenAddDialog()

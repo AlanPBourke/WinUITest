@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WinUITest.Data;
 
-namespace WinUITest.ViewModel
+namespace WinUITest.ViewModels
 { 
     public class ProductViewModel : ViewModelBase
     {

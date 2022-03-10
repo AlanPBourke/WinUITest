@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WinUITest.Data;
-using WinUITest.ViewModel;
+using WinUITest.ViewModels;
 
-namespace WinUITest.ViewModel
+namespace WinUITest.ViewModels
 {
     public class TransactionViewModel : ViewModelBase
     {

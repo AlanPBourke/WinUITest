@@ -6,33 +6,53 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:WinUITest"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:WinUITest.ViewModel"
+    xmlns:vm="using:WinUITest.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <AutoSuggestBox
+        <CommandBar
+            Name="CustomerMaintenanceCommandBar"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="True">
+            <AppBarButton
+                Name="AddButton"
+                Command="{x:Bind AddCommand}"
+                Icon="Add"
+                Label="Add" />
+            <AppBarButton
+                Name="EditButton"
+                Command="{x:Bind EditCommand}"
+                Icon="Edit"
+                Label="Edit" />
+            <AppBarButton
+                Name="DeleteButton"
+                Command="{x:Bind DeleteCommand}"
+                Icon="Delete"
+                Label="Delete" />
+        </CommandBar>
+
+        <!--<AutoSuggestBox
             x:Name="CustomerSearchBox"
             Grid.Row="0"
             Width="500"
             PlaceholderText="Search"
             QueryIcon="Find"
-            QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
+            QuerySubmitted="AutoSuggestBox_QuerySubmitted" />-->
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBox
+
+        <!--<TextBox
                 Grid.Row="1"
                 Margin="10"
                 Header="Name"
@@ -41,24 +61,60 @@
                 Grid.Row="2"
                 Margin="10"
                 Header="Code"
-                Text="{x:Bind ViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <!--<Button Grid.Row="3" Content="Save" Margin="10 10 10 30"
-            IsEnabled="{x:Bind ViewModel.SelectedCustomer.CanSave, Mode=OneWay}"
-            Click="{x:Bind ViewModel.SelectedCustomer.Save}"/>-->
+                Text="{x:Bind ViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
 
-            <controls:DataGrid
-                Grid.Row="3"
-                AutoGenerateColumns="False"
-                ItemsSource="{x:Bind ViewModel.Transactions}">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Binding="{Binding ExpandedType}" Header="Type" />
-                    <controls:DataGridTextColumn Binding="{Binding TransactionDateAsString}" Header="Date" />
-                    <controls:DataGridTextColumn Binding="{Binding ValueAsString}" Header="Value" />
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
-        </Grid>
+        <controls:DataGrid
+            Name="CustomersGrid"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            ItemsSource="{x:Bind ViewModel.Customers}"
+            SelectionChanged="CustomersGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding CustomerCode}"
+                    Header="Code"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Name}"
+                    Header="Name"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding BalanceString}"
+                    Header="Balance"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
 
-        <ContentDialog
+        <controls:DataGrid
+            Name="TransactionsGrid"
+            Grid.Row="2"
+            AutoGenerateColumns="False"
+            ItemsSource="{x:Bind ViewModel.Transactions}"
+            SelectionChanged="TransactionsGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Binding="{Binding ExpandedType}" Header="Type" />
+                <controls:DataGridTextColumn Binding="{Binding TransactionDateAsString}" Header="Date" />
+                <controls:DataGridTextColumn Binding="{Binding ValueAsString}" Header="Value" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+        <controls:DataGrid
+            Name="TransactionDetailsGrid"
+            Grid.Row="3"
+            AutoGenerateColumns="False"
+            ItemsSource="{x:Bind ViewModel.TransactionDetails}"
+            SelectionChanged="TransactionDetailsGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Binding="{Binding ProductCode}" Header="Product" />
+                <controls:DataGridTextColumn Binding="{Binding QuantityString}" Header="Quantity" />
+                <controls:DataGridTextColumn Binding="{Binding ValueString}" Header="Value" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+        <!--<ContentDialog
             x:Name="SearchResultsDialog"
             IsPrimaryButtonEnabled="True"
             IsSecondaryButtonEnabled="False"
@@ -87,7 +143,7 @@
                 </ListView>
             </StackPanel>
 
-        </ContentDialog>
+        </ContentDialog>-->
 
     </Grid>
 </Page>

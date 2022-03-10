@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WinUITest.Data;
-using WinUITest.ViewModel;
+using WinUITest.ViewModels;
 
-namespace WinUITest.ViewModel
+namespace WinUITest.ViewModels
 {
     public class ProductMaintenanceViewModel : ViewModelBase
     {
