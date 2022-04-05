@@ -14,7 +14,7 @@
         x:Name="NavView"
         IsBackButtonVisible="Collapsed"
         ItemInvoked="NavView_ItemInvoked"
-        PaneDisplayMode="Top"
+        PaneDisplayMode="Left"
         SelectionFollowsFocus="Enabled">
 
         <NavigationView.MenuItems>

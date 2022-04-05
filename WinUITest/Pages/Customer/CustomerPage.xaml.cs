@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -17,6 +18,7 @@ using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinUITest.Data;
+using WinUITest.Pages;
 using WinUITest.UserControls;
 using WinUITest.ViewModels;
 
@@ -32,27 +34,30 @@ namespace WinUITest
     {
         public ICommand AddCommand => new AsyncRelayCommand(OpenAddDialog);
 
-        public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
-
-        public ICommand DeleteCommand => new AsyncRelayCommand(DeleteCustomer);
-
-        private Task DeleteCustomer()
-        {
-            throw new NotImplementedException();
-        }
-
         public CustomerMaintenanceViewModel ViewModel { get; }
         public CustomerPage()
         {
             this.InitializeComponent();
-            ViewModel = new CustomerMaintenanceViewModel();
+            ViewModel = App.Current.Services.GetService(typeof(CustomerMaintenanceViewModel)) as CustomerMaintenanceViewModel;
             ViewModel.Load();
+
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.Customers.Count > 0)
+            {
+                CustomersGrid.SelectedItem = ViewModel.Customers[0].CustomerId;
+                //CustomersGrid.ScrollIntoView(ViewModel.Customers[0], CustomersGrid.Columns[0]);
+            }
+            //CustomerContentFrame.NavigateToType(typeof(CustomerInfoPage), null, new FrameNavigationOptions { IsNavigationStackEnabled = true });
+            //CustomerInfoTransactionsNavigationView.SelectedItem = 1;
         }
 
         private void CustomersGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataGrid g = sender as DataGrid;
-            if (g != null && g.SelectedItem!=null)
+            if (g != null && g.SelectedItem != null)
             {
                 var cust = g.SelectedItem as CustomerViewModel;
                 ViewModel.SetCustomer(cust.CustomerId);
@@ -68,7 +73,6 @@ namespace WinUITest
                 ViewModel.SetTransaction(txn.TransactionId);
             }
         }
-
 
         private void TransactionDetailsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -89,21 +93,6 @@ namespace WinUITest
             ViewModel.Load();
         }
 
-        private async Task OpenEditDialog()
-        {
-            if (ViewModel.SelectedCustomer != null)
-            {
-                CustomerContentDialog EditCustomerDialog = new CustomerContentDialog(ViewModel);
-                EditCustomerDialog.Title = "Edit Customer";
-                EditCustomerDialog.DataContext = ViewModel.SelectedCustomer;
-                EditCustomerDialog.XamlRoot = this.Content.XamlRoot;
-                ViewModel.IsEditing = true;
-                await EditCustomerDialog.ShowAsync();
-                ViewModel.IsEditing = false;
-                ViewModel.SelectedCustomer.Save();
-                ViewModel.Load();
-            }
-        }
 
         //private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         //{

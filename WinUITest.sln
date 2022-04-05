@@ -7,7 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinUITest", "WinUITest\WinU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProvider2", "DataProvider2\DataProvider2.csproj", "{EC0CC5BB-BC08-4560-8431-AB8EB87119E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProvider2Tests", "DataProvider2Tests\DataProvider2Tests.csproj", "{67E29345-94DD-4BD5-A144-B8A457AC54F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProvider2Tests", "DataProvider2Tests\DataProvider2Tests.csproj", "{67E29345-94DD-4BD5-A144-B8A457AC54F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{2338D5EB-5193-4DFF-8B43-61606D0F39D3}"
+	ProjectSection(SolutionItems) = preProject
+		inventory sample.png = inventory sample.png
+		WinUITest\readme.txt = WinUITest\readme.txt
+		word\Van Arsdel TabView Setup.docx = word\Van Arsdel TabView Setup.docx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -30,6 +30,12 @@ namespace WinUITest
     public partial class App : Application
     {
         public static IDataProvider DataProvider { get; set; }
+        public IServiceProvider Services { get; }
+
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -37,7 +43,10 @@ namespace WinUITest
         /// </summary>
         public App()
         {
+            // Can't see textbox caret unless Dark in App SDK 1.1 !
+            App.Current.RequestedTheme = ApplicationTheme.Dark;     
             DataProvider = new SqliteDataProvider();
+            Services = ConfigureServices();
             this.InitializeComponent();
         }
 
@@ -53,5 +62,13 @@ namespace WinUITest
         }
 
         private Window m_window;
+
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+            services.AddSingleton<CustomerMaintenanceViewModel>();
+            services.AddSingleton(new CustomerViewModel(new Customer()));
+            return services.BuildServiceProvider();
+        }
     }
 }

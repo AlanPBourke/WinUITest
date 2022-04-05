@@ -19,7 +19,9 @@ namespace WinUITest.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Data Source={Path.Combine(Path.GetTempPath(), "winuitest.db")}");
+            var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            System.Diagnostics.Debug.WriteLine($"{DbPath}");
+            optionsBuilder.UseSqlite($"Data Source={Path.Combine(DbPath, "winuitest.db")}");
             optionsBuilder.UseLazyLoadingProxies();
         }
 

@@ -17,6 +17,9 @@
     <None Remove="CustomerPage.xaml" />
     <None Remove="InvoicingPage.xaml" />
     <None Remove="MainWindow.xaml" />
+    <None Remove="Pages\CustomerInfoPage.xaml" />
+    <None Remove="Pages\CustomerTransactionsPage.xaml" />
+    <None Remove="Pages\Customer\BlankPage1.xaml" />
     <None Remove="ProductContentDialog.xaml" />
     <None Remove="ProductPage.xaml" />
     <None Remove="ResourceDictionary.xaml" />
@@ -41,7 +44,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
@@ -54,6 +57,21 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Customer\BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Customer\CustomerTransactionsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Customer\CustomerInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\CustomerContentDialog.xaml">
@@ -76,7 +94,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\CustomerPage.xaml">
+    <Page Update="Pages\Customer\CustomerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -19,11 +19,13 @@ using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
-    public class CustomerViewModel : ViewModelBase
+    // TODO Move IEDitableObject to ViewModelBase
+    public class CustomerViewModel : ViewModelBase, IEditableObject
     {
         public bool CanSave => (string.IsNullOrEmpty(Name) == false);
-
         private readonly Customer _customer;
+        private CustomerViewModel _backup;
+
         public string Name
         {
             get => _customer.Name;
@@ -84,5 +86,26 @@ namespace WinUITest.ViewModels
             return $"{CustomerCode}\t{Name}\t{CanSave}";
         }
 
+        public void BeginEdit()
+        {
+            _backup = this.MemberwiseClone() as CustomerViewModel;
+        }
+
+        public void CancelEdit()
+        {
+            this.CustomerCode = _backup.CustomerCode;
+            this.Name = _backup.Name;
+        }
+
+        public void EndEdit()
+        {
+            
+        }
+
+        public CustomerViewModel()
+        {
+
+        }
+        
     }
 }

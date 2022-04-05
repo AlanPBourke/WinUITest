@@ -12,6 +12,7 @@
     SecondaryButtonText="Cancel"
     mc:Ignorable="d">
 
+
     <RelativePanel>
         <TextBox
             x:Name="CustomerCodeTextBox"
@@ -24,6 +25,6 @@
             MaxLength="100"
             RelativePanel.AlignRightWithPanel="True"
             RelativePanel.RightOf="CustomerCodeTextBox"
-            Text="{Binding Path=Name, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
+            Text="{Binding Path=CustomerCode, UpdateSourceTrigger=Explicit, Mode=TwoWay}" />
     </RelativePanel>
 </ContentDialog>
