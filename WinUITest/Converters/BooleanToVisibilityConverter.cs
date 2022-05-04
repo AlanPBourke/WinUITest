@@ -1,21 +1,21 @@
 ﻿using System;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 
 namespace WinUITest.Converters
 {
-    public class PriceDecimalConverter : IValueConverter
+    public class BooleanToVisibilityConverter : IValueConverter
     {
+        public bool IsInverse { get; set; }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-
-            var ret = value.ToString();
-
-            if (!string.IsNullOrEmpty(ret))
+            bool visibility = (bool)value;
+            if (IsInverse)
             {
-                ret = string.Format("{0:0.00}", ret);
+                visibility = !visibility;
             }
 
-            return ret;
+            return visibility ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

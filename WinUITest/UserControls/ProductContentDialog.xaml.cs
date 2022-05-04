@@ -21,10 +21,10 @@ namespace WinUITest
 {
     public sealed partial class ProductContentDialog : ContentDialog
     {
-        public ProductMaintenanceViewModel ViewModel;
-        public ProductContentDialog(ProductMaintenanceViewModel viewModel)
+        public ProductMaintenanceViewModel ViewModel { get;}
+        public ProductContentDialog()
         {
-            ViewModel = viewModel;
+            ViewModel = App.Current.Services.GetService(typeof(ProductMaintenanceViewModel)) as ProductMaintenanceViewModel;
             this.InitializeComponent();
         }
 
@@ -34,7 +34,7 @@ namespace WinUITest
             bindingExpressionCode.UpdateSource();
             BindingExpression bindingExpressionName = ProductNameTextBox.GetBindingExpression(TextBox.TextProperty);
             bindingExpressionName.UpdateSource();
-            BindingExpression bindingExpressionPrice = ProductNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression bindingExpressionPrice = ProductPriceTextBox.GetBindingExpression(TextBox.TextProperty);
             bindingExpressionPrice.UpdateSource();
         }
     }

@@ -31,7 +31,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <CommandBar
+            <!--<CommandBar
                 Name="CustomerAddCommandBar"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
@@ -45,7 +45,8 @@
                     Command="{x:Bind AddCommand}"
                     Icon="Add"
                     Label="Add" />
-                <!--<AppBarButton
+            -->
+            <!--<AppBarButton
                 Name="EditButton"
                 Command="{x:Bind EditCommand}"
                 Icon="Edit"
@@ -55,7 +56,8 @@
                 Command="{x:Bind DeleteCommand}"
                 Icon="Delete"
                 Label="Delete" />-->
-            </CommandBar>
+            <!--
+            </CommandBar>-->
 
             <controls:DataGrid
                 x:Name="CustomersGrid"

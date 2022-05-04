@@ -30,6 +30,15 @@ namespace WinUITest.ViewModels
             }
         }
 
+        public void SetProduct(int productId)
+        {
+            var product = App.DataProvider.Products.Get(productId);
+            if (product != null)
+            {
+                SelectedProduct = new ProductViewModel(product);
+            }
+        }
+
         private bool _isEditing { get; set; } = false;
         public bool IsEditing
         {

@@ -6,7 +6,7 @@
     xmlns:converters="using:WinUITest.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:WinUITest.ViewModelss"
+    xmlns:vm="using:WinUITest.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -19,7 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -44,6 +44,18 @@
                 Command="{x:Bind EditCommand}"
                 Icon="Edit"
                 Label="Edit" />
+            <AppBarButton
+                Name="SaveButton"
+                Command="{x:Bind SaveCommand}"
+                Icon="Save"
+                Label="Save"
+                Visibility="Collapsed" />
+            <AppBarButton
+                Name="CancelButton"
+                Command="{x:Bind CancelCommand}"
+                Icon="Cancel"
+                Label="Cancel"
+                Visibility="Collapsed" />
             <AppBarButton
                 Name="DeleteButton"
                 Command="{x:Bind DeleteCommand}"
@@ -73,6 +85,24 @@
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
+
+        <RelativePanel Grid.Row="2">
+
+            <TextBox
+                Name="CodeTextBox"
+                Width="150"
+                Header="Code"
+                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                Text="{x:Bind Path=ViewModel.SelectedProduct.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+                Name="NameTextBox"
+                Width="400"
+                Header="Name"
+                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                RelativePanel.Below="CodeTextBox"
+                Text="{x:Bind Path=ViewModel.SelectedProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        </RelativePanel>
 
     </Grid>
 </Page>

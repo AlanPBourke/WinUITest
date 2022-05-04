@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 // https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/implementing-basic-crud-functionality-with-the-entity-framework-in-asp-net-mvc-application
 // dotnet ef migrations add initial then dotnet ef database update
@@ -13,14 +9,13 @@ namespace WinUITest.Data
     public class SqliteContext : DbContext
     {
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
-        public DbSet<Transaction> Transactions { get; set;}
-        public DbSet<Customer> Customers { get; set;}
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            System.Diagnostics.Debug.WriteLine($"{DbPath}");
+            var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             optionsBuilder.UseSqlite($"Data Source={Path.Combine(DbPath, "winuitest.db")}");
             optionsBuilder.UseLazyLoadingProxies();
         }
@@ -45,7 +40,7 @@ namespace WinUITest.Data
 
             modelBuilder.Entity<Transaction>().Property(t => t.TransactionDate).HasDefaultValue(System.DateTime.Now);
             modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13), Type = "I", Value = 48.17m},
+                new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13), Type = "I", Value = 48.17m },
                 new Transaction { TransactionId = 2, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -22.19m },
                 new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -14.30m }
                 );

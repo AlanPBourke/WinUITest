@@ -68,6 +68,8 @@ namespace WinUITest
             var services = new ServiceCollection();
             services.AddSingleton<CustomerMaintenanceViewModel>();
             services.AddSingleton(new CustomerViewModel(new Customer()));
+            services.AddSingleton<ProductMaintenanceViewModel>();
+            services.AddSingleton(new ProductViewModel(new Product()));
             return services.BuildServiceProvider();
         }
     }

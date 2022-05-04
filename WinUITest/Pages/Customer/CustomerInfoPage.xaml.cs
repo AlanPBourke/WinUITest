@@ -1,22 +1,6 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
+﻿using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using WinUITest.Data;
-using WinUITest.UserControls;
 using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -31,12 +15,11 @@ namespace WinUITest.Pages
     public sealed partial class CustomerInfoPage : Page
     {
         //public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
-        public ICommand EditCommand => new RelayCommand(BeginEdit);
+        public ICommand AddCommand => new RelayCommand(Add);
+        public ICommand EditCommand => new RelayCommand(Edit);
         public ICommand SaveCommand => new RelayCommand(SaveChanges);
         public ICommand CancelCommand => new RelayCommand(CancelChanges);
-        public ICommand DeleteCommand => new AsyncRelayCommand(DeleteCustomer);
-
-        public CustomerMaintenanceViewModel InfoViewModel { get;}
+        public CustomerMaintenanceViewModel InfoViewModel { get; }
 
         public CustomerInfoPage()
         {
@@ -45,45 +28,99 @@ namespace WinUITest.Pages
             InfoViewModel.Load();
             DataContext = InfoViewModel;
         }
-
-        private void BeginEdit()
+        private void Add()
         {
-            //EditInfoViewModel = InfoViewModel.SelectedCustomer;
-            SaveButton.Visibility = Visibility.Visible;
-            CancelButton.Visibility = Visibility.Visible;
-            EditButton.Visibility = Visibility.Collapsed;
-            DeleteButton.Visibility = Visibility.Collapsed;
+            InfoViewModel.CustomerCodeError = false;
+            InfoViewModel.CustomerNameError = false;
+            InfoViewModel.IsAdding = true;
+            InfoViewModel.IsNavigating = false;
+            InfoViewModel.IsEditing = false;
+            InfoViewModel.SelectedCustomer = new CustomerViewModel(new Data.Customer());
+            InfoViewModel.SelectedCustomer.BeginEdit();
+        }
+
+        private void Edit()
+        {
+            InfoViewModel.IsAdding = false;
+            InfoViewModel.IsNavigating = false;
             InfoViewModel.IsEditing = true;
+            InfoViewModel.CustomerCodeError = false;
+            InfoViewModel.CustomerNameError = false;
             InfoViewModel.SelectedCustomer.BeginEdit();
         }
 
         private void SaveChanges()
         {
-            InfoViewModel.SelectedCustomer.Save();
-            InfoViewModel.SelectedCustomer.EndEdit();
-            InfoViewModel.IsEditing = false;
-            ResetToolbar();
+            if (InfoViewModel.Validate())
+            {
+                InfoViewModel.IsAdding = false;
+                InfoViewModel.IsNavigating = true;
+                InfoViewModel.IsEditing = false;
+                InfoViewModel.SelectedCustomer.Save();
+                InfoViewModel.SelectedCustomer.EndEdit();
+                InfoViewModel.Load();
+                InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
+                //ResetToolbar();
+                InfoViewModel.CustomerCodeError = false;
+                InfoViewModel.CustomerNameError = false;
+            }
         }
 
         private void CancelChanges()
         {
+            InfoViewModel.IsAdding = false;
+            InfoViewModel.IsNavigating = true;
             InfoViewModel.IsEditing = false;
-            InfoViewModel.SelectedCustomer.CancelEdit();
-            ResetToolbar();
+            InfoViewModel.CustomerCodeError = false;
+            InfoViewModel.CustomerNameError = false;
+            //InfoViewModel.IsAdding = false;
+
+            if (InfoViewModel.IsEditing)
+            {
+                InfoViewModel.SelectedCustomer.CancelEdit();
+            }
+            else
+            {
+                InfoViewModel.SetCustomer(InfoViewModel.Customers[0].CustomerId);
+            }
+
+            if (InfoViewModel.SelectedCustomer != null)
+            {
+                InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
+            }
+
+            // ResetToolbar();
         }
 
-        private void ResetToolbar()
+        //private void ResetToolbar()
+        //{
+        //    SaveButton.Visibility = Visibility.Collapsed;
+        //    CancelButton.Visibility = Visibility.Collapsed;
+        //    //EditButton.Visibility = Visibility.Visible;
+        //    DeleteButton.Visibility = Visibility.Visible;
+        //}
+
+        private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
-            SaveButton.Visibility = Visibility.Collapsed;
-            CancelButton.Visibility = Visibility.Collapsed;
-            EditButton.Visibility = Visibility.Visible;
-            DeleteButton.Visibility = Visibility.Visible;
+            InfoViewModel.IsAdding = false;
+            InfoViewModel.IsNavigating = true;
+            InfoViewModel.IsEditing = false;
+
+            if (InfoViewModel.CanDelete())
+            {
+                InfoViewModel.DeleteCustomer();
+                InfoViewModel.Load();
+                InfoViewModel.SetFirstCustomer();
+            }
+            DeleteButton.Flyout.Hide();
         }
 
-        private Task DeleteCustomer()
+        private void DeleteCancelClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            InfoViewModel.IsAdding = false;
+            InfoViewModel.IsNavigating = true;
+            InfoViewModel.IsEditing = false;
+            DeleteButton.Flyout.Hide();
         }
-
     }
 }

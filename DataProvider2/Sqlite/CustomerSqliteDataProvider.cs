@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 // https://docs.microsoft.com/en-us/ef/core/providers/sqlite/functions
 
@@ -34,7 +29,7 @@ namespace WinUITest.Data
                 .Take(10);
         }
 
-        public Customer Get(int id)
+        public Customer? Get(int id)
         {
             return DataContext.Customers.Where(c => c.CustomerId == id).FirstOrDefault();
         }
@@ -42,7 +37,27 @@ namespace WinUITest.Data
         public void Save(Customer c)
         {
             DataContext.Customers.Update(c);
-            DataContext.SaveChanges(); 
+            DataContext.SaveChanges();
+        }
+
+        public bool CustomerCodeExists(string customerCode)
+        {
+            return DataContext.Customers.Where(c => c.CustomerCode == customerCode).Count() > 0;
+        }
+
+        public bool CustomerHasTransactions(int customerId)
+        {
+            return DataContext.Transactions.Where(t => t.CustomerId == customerId).Count() > 0;
+        }
+
+        public void DeleteCustomer(int customerId)
+        {
+            var customerToDelete = Get(customerId);
+            if (customerToDelete != null)
+            {
+                DataContext.Customers.Remove(customerToDelete);
+                DataContext.SaveChanges();
+            }
         }
     }
 }

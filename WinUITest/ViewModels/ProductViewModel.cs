@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,9 +8,10 @@ using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 { 
-    public class ProductViewModel : ViewModelBase
+    public class ProductViewModel : ViewModelBase, IEditableObject
     {
         private readonly Product _product;
+        private ProductViewModel _backup;
 
         public int ProductId
         {
@@ -88,6 +90,23 @@ namespace WinUITest.ViewModels
         public void Delete()
         {
             App.DataProvider.Products.Delete(_product.ProductId);
+        }
+
+        public void BeginEdit()
+        {
+            _backup = this.MemberwiseClone() as ProductViewModel;
+        }
+
+        public void CancelEdit()
+        {
+            this.ProductCode = _backup.ProductCode;
+            this.ProductName = _backup.ProductName;
+            this.Price = _backup.Price; 
+        }
+
+        public void EndEdit()
+        {
+            throw new NotImplementedException();
         }
     }
 }

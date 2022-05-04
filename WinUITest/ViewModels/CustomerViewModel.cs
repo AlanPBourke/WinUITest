@@ -1,15 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using MvvmGen;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using WinUITest.Data;
 
 // https://github.com/dotnet/aspnetcore/issues/38238
@@ -19,9 +8,9 @@ using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
-    // TODO Move IEDitableObject to ViewModelBase
     public class CustomerViewModel : ViewModelBase, IEditableObject
     {
+
         public bool CanSave => (string.IsNullOrEmpty(Name) == false);
         private readonly Customer _customer;
         private CustomerViewModel _backup;
@@ -34,7 +23,6 @@ namespace WinUITest.ViewModels
                 if (_customer.Name != value)
                 {
                     _customer.Name = value;
-                    //RaisePropertyChanged();
                     RaisePropertyChanged(nameof(Name));
                 }
             }
@@ -48,7 +36,7 @@ namespace WinUITest.ViewModels
                 if (_customer.CustomerCode != value)
                 {
                     _customer.CustomerCode = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(CustomerCode));
                 }
             }
         }
@@ -99,13 +87,12 @@ namespace WinUITest.ViewModels
 
         public void EndEdit()
         {
-            
-        }
 
+        }
         public CustomerViewModel()
         {
 
         }
-        
+
     }
 }

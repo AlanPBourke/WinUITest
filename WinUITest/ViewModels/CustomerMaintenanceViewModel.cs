@@ -1,25 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
     public class CustomerMaintenanceViewModel : ViewModelBase
     {
-        public bool IsCustomerSelected => SelectedCustomer != null;
         public bool IsTransactionSelected => SelectedCustomer != null;
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
         public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
         public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; } = new();
         //public ObservableCollection<CustomerViewModel> SearchResults = new();
+        //public bool CustomerCodeError { get; set { RaisePropertyChanged(nameof(CustomerCodeError)); } }
+        //public bool CustomerNameError { get; set; }
+
+        private bool _isCustomerSelected;
+        public bool IsCustomerSelected
+        {
+            get => _isCustomerSelected;
+            set
+            {
+                _isCustomerSelected = SelectedCustomer != null;
+                RaisePropertyChanged(nameof(IsCustomerSelected));
+            }
+        }
+
+        private string _customerCodeErrorText = string.Empty;
+        public string CustomerCodeErrorText
+        {
+            get => _customerCodeErrorText;
+            set
+            {
+                _customerCodeErrorText = value;
+                RaisePropertyChanged(nameof(CustomerCodeErrorText));
+            }
+        }
+
+        private bool _customerCodeError;
+        public bool CustomerCodeError
+        {
+            get => _customerCodeError;
+            set
+            {
+                _customerCodeError = value;
+                RaisePropertyChanged(nameof(CustomerCodeError));
+            }
+        }
+
+        private bool _customerNameError;
+        public bool CustomerNameError
+        {
+            get => _customerNameError;
+            set
+            {
+                _customerNameError = value;
+                RaisePropertyChanged(nameof(CustomerNameError));
+            }
+        }
 
         private CustomerViewModel _selectedCustomer;
-
         public CustomerViewModel SelectedCustomer
         {
             get => _selectedCustomer;
@@ -28,7 +66,8 @@ namespace WinUITest.ViewModels
                 if (_selectedCustomer != value)
                 {
                     _selectedCustomer = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(SelectedCustomer));
+                    IsCustomerSelected = true;
                 }
             }
         }
@@ -42,7 +81,7 @@ namespace WinUITest.ViewModels
                 if (_selectedTransaction != value)
                 {
                     _selectedTransaction = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(SelectedTransaction));
                 }
             }
         }
@@ -56,7 +95,7 @@ namespace WinUITest.ViewModels
                 if (_selectedTransactionDetail != value)
                 {
                     _selectedTransactionDetail = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(SelectedTransactionDetail));
                 }
             }
         }
@@ -64,10 +103,18 @@ namespace WinUITest.ViewModels
         {
         }
 
+        public void SetFirstCustomer()
+        {
+            if (Customers.Count > 0)
+            {
+                SelectedCustomer = Customers[0];
+            }
+        }
+
         public void Load()
         {
             var customers = App.DataProvider.Customers.GetAll();
-            
+
             Customers.Clear();
 
             foreach (var customer in customers)
@@ -79,13 +126,19 @@ namespace WinUITest.ViewModels
         public void SetCustomer(int customerId)
         {
             var customer = App.DataProvider.Customers.Get(customerId);
-            SelectedCustomer = new CustomerViewModel(customer);
 
-            Transactions.Clear();
-            var transactionsForCustomer = App.DataProvider.Transactions.GetForCustomer(customerId);
-            foreach (var transaction in transactionsForCustomer)
+            if (customer != null)
             {
-                Transactions.Add(new TransactionViewModel(transaction));
+                SelectedCustomer = new CustomerViewModel(customer);
+                //    RaisePropertyChanged(nameof(SelectedCustomer));
+                //       RaisePropertyChanged(nameof(IsCustomerSelected));
+
+                Transactions.Clear();
+                var transactionsForCustomer = App.DataProvider.Transactions.GetForCustomer(customerId);
+                foreach (var transaction in transactionsForCustomer)
+                {
+                    Transactions.Add(new TransactionViewModel(transaction));
+                }
             }
         }
 
@@ -110,6 +163,18 @@ namespace WinUITest.ViewModels
             {
                 _isEditing = value;
                 RaisePropertyChanged(nameof(IsEditing));
+                RaisePropertyChanged(nameof(IsAddingOrEditing));
+            }
+        }
+
+        private bool _isNavigating { get; set; } = true;
+        public bool IsNavigating
+        {
+            get => _isNavigating;
+            set
+            {
+                _isNavigating = value;
+                RaisePropertyChanged(nameof(IsNavigating));
             }
         }
 
@@ -121,13 +186,74 @@ namespace WinUITest.ViewModels
             {
                 _isAdding = value;
                 RaisePropertyChanged(nameof(IsAdding));
+                RaisePropertyChanged(nameof(IsAddingOrEditing));
             }
         }
 
+        private bool _isAddingOrEditing { get; } = false;
         public bool IsAddingOrEditing
         {
-            get => _isAdding || _isEditing;
+            get => IsAdding || IsEditing;
         }
+
+        public bool Validate()
+        {
+            CustomerCodeError = false;
+            CustomerNameError = false;
+
+            if (String.IsNullOrWhiteSpace(SelectedCustomer.CustomerCode))
+            {
+                CustomerCodeError = true;
+                CustomerCodeErrorText = "Customer code cannot be empty.";
+            }
+            else
+            {
+                if (IsAdding && App.DataProvider.Customers.CustomerCodeExists(SelectedCustomer.CustomerCode))
+                {
+                    CustomerCodeError = true;
+                    CustomerCodeErrorText = "Customer code already exists.";
+                }
+            }
+
+            if (String.IsNullOrWhiteSpace(SelectedCustomer.Name))
+            {
+                CustomerNameError = true;
+            }
+
+            return (CustomerCodeError == false && CustomerNameError == false);
+        }
+
+        public bool CanDelete()
+        {
+            CustomerCodeError = false;
+
+            if (App.DataProvider.Customers.CustomerHasTransactions(SelectedCustomer.CustomerId))
+            {
+                CustomerCodeError = true;
+                CustomerCodeErrorText = "Customer has transactions and cannot be deleted.";
+                return false;
+            }
+
+            return true;
+        }
+
+        public void DeleteCustomer()
+        {
+            App.DataProvider.Customers.DeleteCustomer(SelectedCustomer.CustomerId);
+        }
+
+
+        //private bool _isAddingOrEditing { get; set; } = false;
+        //public bool IsAddingOrEditing
+        //{
+        //    get => _isAddingOrEditing;
+        //    set
+        //    {
+        //        _isAddingOrEditing = _isAdding || _isEditing;
+        //        RaisePropertyChanged(nameof(IsAddingOrEditing));
+        //    }
+
+        //}
 
         //public void SearchCustomer(string searchTerm)
         //{

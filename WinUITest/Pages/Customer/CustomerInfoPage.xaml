@@ -2,11 +2,8 @@
     x:Class="WinUITest.Pages.CustomerInfoPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:WinUITest.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:WinUITest.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -20,46 +17,89 @@
                 DefaultLabelPosition="Right"
                 IsOpen="True">
                 <AppBarButton
+                    Name="AddButton"
+                    Command="{x:Bind AddCommand}"
+                    Icon="Add"
+                    Label="Add"
+                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}" />
+                <AppBarButton
                     Name="EditButton"
                     Command="{x:Bind EditCommand}"
                     Icon="Edit"
-                    Label="Edit" />
+                    Label="Edit"
+                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}" />
                 <AppBarButton
                     Name="DeleteButton"
-                    Command="{x:Bind DeleteCommand}"
                     Icon="Delete"
-                    Label="Delete" />
+                    Label="Delete"
+                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}">
+
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <RelativePanel Width="600">
+                                <TextBlock
+                                    Name="TextBlock"
+                                    Style="{ThemeResource BaseTextBlockStyle}"
+                                    Text="Customer will be deleted. Do you want to continue?" />
+                                <Button
+                                    Name="YesButton"
+                                    Click="DeleteConfirmationClick"
+                                    Content="Yes"
+                                    RelativePanel.Below="TextBlock" />
+                                <Button
+                                    Click="DeleteCancelClick"
+                                    Content="No"
+                                    RelativePanel.Below="TextBlock"
+                                    RelativePanel.RightOf="YesButton" />
+                            </RelativePanel>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+
+                </AppBarButton>
                 <AppBarButton
                     Name="SaveButton"
                     Command="{x:Bind SaveCommand}"
                     Icon="Save"
                     Label="Save"
-                    Visibility="Collapsed" />
+                    Visibility="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
                 <AppBarButton
                     Name="CancelButton"
                     Command="{x:Bind CancelCommand}"
                     Icon="Cancel"
                     Label="Cancel"
-                    Visibility="Collapsed" />
+                    Visibility="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
             </CommandBar>
 
-            <!--  UpdateSourceTrigger is Explicit because otherwise would have to roll back db if  -->
-            <!--  the user cancelled. This is the reason for UpdateSource() in the codebehind.  -->
             <TextBox
                 Name="CodeTextBox"
-                Width="150"
+                Width="250"
+                CharacterCasing="Upper"
                 Header="Code"
-                IsEnabled="{x:Bind InfoViewModel.IsEditing, Mode=OneWay}"
+                IsEnabled="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}"
+                MaxLength="16"
                 RelativePanel.Below="CustomerEditDeleteCommandBar"
                 Text="{x:Bind Path=InfoViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock
+                Name="CodeErrorTextBlock"
+                Width="250"
+                Foreground="Red"
+                RelativePanel.Below="CodeTextBox"
+                Text="{x:Bind InfoViewModel.CustomerCodeErrorText, Mode=OneWay}"
+                Visibility="{x:Bind InfoViewModel.CustomerCodeError, Mode=OneWay}" />
             <TextBox
                 Name="NameTextBox"
-                Width="400"
+                Width="600"
                 Header="Name"
-                IsEnabled="{x:Bind InfoViewModel.IsEditing, Mode=OneWay}"
-                RelativePanel.Below="CodeTextBox"
+                IsEnabled="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}"
+                RelativePanel.Below="CodeErrorTextBlock"
                 Text="{x:Bind Path=InfoViewModel.SelectedCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+            <TextBlock
+                Name="NameErrorTextBlock"
+                Width="250"
+                Foreground="Red"
+                RelativePanel.Below="NameTextBox"
+                Text="Name cannot be empty."
+                Visibility="{x:Bind InfoViewModel.CustomerNameError, Mode=OneWay}" />
         </RelativePanel>
     </ScrollViewer>
 
