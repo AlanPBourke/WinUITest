@@ -8,6 +8,7 @@ using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
+
     public class CustomerViewModel : ViewModelBase, IEditableObject
     {
 
@@ -39,11 +40,6 @@ namespace WinUITest.ViewModels
                     RaisePropertyChanged(nameof(CustomerCode));
                 }
             }
-        }
-
-        public string BalanceString
-        {
-            get => _customer.Balance.ToString();
         }
 
         public int CustomerId
@@ -89,6 +85,7 @@ namespace WinUITest.ViewModels
         {
 
         }
+
         public CustomerViewModel()
         {
 

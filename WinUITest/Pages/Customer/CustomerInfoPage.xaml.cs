@@ -30,22 +30,14 @@ namespace WinUITest.Pages
         }
         private void Add()
         {
-            InfoViewModel.CustomerCodeError = false;
-            InfoViewModel.CustomerNameError = false;
-            InfoViewModel.IsAdding = true;
-            InfoViewModel.IsNavigating = false;
-            InfoViewModel.IsEditing = false;
+            SetMode("add");
             InfoViewModel.SelectedCustomer = new CustomerViewModel(new Data.Customer());
             InfoViewModel.SelectedCustomer.BeginEdit();
         }
 
         private void Edit()
         {
-            InfoViewModel.IsAdding = false;
-            InfoViewModel.IsNavigating = false;
-            InfoViewModel.IsEditing = true;
-            InfoViewModel.CustomerCodeError = false;
-            InfoViewModel.CustomerNameError = false;
+            SetMode("edit");
             InfoViewModel.SelectedCustomer.BeginEdit();
         }
 
@@ -53,28 +45,16 @@ namespace WinUITest.Pages
         {
             if (InfoViewModel.Validate())
             {
-                InfoViewModel.IsAdding = false;
-                InfoViewModel.IsNavigating = true;
-                InfoViewModel.IsEditing = false;
                 InfoViewModel.SelectedCustomer.Save();
                 InfoViewModel.SelectedCustomer.EndEdit();
                 InfoViewModel.Load();
                 InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
-                //ResetToolbar();
-                InfoViewModel.CustomerCodeError = false;
-                InfoViewModel.CustomerNameError = false;
+                SetMode("navigate");
             }
         }
 
         private void CancelChanges()
         {
-            InfoViewModel.IsAdding = false;
-            InfoViewModel.IsNavigating = true;
-            InfoViewModel.IsEditing = false;
-            InfoViewModel.CustomerCodeError = false;
-            InfoViewModel.CustomerNameError = false;
-            //InfoViewModel.IsAdding = false;
-
             if (InfoViewModel.IsEditing)
             {
                 InfoViewModel.SelectedCustomer.CancelEdit();
@@ -89,23 +69,11 @@ namespace WinUITest.Pages
                 InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
             }
 
-            // ResetToolbar();
+            SetMode("navigate");
         }
-
-        //private void ResetToolbar()
-        //{
-        //    SaveButton.Visibility = Visibility.Collapsed;
-        //    CancelButton.Visibility = Visibility.Collapsed;
-        //    //EditButton.Visibility = Visibility.Visible;
-        //    DeleteButton.Visibility = Visibility.Visible;
-        //}
 
         private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
-            InfoViewModel.IsAdding = false;
-            InfoViewModel.IsNavigating = true;
-            InfoViewModel.IsEditing = false;
-
             if (InfoViewModel.CanDelete())
             {
                 InfoViewModel.DeleteCustomer();
@@ -113,6 +81,7 @@ namespace WinUITest.Pages
                 InfoViewModel.SetFirstCustomer();
             }
             DeleteButton.Flyout.Hide();
+            SetMode("navigate");
         }
 
         private void DeleteCancelClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -121,6 +90,34 @@ namespace WinUITest.Pages
             InfoViewModel.IsNavigating = true;
             InfoViewModel.IsEditing = false;
             DeleteButton.Flyout.Hide();
+            SetMode("navigate");
+        }
+
+        private void SetMode(string mode)
+        {
+            switch (mode)
+            {
+                case "navigate":
+                default:
+                    InfoViewModel.IsNavigating = true;
+                    InfoViewModel.IsAdding = false;
+                    InfoViewModel.IsEditing = false;
+                    break;
+                case "add":
+                    InfoViewModel.IsNavigating = false;
+                    InfoViewModel.IsAdding = true;
+                    InfoViewModel.IsEditing = false;
+                    break;
+                case "edit":
+                    InfoViewModel.IsNavigating = false;
+                    InfoViewModel.IsAdding = false;
+                    InfoViewModel.IsEditing = true;
+                    break;
+            }
+
+            InfoViewModel.CustomerCodeError = false;
+            InfoViewModel.CustomerNameError = false;
+
         }
     }
 }

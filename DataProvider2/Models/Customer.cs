@@ -6,9 +6,13 @@ namespace WinUITest.Data
     {
         public int CustomerId { get; set; }         // pk by convention
 
+        [Required]
+        [MinLength(1)]
         [MaxLength(16)]
         public string CustomerCode { get; set; } = string.Empty;
 
+        [Required]
+        [MinLength(1)]
         [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
         public decimal Balance { get; set; }
