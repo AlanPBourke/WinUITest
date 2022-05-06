@@ -79,27 +79,20 @@
                 MaxLength="16"
                 RelativePanel.Below="CustomerEditDeleteCommandBar"
                 Text="{x:Bind Path=InfoViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock
-                Name="CodeErrorTextBlock"
-                Width="250"
-                Foreground="Red"
-                RelativePanel.Below="CodeTextBox"
-                Text="{x:Bind InfoViewModel.CustomerCodeErrorText, Mode=OneWay}"
-                Visibility="{x:Bind InfoViewModel.CustomerCodeError, Mode=OneWay}" />
             <TextBox
                 Name="NameTextBox"
                 Width="600"
                 Header="Name"
                 IsEnabled="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}"
-                RelativePanel.Below="CodeErrorTextBlock"
+                RelativePanel.Below="CodeTextBox"
                 Text="{x:Bind Path=InfoViewModel.SelectedCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
-                Name="NameErrorTextBlock"
+                Name="ErrorTextBlock"
                 Width="250"
                 Foreground="Red"
                 RelativePanel.Below="NameTextBox"
-                Text="Name cannot be empty."
-                Visibility="{x:Bind InfoViewModel.CustomerNameError, Mode=OneWay}" />
+                Text="{x:Bind InfoViewModel.SelectedCustomer.Errors, Mode=OneWay}"
+                Visibility="{x:Bind InfoViewModel.SelectedCustomer.HasErrors, Mode=OneWay}" />
         </RelativePanel>
     </ScrollViewer>
 

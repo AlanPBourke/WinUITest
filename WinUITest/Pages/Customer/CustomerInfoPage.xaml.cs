@@ -43,7 +43,7 @@ namespace WinUITest.Pages
 
         private void SaveChanges()
         {
-            if (InfoViewModel.Validate())
+            if (InfoViewModel.SelectedCustomer.HasErrors == false)
             {
                 InfoViewModel.SelectedCustomer.Save();
                 InfoViewModel.SelectedCustomer.EndEdit();
@@ -74,12 +74,13 @@ namespace WinUITest.Pages
 
         private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
-            if (InfoViewModel.CanDelete())
-            {
-                InfoViewModel.DeleteCustomer();
-                InfoViewModel.Load();
-                InfoViewModel.SetFirstCustomer();
-            }
+
+            //if (InfoViewModel.SelectedCustomer.HasErrors == false)
+            //{
+            InfoViewModel.SelectedCustomer.Delete();
+            //InfoViewModel.Load();
+            //InfoViewModel.SetFirstCustomer();
+            //}
             DeleteButton.Flyout.Hide();
             SetMode("navigate");
         }
@@ -114,10 +115,6 @@ namespace WinUITest.Pages
                     InfoViewModel.IsEditing = true;
                     break;
             }
-
-            InfoViewModel.CustomerCodeError = false;
-            InfoViewModel.CustomerNameError = false;
-
         }
     }
 }
