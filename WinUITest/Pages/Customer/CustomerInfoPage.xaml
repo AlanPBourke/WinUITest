@@ -2,6 +2,7 @@
     x:Class="WinUITest.Pages.CustomerInfoPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -93,6 +94,28 @@
                 RelativePanel.Below="NameTextBox"
                 Text="{x:Bind InfoViewModel.SelectedCustomer.Errors, Mode=OneWay}"
                 Visibility="{x:Bind InfoViewModel.SelectedCustomer.HasErrors, Mode=OneWay}" />
+            <controls:InAppNotification
+                x:Name="UserMaintenanceInAppNotification"
+                Grid.Row="3"
+                AnimationDuration="00:00:00.1000000"
+                Content="This is a test message."
+                HorizontalOffset="0"
+                RelativePanel.Below="ErrorTextBlock"
+                ShowDismissButton="True"
+                StackMode="Replace"
+                VerticalOffset="100">
+                <controls:InAppNotification.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Margin="0,0,0,8" Text="{Binding Value}" />
+                            <TextBlock
+                                Opacity="0.8"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{Binding Key}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </controls:InAppNotification.ContentTemplate>
+            </controls:InAppNotification>
         </RelativePanel>
     </ScrollViewer>
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
@@ -43,7 +42,6 @@ namespace WinUITest.ViewModels
         }
 
         private int _customerid;
-        [CustomValidation(typeof(CustomerViewModel), nameof(CanDeleteCustomer))]
         public int CustomerId
         {
             get => _customerid;
@@ -55,6 +53,7 @@ namespace WinUITest.ViewModels
         public CustomerViewModel(Customer customer)
         {
             _customer = customer;
+            CustomerId = _customer.CustomerId;
             CustomerCode = _customer.CustomerCode;
             Name = _customer.Name;
             Balance = _customer.Balance;
@@ -64,11 +63,7 @@ namespace WinUITest.ViewModels
 
         public void Delete()
         {
-            ValidateProperty(nameof(CustomerCode));
-            if (HasErrors == false)
-            {
-                Debug.WriteLine("Deleting");
-            }
+            App.DataProvider.Customers.DeleteCustomer(CustomerId);
         }
 
         public void Save()
@@ -114,7 +109,6 @@ namespace WinUITest.ViewModels
         private void CustomerViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
-            Debug.WriteLine($"Errors:{Errors}");
         }
 
         private void CustomerViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -123,7 +117,6 @@ namespace WinUITest.ViewModels
             {
                 OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
             }
-            Debug.WriteLine($"HasErrors:{HasErrors}");
         }
 
     }

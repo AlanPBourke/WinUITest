@@ -94,8 +94,8 @@ namespace WinUITest.ViewModels
             if (customer != null)
             {
                 SelectedCustomer = new CustomerViewModel(customer);
-                //    RaisePropertyChanged(nameof(SelectedCustomer));
-                //       RaisePropertyChanged(nameof(IsCustomerSelected));
+                OnPropertyChanged(nameof(SelectedCustomer));
+                OnPropertyChanged(nameof(IsCustomerSelected));
 
                 Transactions.Clear();
                 var transactionsForCustomer = App.DataProvider.Transactions.GetForCustomer(customerId);
@@ -160,7 +160,10 @@ namespace WinUITest.ViewModels
             get => IsAdding || IsEditing;
         }
 
-
+        public bool CanDelete()
+        {
+            return App.DataProvider.Customers.CustomerHasTransactions(SelectedCustomer.CustomerId) == false;
+        }
 
         public void DeleteCustomer()
         {

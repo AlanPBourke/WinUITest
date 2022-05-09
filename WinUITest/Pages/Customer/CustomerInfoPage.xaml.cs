@@ -77,10 +77,16 @@ namespace WinUITest.Pages
 
             //if (InfoViewModel.SelectedCustomer.HasErrors == false)
             //{
-            InfoViewModel.SelectedCustomer.Delete();
-            //InfoViewModel.Load();
-            //InfoViewModel.SetFirstCustomer();
-            //}
+            if (InfoViewModel.CanDelete())
+            {
+                InfoViewModel.SelectedCustomer.Delete();
+                InfoViewModel.Load();
+                InfoViewModel.SetFirstCustomer();
+            }
+            else
+            {
+                UserMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
+            }
             DeleteButton.Flyout.Hide();
             SetMode("navigate");
         }
