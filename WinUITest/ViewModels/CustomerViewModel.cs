@@ -12,7 +12,6 @@ using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
-
     public class CustomerViewModel : ObservableValidator, IEditableObject
     {
         public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
@@ -24,8 +23,8 @@ namespace WinUITest.ViewModels
         private string _customercode;
 
         [Required]
-        [MinLength(1)]
-        [MaxLength(100)]
+        [MinLength(1, ErrorMessage = "Name is required.")]
+        [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
         public string Name
         {
             get => _name;
@@ -33,8 +32,8 @@ namespace WinUITest.ViewModels
         }
 
         [Required]
-        [MinLength(1, ErrorMessage = "Customer Code cannot be empty sir.")]
-        [MaxLength(16, ErrorMessage = "Customer Code cannot be > 16.")]
+        [MinLength(1, ErrorMessage = "Codeis required.")]
+        [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
         public string CustomerCode
         {
             get => _customercode;

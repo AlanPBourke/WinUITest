@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels
 {
-    public class CustomerNavigationMenuItemViewModel : ViewModelBase
+    public class CustomerNavigationMenuItemViewModel : ObservableObject
     {
         public string Name { get; set; }
         public string Tag { get; set; }

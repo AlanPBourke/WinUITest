@@ -46,7 +46,7 @@ namespace WinUITest
                     pageType = typeof(CustomerPage);
                     break;
                 case "invoicing":
-                    pageType = typeof(InvoicingPage);
+                    pageType = typeof(TransactionsPage);
                     break;
                 case "products":
                     pageType = typeof(ProductPage);

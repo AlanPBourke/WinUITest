@@ -1,26 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
-using WinUITest.ViewModels;
 
 namespace WinUITest.ViewModels
 {
-    public class TransactionViewModel : ViewModelBase
+    public class TransactionViewModel : ObservableObject
     {
         private readonly Transaction _transaction;
 
-        public int TransactionId 
-        { 
+        public int TransactionId
+        {
             get => _transaction.TransactionId;
             set
             {
                 if (_transaction.TransactionId != value)
                 {
                     _transaction.TransactionId = value;
-                    RaisePropertyChanged(nameof(TransactionId));
+                    OnPropertyChanged(nameof(TransactionId));
                 }
 
             }
@@ -29,13 +25,13 @@ namespace WinUITest.ViewModels
         public string ExpandedType => _transaction.Type == "I" ? "Invoice" : "Credit";
         public string Type
         {
-            get => _transaction.Type; 
+            get => _transaction.Type;
             set
             {
                 if (value != _transaction.Type)
                 {
                     _transaction.Type = value;
-                    RaisePropertyChanged(nameof(Type));
+                    OnPropertyChanged(nameof(Type));
                 }
             }
         }
@@ -46,11 +42,11 @@ namespace WinUITest.ViewModels
         {
             get => _transaction.CustomerId;
             set
-            { 
+            {
                 if (value != _transaction.CustomerId)
                 {
                     _transaction.CustomerId = value;
-                    RaisePropertyChanged(nameof(CustomerId));
+                    OnPropertyChanged(nameof(CustomerId));
                 }
             }
         }
@@ -60,11 +56,11 @@ namespace WinUITest.ViewModels
         {
             get => _transaction.Value;
             set
-            { 
+            {
                 if (value != _transaction.Value)
                 {
                     _transaction.Value = value;
-                    RaisePropertyChanged(nameof(Value));
+                    OnPropertyChanged(nameof(Value));
                 }
             }
         }

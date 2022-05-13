@@ -13,6 +13,8 @@ namespace WinUITest.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<CustomerTransaction> CustomerTransactions { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -40,9 +42,9 @@ namespace WinUITest.Data
 
             modelBuilder.Entity<Transaction>().Property(t => t.TransactionDate).HasDefaultValue(System.DateTime.Now);
             modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13), Type = "I", Value = 48.17m },
-                new Transaction { TransactionId = 2, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -22.19m },
-                new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -14.30m }
+                new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, DateTimeKind.Local), Type = "I", Value = 48.17m },
+                new Transaction { TransactionId = 2, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, DateTimeKind.Local), Type = "C", Value = -22.19m },
+                new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, DateTimeKind.Local), Type = "C", Value = -14.30m }
                 );
 
             modelBuilder.Entity<TransactionDetail>().HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
@@ -52,6 +54,12 @@ namespace WinUITest.Data
                 new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Value = -22.19m },
                 new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Value = -14.30m }
                 );
+
+            // Map to database view
+            modelBuilder
+                .Entity<CustomerTransaction>()
+                .ToView(nameof(CustomerTransactions))
+                .HasKey(t => t.TransactionId);
 
         }
     }

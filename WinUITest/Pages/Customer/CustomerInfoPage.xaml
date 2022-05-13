@@ -22,18 +22,18 @@
                     Command="{x:Bind AddCommand}"
                     Icon="Add"
                     Label="Add"
-                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}" />
+                    Visibility="{x:Bind CustomerInfoViewModel.IsNavigating, Mode=OneWay}" />
                 <AppBarButton
                     Name="EditButton"
                     Command="{x:Bind EditCommand}"
                     Icon="Edit"
                     Label="Edit"
-                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}" />
+                    Visibility="{x:Bind CustomerInfoViewModel.IsNavigating, Mode=OneWay}" />
                 <AppBarButton
                     Name="DeleteButton"
                     Icon="Delete"
                     Label="Delete"
-                    Visibility="{x:Bind InfoViewModel.IsNavigating, Mode=OneWay}">
+                    Visibility="{x:Bind CustomerInfoViewModel.IsNavigating, Mode=OneWay}">
 
                     <AppBarButton.Flyout>
                         <Flyout>
@@ -62,13 +62,13 @@
                     Command="{x:Bind SaveCommand}"
                     Icon="Save"
                     Label="Save"
-                    Visibility="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                    Visibility="{x:Bind CustomerInfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
                 <AppBarButton
                     Name="CancelButton"
                     Command="{x:Bind CancelCommand}"
                     Icon="Cancel"
                     Label="Cancel"
-                    Visibility="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                    Visibility="{x:Bind CustomerInfoViewModel.IsAddingOrEditing, Mode=OneWay}" />
             </CommandBar>
 
             <TextBox
@@ -76,24 +76,24 @@
                 Width="250"
                 CharacterCasing="Upper"
                 Header="Code"
-                IsEnabled="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsEnabled="{x:Bind CustomerInfoViewModel.IsAddingOrEditing, Mode=OneWay}"
                 MaxLength="16"
                 RelativePanel.Below="CustomerEditDeleteCommandBar"
-                Text="{x:Bind Path=InfoViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{x:Bind Path=CustomerInfoViewModel.SelectedCustomer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox
                 Name="NameTextBox"
                 Width="600"
                 Header="Name"
-                IsEnabled="{x:Bind InfoViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsEnabled="{x:Bind CustomerInfoViewModel.IsAddingOrEditing, Mode=OneWay}"
                 RelativePanel.Below="CodeTextBox"
-                Text="{x:Bind Path=InfoViewModel.SelectedCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{x:Bind Path=CustomerInfoViewModel.SelectedCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
                 Name="ErrorTextBlock"
                 Width="250"
                 Foreground="Red"
                 RelativePanel.Below="NameTextBox"
-                Text="{x:Bind InfoViewModel.SelectedCustomer.Errors, Mode=OneWay}"
-                Visibility="{x:Bind InfoViewModel.SelectedCustomer.HasErrors, Mode=OneWay}" />
+                Text="{x:Bind CustomerInfoViewModel.SelectedCustomer.Errors, Mode=OneWay}"
+                Visibility="{x:Bind CustomerInfoViewModel.SelectedCustomer.HasErrors, Mode=OneWay}" />
             <controls:InAppNotification
                 x:Name="UserMaintenanceInAppNotification"
                 Grid.Row="3"

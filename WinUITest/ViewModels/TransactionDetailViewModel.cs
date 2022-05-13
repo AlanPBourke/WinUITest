@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels
 {
-    public class TransactionDetailViewModel : ViewModelBase
+    public class TransactionDetailViewModel : ObservableObject
     {
         private readonly TransactionDetail _transactionDetail;
 
@@ -30,7 +26,7 @@ namespace WinUITest.ViewModels
                 if (_transactionDetail.Quantity != value)
                 {
                     _transactionDetail.Quantity = value;
-                    RaisePropertyChanged(nameof(Quantity));
+                    OnPropertyChanged(nameof(Quantity));
                 }
             }
         }
@@ -49,7 +45,7 @@ namespace WinUITest.ViewModels
                 if (_transactionDetail.Value != value)
                 {
                     _transactionDetail.Value = value;
-                    RaisePropertyChanged(nameof(Value));
+                    OnPropertyChanged(nameof(Value));
                 }
             }
         }
@@ -62,7 +58,7 @@ namespace WinUITest.ViewModels
                 if (_transactionDetail.ProductCode != value)
                 {
                     _transactionDetail.ProductCode = value;
-                    RaisePropertyChanged(nameof(ProductCode));
+                    OnPropertyChanged(nameof(ProductCode));
                 }
             }
 

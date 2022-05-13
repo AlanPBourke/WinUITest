@@ -18,7 +18,6 @@
     <None Remove="MainWindow.xaml" />
     <None Remove="Pages\CustomerInfoPage.xaml" />
     <None Remove="Pages\CustomerTransactionsPage.xaml" />
-    <None Remove="Pages\Customer\BlankPage1.xaml" />
     <None Remove="ProductContentDialog.xaml" />
     <None Remove="ProductPage.xaml" />
     <None Remove="ResourceDictionary.xaml" />
@@ -55,11 +54,6 @@
     <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="Pages\Customer\CustomerTransactionsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -90,7 +84,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\CustomerPage.xaml">
+    <Page Update="Pages\Customer\CustomersPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

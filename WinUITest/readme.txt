@@ -17,4 +17,9 @@ https://kmatyaszek.github.io/wpf%20validation/2019/03/13/wpf-validation-using-in
 however this doesn't work with WinUI so
 https://github.com/microsoft/microsoft-ui-xaml/issues/4567
 
-some text to test branches
+adding a view
+https://khalidabuhakmeh.com/how-to-add-a-view-to-an-entity-framework-core-dbcontext
+
+CREATE VIEW TransactionsWithCustomerDetails as
+select t.TransactionDate, t.Type, t.Value, c.CustomerCode, c.Name
+from Transactions t left join Customers c on t.CustomerId = c.CustomerId

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WinUITest.Data
+﻿namespace WinUITest.Data
 {
     public interface ITransactionDataProvider
     {
+        //IEnumerable<Transaction> GetTransactions();
         IEnumerable<Transaction> GetForCustomer(int customerId);
-        IEnumerable<TransactionDetail> GetTransactionDetailsForTransaction(int transactionId);
-        Transaction Get(int id);
+        IEnumerable<TransactionDetail> GetTransactionDetailsForId(int transactionId);
+        Transaction GetById(int id);
         void Save(Transaction p);
     }
 }

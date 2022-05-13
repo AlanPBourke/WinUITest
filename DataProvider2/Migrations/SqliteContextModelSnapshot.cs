@@ -15,7 +15,7 @@ namespace WinUITest.DataProvider.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
             modelBuilder.Entity("WinUITest.Data.Customer", b =>
                 {
@@ -28,12 +28,10 @@ namespace WinUITest.DataProvider.Migrations
 
                     b.Property<string>("CustomerCode")
                         .IsRequired()
-                        .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("CustomerId");
@@ -88,13 +86,9 @@ namespace WinUITest.DataProvider.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasMaxLength(16)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProductId");
@@ -144,7 +138,7 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2022, 2, 9, 15, 42, 35, 245, DateTimeKind.Local).AddTicks(5238));
+                        .HasDefaultValue(new DateTime(2022, 5, 13, 12, 2, 32, 967, DateTimeKind.Local).AddTicks(751));
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -165,7 +159,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 1,
                             CustomerId = 1,
-                            TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "I",
                             Value = 48.17m
                         },
@@ -173,7 +167,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 2,
                             CustomerId = 1,
-                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
                             Value = -22.19m
                         },
@@ -181,7 +175,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 3,
                             CustomerId = 3,
-                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
                             Value = -14.30m
                         });

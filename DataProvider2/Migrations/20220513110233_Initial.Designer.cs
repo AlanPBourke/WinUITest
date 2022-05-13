@@ -11,13 +11,13 @@ using WinUITest.Data;
 namespace WinUITest.DataProvider.Migrations
 {
     [DbContext(typeof(SqliteContext))]
-    [Migration("20220207174224_transactiondetail")]
-    partial class transactiondetail
+    [Migration("20220513110233_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
             modelBuilder.Entity("WinUITest.Data.Customer", b =>
                 {
@@ -88,11 +88,9 @@ namespace WinUITest.DataProvider.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProductId");
@@ -142,10 +140,11 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2022, 2, 7, 17, 42, 23, 840, DateTimeKind.Local).AddTicks(8166));
+                        .HasDefaultValue(new DateTime(2022, 5, 13, 12, 2, 32, 967, DateTimeKind.Local).AddTicks(751));
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasMaxLength(1)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Value")
@@ -162,7 +161,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 1,
                             CustomerId = 1,
-                            TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "I",
                             Value = 48.17m
                         },
@@ -170,7 +169,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 2,
                             CustomerId = 1,
-                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
                             Value = -22.19m
                         },
@@ -178,7 +177,7 @@ namespace WinUITest.DataProvider.Migrations
                         {
                             TransactionId = 3,
                             CustomerId = 3,
-                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
                             Value = -14.30m
                         });

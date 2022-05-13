@@ -19,54 +19,54 @@ namespace WinUITest.Pages
         public ICommand EditCommand => new RelayCommand(Edit);
         public ICommand SaveCommand => new RelayCommand(SaveChanges);
         public ICommand CancelCommand => new RelayCommand(CancelChanges);
-        public CustomerMaintenanceViewModel InfoViewModel { get; }
+        public CustomerMaintenanceViewModel CustomerInfoViewModel { get; }
 
         public CustomerInfoPage()
         {
             this.InitializeComponent();
-            InfoViewModel = App.Current.Services.GetService(typeof(CustomerMaintenanceViewModel)) as CustomerMaintenanceViewModel;
-            InfoViewModel.Load();
-            DataContext = InfoViewModel;
+            CustomerInfoViewModel = App.Current.Services.GetService(typeof(CustomerMaintenanceViewModel)) as CustomerMaintenanceViewModel;
+            CustomerInfoViewModel.Load();
+            DataContext = CustomerInfoViewModel;
         }
         private void Add()
         {
             SetMode("add");
-            InfoViewModel.SelectedCustomer = new CustomerViewModel(new Data.Customer());
-            InfoViewModel.SelectedCustomer.BeginEdit();
+            CustomerInfoViewModel.SelectedCustomer = new CustomerViewModel(new Data.Customer());
+            CustomerInfoViewModel.SelectedCustomer.BeginEdit();
         }
 
         private void Edit()
         {
             SetMode("edit");
-            InfoViewModel.SelectedCustomer.BeginEdit();
+            CustomerInfoViewModel.SelectedCustomer.BeginEdit();
         }
 
         private void SaveChanges()
         {
-            if (InfoViewModel.SelectedCustomer.HasErrors == false)
+            if (CustomerInfoViewModel.SelectedCustomer.HasErrors == false)
             {
-                InfoViewModel.SelectedCustomer.Save();
-                InfoViewModel.SelectedCustomer.EndEdit();
-                InfoViewModel.Load();
-                InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
+                CustomerInfoViewModel.SelectedCustomer.Save();
+                CustomerInfoViewModel.SelectedCustomer.EndEdit();
+                CustomerInfoViewModel.Load();
+                CustomerInfoViewModel.SetCustomer(CustomerInfoViewModel.SelectedCustomer.CustomerId);
                 SetMode("navigate");
             }
         }
 
         private void CancelChanges()
         {
-            if (InfoViewModel.IsEditing)
+            if (CustomerInfoViewModel.IsEditing)
             {
-                InfoViewModel.SelectedCustomer.CancelEdit();
+                CustomerInfoViewModel.SelectedCustomer.CancelEdit();
             }
             else
             {
-                InfoViewModel.SetCustomer(InfoViewModel.Customers[0].CustomerId);
+                CustomerInfoViewModel.SetCustomer(CustomerInfoViewModel.Customers[0].CustomerId);
             }
 
-            if (InfoViewModel.SelectedCustomer != null)
+            if (CustomerInfoViewModel.SelectedCustomer != null)
             {
-                InfoViewModel.SetCustomer(InfoViewModel.SelectedCustomer.CustomerId);
+                CustomerInfoViewModel.SetCustomer(CustomerInfoViewModel.SelectedCustomer.CustomerId);
             }
 
             SetMode("navigate");
@@ -77,11 +77,11 @@ namespace WinUITest.Pages
 
             //if (InfoViewModel.SelectedCustomer.HasErrors == false)
             //{
-            if (InfoViewModel.CanDelete())
+            if (CustomerInfoViewModel.CanDelete())
             {
-                InfoViewModel.SelectedCustomer.Delete();
-                InfoViewModel.Load();
-                InfoViewModel.SetFirstCustomer();
+                CustomerInfoViewModel.SelectedCustomer.Delete();
+                CustomerInfoViewModel.Load();
+                CustomerInfoViewModel.SetFirstCustomer();
             }
             else
             {
@@ -93,9 +93,9 @@ namespace WinUITest.Pages
 
         private void DeleteCancelClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
-            InfoViewModel.IsAdding = false;
-            InfoViewModel.IsNavigating = true;
-            InfoViewModel.IsEditing = false;
+            CustomerInfoViewModel.IsAdding = false;
+            CustomerInfoViewModel.IsNavigating = true;
+            CustomerInfoViewModel.IsEditing = false;
             DeleteButton.Flyout.Hide();
             SetMode("navigate");
         }
@@ -106,19 +106,19 @@ namespace WinUITest.Pages
             {
                 case "navigate":
                 default:
-                    InfoViewModel.IsNavigating = true;
-                    InfoViewModel.IsAdding = false;
-                    InfoViewModel.IsEditing = false;
+                    CustomerInfoViewModel.IsNavigating = true;
+                    CustomerInfoViewModel.IsAdding = false;
+                    CustomerInfoViewModel.IsEditing = false;
                     break;
                 case "add":
-                    InfoViewModel.IsNavigating = false;
-                    InfoViewModel.IsAdding = true;
-                    InfoViewModel.IsEditing = false;
+                    CustomerInfoViewModel.IsNavigating = false;
+                    CustomerInfoViewModel.IsAdding = true;
+                    CustomerInfoViewModel.IsEditing = false;
                     break;
                 case "edit":
-                    InfoViewModel.IsNavigating = false;
-                    InfoViewModel.IsAdding = false;
-                    InfoViewModel.IsEditing = true;
+                    CustomerInfoViewModel.IsNavigating = false;
+                    CustomerInfoViewModel.IsAdding = false;
+                    CustomerInfoViewModel.IsEditing = true;
                     break;
             }
         }

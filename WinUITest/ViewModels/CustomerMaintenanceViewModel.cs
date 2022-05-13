@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels
 {
-    public class CustomerMaintenanceViewModel : ObservableRecipient
+    public class CustomerMaintenanceViewModel : ObservableObject
     {
         public bool IsTransactionSelected => SelectedCustomer != null;
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
@@ -108,11 +108,11 @@ namespace WinUITest.ViewModels
 
         public void SetTransaction(int transactionId)
         {
-            var txn = App.DataProvider.Transactions.Get(transactionId);
+            var txn = App.DataProvider.Transactions.GetById(transactionId);
             SelectedTransaction = new TransactionViewModel(txn);
 
             TransactionDetails.Clear();
-            var transactionDetailsForTransaction = App.DataProvider.Transactions.GetTransactionDetailsForTransaction(SelectedTransaction.TransactionId);
+            var transactionDetailsForTransaction = App.DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);
             foreach (var transaction in transactionDetailsForTransaction)
             {
                 TransactionDetails.Add(new TransactionDetailViewModel(transaction));
