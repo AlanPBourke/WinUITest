@@ -26,13 +26,13 @@ namespace WinUITest.Pages
     {
         public static readonly DependencyProperty TransactionsViewModelProperty
             = DependencyProperty.Register(nameof(TransactionsViewModel), 
-                typeof(CustomerMaintenanceViewModel), 
+                typeof(CustomerPageViewModel), 
                 typeof(CustomerTransactionsPage), 
                 new PropertyMetadata(null));
         
-        public CustomerMaintenanceViewModel TransactionsViewModel
+        public CustomerPageViewModel TransactionsViewModel
         {
-            get { return (CustomerMaintenanceViewModel)GetValue(TransactionsViewModelProperty); } 
+            get { return (CustomerPageViewModel)GetValue(TransactionsViewModelProperty); } 
             set { SetValue(TransactionsViewModelProperty, value); }
         }
         public CustomerTransactionsPage()

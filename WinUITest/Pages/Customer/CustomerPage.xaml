@@ -14,9 +14,9 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerNavigationMenuItemViewModel">
+        <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerPageMenuViewModel">
             <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
-        </DataTemplate>
+        </DataTemplate>-->
         <converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />
     </Page.Resources>
 
@@ -89,7 +89,7 @@
 
         <Pivot x:Name="CustomerPivot" Grid.Row="2">
             <PivotItem Header="Information">
-                <views:CustomerInfoPage />
+                <views:CustomerDetailsPage />
             </PivotItem>
             <PivotItem Header="Transactions">
                 <views:CustomerTransactionsPage TransactionsViewModel="{x:Bind ViewModel}" />

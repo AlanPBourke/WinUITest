@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels
 {
-    public class CustomerMaintenanceViewModel : ObservableObject
+    public class CustomerPageViewModel : ObservableObject
     {
         public bool IsTransactionSelected => SelectedCustomer != null;
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
@@ -63,7 +63,7 @@ namespace WinUITest.ViewModels
                 }
             }
         }
-        public CustomerMaintenanceViewModel()
+        public CustomerPageViewModel()
         {
         }
 

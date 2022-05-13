@@ -15,11 +15,11 @@ namespace WinUITest
     {
         //public ICommand AddCommand => new AsyncRelayCommand(OpenAddDialog);
 
-        public CustomerMaintenanceViewModel ViewModel { get; }
+        public CustomerPageViewModel ViewModel { get; }
         public CustomerPage()
         {
             this.InitializeComponent();
-            ViewModel = App.Current.Services.GetService(typeof(CustomerMaintenanceViewModel)) as CustomerMaintenanceViewModel;
+            ViewModel = App.Current.Services.GetService(typeof(CustomerPageViewModel)) as CustomerPageViewModel;
             ViewModel.Load();
 
         }

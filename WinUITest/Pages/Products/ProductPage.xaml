@@ -17,55 +17,18 @@
     <Grid BorderThickness="15">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="70*" />
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="15*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <CommandBar
-            Name="ProductMaintenanceCommandBar"
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            HorizontalAlignment="Left"
-            Background="Transparent"
-            DefaultLabelPosition="Right"
-            IsOpen="True">
-            <AppBarButton
-                Name="AddButton"
-                Command="{x:Bind AddCommand}"
-                Icon="Add"
-                Label="Add" />
-            <AppBarButton
-                Name="EditButton"
-                Command="{x:Bind EditCommand}"
-                Icon="Edit"
-                Label="Edit" />
-            <AppBarButton
-                Name="SaveButton"
-                Command="{x:Bind SaveCommand}"
-                Icon="Save"
-                Label="Save"
-                Visibility="Collapsed" />
-            <AppBarButton
-                Name="CancelButton"
-                Command="{x:Bind CancelCommand}"
-                Icon="Cancel"
-                Label="Cancel"
-                Visibility="Collapsed" />
-            <AppBarButton
-                Name="DeleteButton"
-                Command="{x:Bind DeleteCommand}"
-                Icon="Delete"
-                Label="Delete" />
-        </CommandBar>
-
         <controls:DataGrid
             Name="ProductGrid"
-            Grid.Row="1"
+            Grid.Row="0"
             AutoGenerateColumns="False"
             ItemsSource="{x:Bind ViewModel.Products}"
             SelectionChanged="DataGrid_SelectionChanged"
@@ -86,6 +49,67 @@
             </controls:DataGrid.Columns>
         </controls:DataGrid>
 
+        <CommandBar
+            Name="ProductMaintenanceCommandBar"
+            Grid.Row="1"
+            Grid.ColumnSpan="1"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="True">
+            <AppBarButton
+                Name="AddButton"
+                Command="{x:Bind AddCommand}"
+                Icon="Add"
+                Label="Add"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+            <AppBarButton
+                Name="EditButton"
+                Command="{x:Bind EditCommand}"
+                Icon="Edit"
+                Label="Edit"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+            <AppBarButton
+                Name="SaveButton"
+                Command="{x:Bind SaveCommand}"
+                Icon="Save"
+                Label="Save"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="CancelButton"
+                Command="{x:Bind CancelCommand}"
+                Icon="Cancel"
+                Label="Cancel"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="DeleteButton"
+                Command="{x:Bind DeleteCommand}"
+                Icon="Delete"
+                Label="Delete"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <RelativePanel Width="600">
+                            <TextBlock
+                                Name="TextBlock"
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Text="Product will be deleted. Do you want to continue?" />
+                            <Button
+                                Name="YesButton"
+                                Click="DeleteConfirmationClick"
+                                Content="Yes"
+                                RelativePanel.Below="TextBlock" />
+                            <Button
+                                Click="DeleteCancelClick"
+                                Content="No"
+                                RelativePanel.Below="TextBlock"
+                                RelativePanel.RightOf="YesButton" />
+                        </RelativePanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </CommandBar>
+
         <RelativePanel Grid.Row="2">
 
             <TextBox
@@ -101,7 +125,13 @@
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                 RelativePanel.Below="CodeTextBox"
                 Text="{x:Bind Path=ViewModel.SelectedProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+            <TextBox
+                Name="PriceTextBox"
+                Width="200"
+                Header="Price"
+                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                RelativePanel.Below="NameTextBox"
+                Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </RelativePanel>
 
     </Grid>

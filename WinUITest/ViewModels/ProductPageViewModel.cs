@@ -1,17 +1,9 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using WinUITest.Data;
-using WinUITest.ViewModels;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels
 {
-    public class ProductMaintenanceViewModel : ViewModelBase
+    public class ProductPageViewModel : ObservableObject
     {
         public ObservableCollection<ProductViewModel> Products { get; } = new();
         public bool IsProductSelected => _selectedProduct != null;
@@ -24,8 +16,8 @@ namespace WinUITest.ViewModels
                 if (_selectedProduct != value)
                 {
                     _selectedProduct = value;
-                    RaisePropertyChanged(nameof(SelectedProduct));
-                    RaisePropertyChanged(nameof(IsProductSelected));
+                    OnPropertyChanged(nameof(SelectedProduct));
+                    OnPropertyChanged(nameof(IsProductSelected));
                 }
             }
         }
@@ -36,6 +28,8 @@ namespace WinUITest.ViewModels
             if (product != null)
             {
                 SelectedProduct = new ProductViewModel(product);
+                OnPropertyChanged(nameof(SelectedProduct));
+                OnPropertyChanged(nameof(IsProductSelected));
             }
         }
 
@@ -46,7 +40,19 @@ namespace WinUITest.ViewModels
             set
             {
                 _isEditing = value;
-                RaisePropertyChanged(nameof(IsEditing));
+                OnPropertyChanged(nameof(IsEditing));
+                OnPropertyChanged(nameof(IsAddingOrEditing));
+            }
+        }
+
+        private bool _isNavigating { get; set; } = true;
+        public bool IsNavigating
+        {
+            get => _isNavigating;
+            set
+            {
+                _isNavigating = value;
+                OnPropertyChanged(nameof(IsNavigating));
             }
         }
 
@@ -57,16 +63,18 @@ namespace WinUITest.ViewModels
             set
             {
                 _isAdding = value;
-                RaisePropertyChanged(nameof(IsAdding));
+                OnPropertyChanged(nameof(IsAdding));
+                OnPropertyChanged(nameof(IsAddingOrEditing));
             }
         }
 
+        private bool _isAddingOrEditing { get; } = false;
         public bool IsAddingOrEditing
         {
-            get => _isAdding || _isEditing;
+            get => IsAdding || IsEditing;
         }
 
-        public ProductMaintenanceViewModel()
+        public ProductPageViewModel()
         {
         }
 

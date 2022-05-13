@@ -66,9 +66,9 @@ namespace WinUITest
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<CustomerMaintenanceViewModel>();
+            services.AddSingleton<CustomerPageViewModel>();
             services.AddSingleton(new CustomerViewModel(new Customer()));
-            services.AddSingleton<ProductMaintenanceViewModel>();
+            services.AddSingleton<ProductPageViewModel>();
             services.AddSingleton(new ProductViewModel(new Product()));
             return services.BuildServiceProvider();
         }

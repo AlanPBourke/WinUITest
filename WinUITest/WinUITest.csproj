@@ -59,7 +59,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\CustomerInfoPage.xaml">
+    <Page Update="Pages\Customer\CustomerDetailsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -84,7 +84,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\CustomersPage.xaml">
+    <Page Update="Pages\Customer\CustomerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

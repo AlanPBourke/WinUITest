@@ -1,24 +1,12 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using WinUITest.DataProvider;
-using WinUITest.ViewModels;
-using CommunityToolkit.WinUI.UI.Controls;
-using WinUITest.Data;
-using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.Input;
+﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using CommunityToolkit.WinUI.UI.Controls;
+using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using WinUITest.Data;
+using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,11 +22,21 @@ namespace WinUITest
         public ICommand EditCommand => new RelayCommand(BeginEdit);
         public ICommand SaveCommand => new RelayCommand(SaveChanges);
         public ICommand CancelCommand => new RelayCommand(CancelChanges);
+        public ICommand DeleteCommand => new AsyncRelayCommand(DeleteProduct);
+
+        public ProductPageViewModel ViewModel { get; }
+        //private ProductViewModel SelectedProduct { get; set; }
+        public ProductPage()
+        {
+            InitializeComponent();
+            ViewModel = App.Current.Services.GetService(typeof(ProductPageViewModel)) as ProductPageViewModel;
+            ViewModel.Load();
+        }
 
         private void CancelChanges()
         {
             ViewModel.SelectedProduct.CancelEdit();
-            
+
             ViewModel.IsAdding = false;
             ViewModel.IsEditing = false;
             AddButton.Visibility = Visibility.Visible;
@@ -86,23 +84,14 @@ namespace WinUITest
         }
 
         //public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
-        public ICommand DeleteCommand => new AsyncRelayCommand(DeleteProduct);
-
-        public ProductMaintenanceViewModel ViewModel { get; } 
-        //private ProductViewModel SelectedProduct { get; set; }
-        public ProductPage()
-        {
-            InitializeComponent();
-            ViewModel = App.Current.Services.GetService(typeof(ProductMaintenanceViewModel)) as ProductMaintenanceViewModel;
-            ViewModel.Load();
-        }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataGrid g = sender as DataGrid;
             if (g != null)
             {
-                ViewModel.SelectedProduct = g.SelectedItem as ProductViewModel;
+                var product = g.SelectedItem as ProductViewModel;
+                ViewModel.SetProduct(product.ProductId);
             }
         }
 
@@ -148,8 +137,8 @@ namespace WinUITest
                 ConfirmDialog.XamlRoot = this.Content.XamlRoot;
 
                 var result = await ConfirmDialog.ShowAsync();
-                
-                if (result== ContentDialogResult.Primary)
+
+                if (result == ContentDialogResult.Primary)
                 {
                     ViewModel.SelectedProduct.Delete();
                     ViewModel.Load();

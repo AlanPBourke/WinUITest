@@ -21,10 +21,10 @@ namespace WinUITest
 {
     public sealed partial class ProductContentDialog : ContentDialog
     {
-        public ProductMaintenanceViewModel ViewModel { get;}
+        public ProductPageViewModel ViewModel { get;}
         public ProductContentDialog()
         {
-            ViewModel = App.Current.Services.GetService(typeof(ProductMaintenanceViewModel)) as ProductMaintenanceViewModel;
+            ViewModel = App.Current.Services.GetService(typeof(ProductPageViewModel)) as ProductPageViewModel;
             this.InitializeComponent();
         }
 

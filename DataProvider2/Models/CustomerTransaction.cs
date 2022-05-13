@@ -1,5 +1,7 @@
 ﻿namespace WinUITest.Data
 {
+    // Does not create a db table, is instead mapped to a db view in the context.
+    // the view is defined manually in the initial migration.
     public class CustomerTransaction
     {
         public int TransactionId { get; set; }

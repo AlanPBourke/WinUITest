@@ -1,67 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels
-{ 
-    public class ProductViewModel : ViewModelBase, IEditableObject
+{
+    public class ProductViewModel : ObservableValidator, IEditableObject
     {
         private readonly Product _product;
         private ProductViewModel _backup;
 
+        private int _productid;
         public int ProductId
         {
-            get => _product.ProductId; 
-            set
-            {
-                if (_product.ProductId != value)
-                {
-                    _product.ProductId = value;
-                    RaisePropertyChanged(nameof(ProductId));
-                }
-            }
+            get => _productid;
+            set => SetProperty(ref _productid, value, true);
         }
 
+        private string _productname;
+        [Required]
+        [MinLength(1, ErrorMessage = "Name is required.")]
+        [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
         public string ProductName
         {
-            get => _product.ProductName;
-            set
-            {
-                if (_product.ProductName != value)
-                {
-                    _product.ProductName = value;
-                    RaisePropertyChanged(nameof(ProductName));
-                }
-            }
+            get => _productname;
+            set => SetProperty(ref _productname, value, true);
         }
 
+        private string _productcode;
+        [Required]
+        [MinLength(1, ErrorMessage = "Code is required.")]
+        [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
         public string ProductCode
         {
-            get => _product.ProductCode;
-            set
-            {
-                if (_product.ProductCode != value)
-                {
-                    _product.ProductCode = value;
-                    RaisePropertyChanged(nameof(ProductCode));
-                }
-            }
+            get => _productcode;
+            set => SetProperty(ref _productcode, value, true);
         }
-        public decimal Price
+
+        private decimal _price;
+        [Required]
+        [Range(0, 999999999.99, ErrorMessage = $"Price must be nonzero and less than 999999999.99")]
+        public string Price
         {
-            get => _product.Price;
-            set
-            {
-                if (_product.Price != value)
-                {
-                    _product.Price = value;
-                    RaisePropertyChanged(nameof(Price));
-                }
-            }
+            get => _productname;
+            set => SetProperty(ref _productname, value, true);
         }
 
         public string PriceString
@@ -72,7 +55,7 @@ namespace WinUITest.ViewModels
                 if (_product.Price != Convert.ToDecimal(value))
                 {
                     _product.Price = Convert.ToDecimal(value);
-                    RaisePropertyChanged(nameof(Price));
+                    OnPropertyChanged(nameof(Price));
                 }
             }
         }
@@ -101,7 +84,7 @@ namespace WinUITest.ViewModels
         {
             this.ProductCode = _backup.ProductCode;
             this.ProductName = _backup.ProductName;
-            this.Price = _backup.Price; 
+            this.Price = _backup.Price;
         }
 
         public void EndEdit()
