@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WinUITest.Data
+﻿namespace WinUITest.Data
 {
     public interface IProductDataProvider
     {
@@ -12,5 +6,7 @@ namespace WinUITest.Data
         Product Get(int id);
         void Save(Product p);
         void Delete(int id);
+
+        bool ProductInUse(int id);
     }
 }

@@ -1,25 +1,30 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
+
 namespace WinUITest.ViewModels
 {
     public class ProductPageViewModel : ObservableObject
     {
         public ObservableCollection<ProductViewModel> Products { get; } = new();
-        public bool IsProductSelected => _selectedProduct != null;
+
+        private bool _isproductselected;
+        public bool IsProductSelected
+        {
+            get => _isproductselected;
+            set => SetProperty(ref _isproductselected, value);
+        }
+
         private ProductViewModel _selectedProduct;
         public ProductViewModel SelectedProduct
         {
             get => _selectedProduct;
             set
             {
-                if (_selectedProduct != value)
-                {
-                    _selectedProduct = value;
-                    OnPropertyChanged(nameof(SelectedProduct));
-                    OnPropertyChanged(nameof(IsProductSelected));
-                }
+                SetProperty(ref _selectedProduct, value);
+                OnPropertyChanged(nameof(IsProductSelected));
             }
+
         }
 
         public void SetProduct(int productId)
@@ -28,47 +33,43 @@ namespace WinUITest.ViewModels
             if (product != null)
             {
                 SelectedProduct = new ProductViewModel(product);
-                OnPropertyChanged(nameof(SelectedProduct));
-                OnPropertyChanged(nameof(IsProductSelected));
+                //OnPropertyChanged(nameof(SelectedProduct));
+                //OnPropertyChanged(nameof(IsProductSelected));
             }
         }
 
-        private bool _isEditing { get; set; } = false;
+        private bool _isEditing;
         public bool IsEditing
         {
             get => _isEditing;
             set
             {
-                _isEditing = value;
-                OnPropertyChanged(nameof(IsEditing));
+                SetProperty(ref _isEditing, value);
                 OnPropertyChanged(nameof(IsAddingOrEditing));
             }
         }
 
-        private bool _isNavigating { get; set; } = true;
+        private bool _isNavigating;
         public bool IsNavigating
         {
             get => _isNavigating;
             set
             {
-                _isNavigating = value;
-                OnPropertyChanged(nameof(IsNavigating));
+                SetProperty(ref _isNavigating, value);
             }
         }
 
-        private bool _isAdding { get; set; } = false;
+        private bool _isAdding;
         public bool IsAdding
         {
             get => _isAdding;
             set
             {
-                _isAdding = value;
-                OnPropertyChanged(nameof(IsAdding));
+                SetProperty(ref _isAdding, value);
                 OnPropertyChanged(nameof(IsAddingOrEditing));
             }
         }
 
-        private bool _isAddingOrEditing { get; } = false;
         public bool IsAddingOrEditing
         {
             get => IsAdding || IsEditing;
@@ -87,7 +88,19 @@ namespace WinUITest.ViewModels
             {
                 Products.Add(new ProductViewModel(product));
             }
+        }
 
+        public bool CanDelete()
+        {
+            return App.DataProvider.Products.ProductInUse(SelectedProduct.ProductId) == false;
+        }
+
+        public void SetFirstProduct()
+        {
+            if (Products.Count > 0)
+            {
+                SelectedProduct = Products[0];
+            }
         }
     }
 }

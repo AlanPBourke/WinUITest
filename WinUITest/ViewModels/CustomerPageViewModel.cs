@@ -14,11 +14,7 @@ namespace WinUITest.ViewModels
         public bool IsCustomerSelected
         {
             get => _isCustomerSelected;
-            set
-            {
-                _isCustomerSelected = SelectedCustomer != null;
-                OnPropertyChanged(nameof(IsCustomerSelected));
-            }
+            set => SetProperty(ref _isCustomerSelected, value);
         }
 
         private CustomerViewModel _selectedCustomer;
@@ -27,12 +23,8 @@ namespace WinUITest.ViewModels
             get => _selectedCustomer;
             set
             {
-                if (_selectedCustomer != value)
-                {
-                    _selectedCustomer = value;
-                    OnPropertyChanged(nameof(SelectedCustomer));
-                    IsCustomerSelected = true;
-                }
+                SetProperty(ref _selectedCustomer, value);
+                IsCustomerSelected = true;
             }
         }
 
@@ -40,31 +32,55 @@ namespace WinUITest.ViewModels
         public TransactionViewModel SelectedTransaction
         {
             get => _selectedTransaction;
-            set
-            {
-                if (_selectedTransaction != value)
-                {
-                    _selectedTransaction = value;
-                    OnPropertyChanged(nameof(SelectedTransaction));
-                }
-            }
+            set => SetProperty(ref _selectedTransaction, value);
         }
 
         private TransactionDetailViewModel _selectedTransactionDetail;
         public TransactionDetailViewModel SelectedTransactionDetail
         {
             get => _selectedTransactionDetail;
-            set
-            {
-                if (_selectedTransactionDetail != value)
-                {
-                    _selectedTransactionDetail = value;
-                    OnPropertyChanged(nameof(SelectedTransactionDetail));
-                }
-            }
+            set => SetProperty(ref _selectedTransactionDetail, value);
         }
+
         public CustomerPageViewModel()
         {
+        }
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                SetProperty(ref _isEditing, value);
+                OnPropertyChanged(nameof(IsAddingOrEditing));
+            }
+        }
+
+        private bool _isNavigating;
+        public bool IsNavigating
+        {
+            get => _isNavigating;
+            set
+            {
+                SetProperty(ref _isNavigating, value);
+            }
+        }
+
+        private bool _isAdding;
+        public bool IsAdding
+        {
+            get => _isAdding;
+            set
+            {
+                SetProperty(ref _isAdding, value);
+                OnPropertyChanged(nameof(IsAddingOrEditing));
+            }
+        }
+
+        public bool IsAddingOrEditing
+        {
+            get => IsAdding || IsEditing;
         }
 
         public void SetFirstCustomer()
@@ -94,8 +110,8 @@ namespace WinUITest.ViewModels
             if (customer != null)
             {
                 SelectedCustomer = new CustomerViewModel(customer);
-                OnPropertyChanged(nameof(SelectedCustomer));
-                OnPropertyChanged(nameof(IsCustomerSelected));
+                //OnPropertyChanged(nameof(SelectedCustomer));
+                //OnPropertyChanged(nameof(IsCustomerSelected));
 
                 Transactions.Clear();
                 var transactionsForCustomer = App.DataProvider.Transactions.GetForCustomer(customerId);
@@ -119,46 +135,6 @@ namespace WinUITest.ViewModels
             }
         }
 
-        private bool _isEditing { get; set; } = false;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                _isEditing = value;
-                OnPropertyChanged(nameof(IsEditing));
-                OnPropertyChanged(nameof(IsAddingOrEditing));
-            }
-        }
-
-        private bool _isNavigating { get; set; } = true;
-        public bool IsNavigating
-        {
-            get => _isNavigating;
-            set
-            {
-                _isNavigating = value;
-                OnPropertyChanged(nameof(IsNavigating));
-            }
-        }
-
-        private bool _isAdding { get; set; } = false;
-        public bool IsAdding
-        {
-            get => _isAdding;
-            set
-            {
-                _isAdding = value;
-                OnPropertyChanged(nameof(IsAdding));
-                OnPropertyChanged(nameof(IsAddingOrEditing));
-            }
-        }
-
-        private bool _isAddingOrEditing { get; } = false;
-        public bool IsAddingOrEditing
-        {
-            get => IsAdding || IsEditing;
-        }
 
         public bool CanDelete()
         {

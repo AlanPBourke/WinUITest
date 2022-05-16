@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinUITest.Data;
-
-namespace WinUITest.Data
+﻿namespace WinUITest.Data
 {
     public class ProductSqliteDataProvider : IProductDataProvider
     {
@@ -17,7 +10,7 @@ namespace WinUITest.Data
         }
         public Product Get(int id)
         {
-           return DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();  
+            return DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
         }
 
         public void Save(Product p)
@@ -39,6 +32,16 @@ namespace WinUITest.Data
                 DataContext.Products.Remove(product);
                 DataContext.SaveChanges();
             }
+        }
+
+        public bool ProductInUse(int id)
+        {
+            var product = DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
+            if (product != null)
+            {
+                return DataContext.TransactionDetails.Where(p => p.ProductCode == product.ProductCode).Any();
+            }
+            return false;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
@@ -8,6 +9,7 @@ namespace WinUITest.ViewModels
 {
     public class ProductViewModel : ObservableValidator, IEditableObject
     {
+        public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
         private readonly Product _product;
         private ProductViewModel _backup;
 
@@ -41,32 +43,28 @@ namespace WinUITest.ViewModels
         private decimal _price;
         [Required]
         [Range(0, 999999999.99, ErrorMessage = $"Price must be nonzero and less than 999999999.99")]
-        public string Price
+        public decimal Price
         {
-            get => _productname;
-            set => SetProperty(ref _productname, value, true);
-        }
-
-        public string PriceString
-        {
-            get => _product.Price.ToString();
-            set
-            {
-                if (_product.Price != Convert.ToDecimal(value))
-                {
-                    _product.Price = Convert.ToDecimal(value);
-                    OnPropertyChanged(nameof(Price));
-                }
-            }
+            get => _price;
+            set => SetProperty(ref _price, value, true);
         }
 
         public ProductViewModel(Product product)
         {
             _product = product;
+            ProductCode = _product.ProductCode;
+            ProductName = _product.ProductName;
+            ProductId = _product.ProductId;
+            Price = _product.Price;
+            PropertyChanged += ProductViewModel_PropertyChanged;
+            ErrorsChanged += ProductViewModel_ErrorsChanged;
         }
 
         public void Save()
         {
+            _product.ProductCode = ProductCode;
+            _product.ProductName = ProductName;
+            _product.Price = Price;
             App.DataProvider.Products.Save(_product);
         }
 
@@ -82,14 +80,27 @@ namespace WinUITest.ViewModels
 
         public void CancelEdit()
         {
-            this.ProductCode = _backup.ProductCode;
-            this.ProductName = _backup.ProductName;
-            this.Price = _backup.Price;
+            ProductCode = _backup.ProductCode;
+            ProductName = _backup.ProductName;
+            Price = _backup.Price;
         }
 
         public void EndEdit()
         {
             throw new NotImplementedException();
+        }
+
+        private void ProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+        }
+
+        private void ProductViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(HasErrors))
+            {
+                OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
+            }
         }
     }
 }

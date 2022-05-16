@@ -15,13 +15,11 @@ namespace WinUITest.ViewModels
     public class CustomerViewModel : ObservableValidator, IEditableObject
     {
         public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
-        public bool CanSave => (string.IsNullOrEmpty(Name) == false);
+        //public bool CanSave => (string.IsNullOrEmpty(Name) == false);
         private readonly Customer _customer;
         private CustomerViewModel _backup;
 
         private string _name;
-        private string _customercode;
-
         [Required]
         [MinLength(1, ErrorMessage = "Name is required.")]
         [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
@@ -31,6 +29,7 @@ namespace WinUITest.ViewModels
             set => SetProperty(ref _name, value, true);
         }
 
+        private string _customercode;
         [Required]
         [MinLength(1, ErrorMessage = "Codeis required.")]
         [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
@@ -75,7 +74,7 @@ namespace WinUITest.ViewModels
 
         public override string ToString()
         {
-            return $"{CustomerCode}\t{Name}\t{CanSave}";
+            return $"{CustomerCode}\t{Name}";
         }
 
         public void BeginEdit()

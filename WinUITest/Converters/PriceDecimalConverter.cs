@@ -7,7 +7,6 @@ namespace WinUITest.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-
             var ret = value.ToString();
 
             if (!string.IsNullOrEmpty(ret))
@@ -20,7 +19,7 @@ namespace WinUITest.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            return (decimal)value;
         }
     }
 }

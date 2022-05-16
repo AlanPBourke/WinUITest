@@ -6,13 +6,13 @@
     xmlns:converters="using:WinUITest.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:WinUITest.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <!--<Page.Resources>
+    <Page.Resources>
         <converters:PriceDecimalConverter x:Name="PriceDecimalConverter" />
-    </Page.Resources>-->
+    </Page.Resources>
 
     <Grid BorderThickness="15">
 
@@ -83,7 +83,6 @@
                 Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
             <AppBarButton
                 Name="DeleteButton"
-                Command="{x:Bind DeleteCommand}"
                 Icon="Delete"
                 Label="Delete"
                 Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}">
@@ -131,7 +130,35 @@
                 Header="Price"
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                 RelativePanel.Below="NameTextBox"
-                Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PriceDecimalConverter}}" />
+            <TextBlock
+                Name="ErrorTextBlock"
+                Width="250"
+                Foreground="Red"
+                RelativePanel.Below="CodeTextBox"
+                Text="{x:Bind ViewModel.SelectedProduct.Errors, Mode=OneWay}"
+                Visibility="{x:Bind ViewModel.SelectedProduct.HasErrors, Mode=OneWay}" />
+            <controls:InAppNotification
+                x:Name="ProductMaintenanceInAppNotification"
+                AnimationDuration="00:00:00.1000000"
+                Content="This is a test message."
+                HorizontalOffset="0"
+                RelativePanel.Below="ErrorTextBlock"
+                ShowDismissButton="True"
+                StackMode="Replace"
+                VerticalOffset="100">
+                <controls:InAppNotification.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Margin="0,0,0,8" Text="{Binding Value}" />
+                            <TextBlock
+                                Opacity="0.8"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{Binding Key}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </controls:InAppNotification.ContentTemplate>
+            </controls:InAppNotification>
         </RelativePanel>
 
     </Grid>

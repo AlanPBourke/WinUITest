@@ -17,8 +17,8 @@ namespace WinUITest.Pages
         //public ICommand EditCommand => new AsyncRelayCommand(OpenEditDialog);
         public ICommand AddCommand => new RelayCommand(Add);
         public ICommand EditCommand => new RelayCommand(Edit);
-        public ICommand SaveCommand => new RelayCommand(SaveChanges);
-        public ICommand CancelCommand => new RelayCommand(CancelChanges);
+        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand CancelCommand => new RelayCommand(Cancel);
         public CustomerPageViewModel ViewModel { get; }
 
         public CustomerDetailsPage()
@@ -27,6 +27,7 @@ namespace WinUITest.Pages
             ViewModel = App.Current.Services.GetService(typeof(CustomerPageViewModel)) as CustomerPageViewModel;
             ViewModel.Load();
             DataContext = ViewModel;
+            SetMode("navigate");
         }
         private void Add()
         {
@@ -41,7 +42,7 @@ namespace WinUITest.Pages
             ViewModel.SelectedCustomer.BeginEdit();
         }
 
-        private void SaveChanges()
+        private void Save()
         {
             if (ViewModel.SelectedCustomer.HasErrors == false)
             {
@@ -53,7 +54,7 @@ namespace WinUITest.Pages
             }
         }
 
-        private void CancelChanges()
+        private void Cancel()
         {
             if (ViewModel.IsEditing)
             {
