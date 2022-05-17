@@ -8,7 +8,7 @@
 
         public string Name { get; set; } = string.Empty;
 
-        public decimal Balance { get; set; }
+        public double Balance { get; set; }
         public virtual List<Transaction>? Transactions { get; set; }     // virtual so that lazy loading proxies works
         public override string ToString()
         {

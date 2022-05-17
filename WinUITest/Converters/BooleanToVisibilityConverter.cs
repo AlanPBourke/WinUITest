@@ -6,21 +6,16 @@ namespace WinUITest.Converters
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {
-        public bool IsInverse { get; set; }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool visibility = (bool)value;
-            if (IsInverse)
-            {
-                visibility = !visibility;
-            }
-
-            return visibility ? Visibility.Visible : Visibility.Collapsed;
+            bool booleanValue = (bool)value;
+            return booleanValue ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            Visibility visibility = (Visibility)value;
+            return visibility != Visibility.Visible;
         }
     }
 }

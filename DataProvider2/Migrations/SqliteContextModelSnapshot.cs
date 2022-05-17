@@ -23,8 +23,8 @@ namespace WinUITest.DataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Balance")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("CustomerCode")
                         .IsRequired()
@@ -42,38 +42,67 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             CustomerId = 1,
-                            Balance = 25.98m,
+                            Balance = 25.98,
                             CustomerCode = "A001",
                             Name = "Acorn Antiques"
                         },
                         new
                         {
                             CustomerId = 2,
-                            Balance = 0.00m,
+                            Balance = 0.0,
                             CustomerCode = "M123",
                             Name = "Milliways Restaurants Ltd"
                         },
                         new
                         {
                             CustomerId = 3,
-                            Balance = -25.00m,
+                            Balance = -25.0,
                             CustomerCode = "T014",
                             Name = "Trotters Independent Traders"
                         },
                         new
                         {
                             CustomerId = 4,
-                            Balance = 0.00m,
+                            Balance = 0.0,
                             CustomerCode = "S001",
                             Name = "Sunshine Desserts Ltd"
                         },
                         new
                         {
                             CustomerId = 5,
-                            Balance = 0.00m,
+                            Balance = 0.0,
                             CustomerCode = "P145",
                             Name = "Bob's Burger Restaurants Ltd"
                         });
+                });
+
+            modelBuilder.Entity("WinUITest.Data.CustomerTransaction", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CustomerCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("TransactionId");
+
+                    b.ToView("CustomerTransactions");
                 });
 
             modelBuilder.Entity("WinUITest.Data.Product", b =>
@@ -82,8 +111,8 @@ namespace WinUITest.DataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("ProductCode")
                         .HasColumnType("TEXT");
@@ -99,28 +128,28 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             ProductId = 1,
-                            Price = 12.99m,
+                            Price = 12.99,
                             ProductCode = "EGG48",
                             ProductName = "48 Class A Eggs"
                         },
                         new
                         {
                             ProductId = 2,
-                            Price = 8.50m,
+                            Price = 8.5,
                             ProductCode = "MILK25L",
                             ProductName = "25L Full Fat Milk"
                         },
                         new
                         {
                             ProductId = 3,
-                            Price = 7.15m,
+                            Price = 7.1500000000000004,
                             ProductCode = "SUGAR2KG",
                             ProductName = "2KG White Sugar"
                         },
                         new
                         {
                             ProductId = 4,
-                            Price = 22.19m,
+                            Price = 22.190000000000001,
                             ProductCode = "VAN001",
                             ProductName = "500ml Vanilla Essence"
                         });
@@ -138,15 +167,15 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2022, 5, 13, 12, 2, 32, 967, DateTimeKind.Local).AddTicks(751));
+                        .HasDefaultValue(new DateTime(2022, 5, 17, 11, 38, 29, 87, DateTimeKind.Local).AddTicks(8463));
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(1)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Value")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Value")
+                        .HasColumnType("REAL");
 
                     b.HasKey("TransactionId");
 
@@ -161,7 +190,7 @@ namespace WinUITest.DataProvider.Migrations
                             CustomerId = 1,
                             TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "I",
-                            Value = 48.17m
+                            Value = 48.170000000000002
                         },
                         new
                         {
@@ -169,7 +198,7 @@ namespace WinUITest.DataProvider.Migrations
                             CustomerId = 1,
                             TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
-                            Value = -22.19m
+                            Value = -22.190000000000001
                         },
                         new
                         {
@@ -177,7 +206,7 @@ namespace WinUITest.DataProvider.Migrations
                             CustomerId = 3,
                             TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Type = "C",
-                            Value = -14.30m
+                            Value = -14.300000000000001
                         });
                 });
 
@@ -197,8 +226,8 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<int>("TransactionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Value")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Value")
+                        .HasColumnType("REAL");
 
                     b.HasKey("TransactionDetailId");
 
@@ -213,7 +242,7 @@ namespace WinUITest.DataProvider.Migrations
                             ProductCode = "EGG48",
                             Quantity = 2,
                             TransactionId = 1,
-                            Value = 25.98m
+                            Value = 25.98
                         },
                         new
                         {
@@ -221,7 +250,7 @@ namespace WinUITest.DataProvider.Migrations
                             ProductCode = "VAN001",
                             Quantity = 1,
                             TransactionId = 1,
-                            Value = 22.19m
+                            Value = 22.190000000000001
                         },
                         new
                         {
@@ -229,7 +258,7 @@ namespace WinUITest.DataProvider.Migrations
                             ProductCode = "VAN001",
                             Quantity = 1,
                             TransactionId = 2,
-                            Value = -22.19m
+                            Value = -22.190000000000001
                         },
                         new
                         {
@@ -237,7 +266,7 @@ namespace WinUITest.DataProvider.Migrations
                             ProductCode = "SUGAR2KG",
                             Quantity = 2,
                             TransactionId = 3,
-                            Value = -14.30m
+                            Value = -14.300000000000001
                         });
                 });
 

@@ -23,3 +23,7 @@ https://khalidabuhakmeh.com/how-to-add-a-view-to-an-entity-framework-core-dbcont
 CREATE VIEW TransactionsWithCustomerDetails as
 select t.TransactionDate, t.Type, t.Value, c.CustomerCode, c.Name
 from Transactions t left join Customers c on t.CustomerId = c.CustomerId
+
+BINDING
+http://www.blackwasp.co.uk/WPFDataContext_2.aspx
+http://www.blackwasp.co.uk/WPFValueConverter.aspx

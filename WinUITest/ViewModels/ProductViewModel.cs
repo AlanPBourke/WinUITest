@@ -40,13 +40,20 @@ namespace WinUITest.ViewModels
             set => SetProperty(ref _productcode, value, true);
         }
 
-        private decimal _price;
+        private double _price;
         [Required]
-        [Range(0, 999999999.99, ErrorMessage = $"Price must be nonzero and less than 999999999.99")]
-        public decimal Price
+        [Range(0.01, 999999999.99, ErrorMessage = $"Price must be nonzero and less than 999999999.99")]
+        public double Price
         {
             get => _price;
             set => SetProperty(ref _price, value, true);
+        }
+
+        private string _pricestring;
+        public string PriceString
+        {
+            get => _pricestring;
+            set => SetProperty(ref _pricestring, value, true);
         }
 
         public ProductViewModel(Product product)
@@ -87,7 +94,7 @@ namespace WinUITest.ViewModels
 
         public void EndEdit()
         {
-            throw new NotImplementedException();
+
         }
 
         private void ProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)

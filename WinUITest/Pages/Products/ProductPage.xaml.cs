@@ -67,8 +67,6 @@ namespace WinUITest
                 ViewModel.SelectedProduct.Save();
                 ViewModel.SelectedProduct.EndEdit();
 
-                ViewModel.IsAdding = false;
-                ViewModel.IsEditing = false;
                 ViewModel.Load();
                 ViewModel.SetProduct(ViewModel.SelectedProduct.ProductId);
                 SetMode("navigate");
@@ -103,36 +101,6 @@ namespace WinUITest
                 ViewModel.SetProduct(product.ProductId);
             }
         }
-
-        //public async Task OpenAddDialog()
-        //{
-        //    ProductContentDialog NewProductDialog = new ProductContentDialog();
-        //    NewProductDialog.Title = "New Product";
-        //    NewProductDialog.DataContext = new ProductViewModel(new Product());
-        //    NewProductDialog.XamlRoot = this.Content.XamlRoot;
-        //    ViewModel.IsAdding = true;
-        //    await NewProductDialog.ShowAsync();
-        //    ViewModel.IsAdding = false;
-        //    ViewModel.SelectedProduct = NewProductDialog.DataContext as ProductViewModel;
-        //    ViewModel.SelectedProduct.Save();
-        //    ViewModel.Load();
-
-        //}
-
-        //public async Task OpenEditDialog()
-        //{
-        //    if (ViewModel.SelectedProduct != null)
-        //    {
-        //        ProductContentDialog EditProductDialog = new ProductContentDialog();
-        //        EditProductDialog.Title = "Edit Product";
-        //        EditProductDialog.DataContext = ViewModel.SelectedProduct;
-        //        EditProductDialog.XamlRoot = this.Content.XamlRoot;
-        //        ViewModel.IsEditing = true;
-        //        await EditProductDialog.ShowAsync();
-        //        ViewModel.IsEditing = false;
-        //        ViewModel.SelectedProduct.Save();
-        //    }
-        //}
 
         private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {

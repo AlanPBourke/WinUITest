@@ -46,7 +46,12 @@ namespace WinUITest.ViewModels
             set => SetProperty(ref _customerid, value, true);
         }
 
-        public Decimal Balance { get; set; }
+        public Double Balance { get; set; }
+
+        public string BalanceForDisplay
+        {
+            get => Balance.ToString("0.##");
+        }
 
         public CustomerViewModel(Customer customer)
         {

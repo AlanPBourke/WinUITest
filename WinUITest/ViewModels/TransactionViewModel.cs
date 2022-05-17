@@ -1,5 +1,4 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels
@@ -52,7 +51,7 @@ namespace WinUITest.ViewModels
         }
 
         public string ValueAsString => Value.ToString("N2");            // 2 dp
-        public Decimal Value
+        public double Value
         {
             get => _transaction.Value;
             set

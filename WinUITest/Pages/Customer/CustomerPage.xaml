@@ -15,7 +15,7 @@
         <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerPageMenuViewModel">
             <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
         </DataTemplate>-->
-        <converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />
+        <!--<converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />-->
     </Page.Resources>
 
     <Grid Name="MainCustomerGrid" BorderThickness="15">
@@ -76,10 +76,15 @@
                         Binding="{Binding Name}"
                         Header="Name"
                         IsReadOnly="true" />
-                    <controls:DataGridTextColumn
+                    <!--<controls:DataGridTextColumn
                         Binding="{Binding Balance, Converter={StaticResource PriceDecimalConverter}}"
                         Header="Balance"
+                        IsReadOnly="true" />-->
+                    <controls:DataGridTextColumn
+                        Binding="{Binding BalanceForDisplay}"
+                        Header="Balance"
                         IsReadOnly="true" />
+
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
 

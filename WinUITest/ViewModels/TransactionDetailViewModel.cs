@@ -36,7 +36,7 @@ namespace WinUITest.ViewModels
             get => _transactionDetail.Value.ToString();
         }
 
-        public decimal Value
+        public double Value
         {
             get => _transactionDetail.Value;
 

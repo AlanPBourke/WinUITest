@@ -17,9 +17,9 @@
     <Grid BorderThickness="15">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="70*" />
+            <RowDefinition Height="50*" />
             <RowDefinition Height="15*" />
-            <RowDefinition Height="15*" />
+            <RowDefinition Height="35*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -116,12 +116,14 @@
                 Width="150"
                 Header="Code"
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsTabStop="True"
                 Text="{x:Bind Path=ViewModel.SelectedProduct.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox
                 Name="NameTextBox"
                 Width="400"
                 Header="Name"
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsTabStop="True"
                 RelativePanel.Below="CodeTextBox"
                 Text="{x:Bind Path=ViewModel.SelectedProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox
@@ -129,13 +131,25 @@
                 Width="200"
                 Header="Price"
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsTabStop="True"
                 RelativePanel.Below="NameTextBox"
                 Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PriceDecimalConverter}}" />
+
+            <!--  NumberBox is shite - doesn't work with PropertyChanged, or Explicit binding  -->
+            <!--<NumberBox
+                x:Name="PriceNumberBox"
+                Width="200"
+                Header="Price"
+                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                IsTabStop="True"
+                PlaceholderText="0.00"
+                RelativePanel.Below="NameTextBox"
+                Value="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <TextBlock
                 Name="ErrorTextBlock"
-                Width="250"
+                Width="350"
                 Foreground="Red"
-                RelativePanel.Below="CodeTextBox"
+                RelativePanel.Below="PriceTextBox"
                 Text="{x:Bind ViewModel.SelectedProduct.Errors, Mode=OneWay}"
                 Visibility="{x:Bind ViewModel.SelectedProduct.HasErrors, Mode=OneWay}" />
             <controls:InAppNotification
