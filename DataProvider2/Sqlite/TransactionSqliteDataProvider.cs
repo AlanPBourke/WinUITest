@@ -30,6 +30,11 @@
             return DataContext.TransactionDetails.Where(td => td.TransactionId == transactionId);
         }
 
+        public IEnumerable<Transaction> GetAll()
+        {
+            return DataContext.Transactions;
+        }
+
         //public List< GetTransactions()
         //{
         //    var query = from t in DataContext.Transactions

@@ -1,21 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using WinUITest.Data;
 using WinUITest.ViewModels;
 
@@ -44,7 +29,7 @@ namespace WinUITest
         public App()
         {
             // Can't see textbox caret unless Dark in App SDK 1.1 !
-            App.Current.RequestedTheme = ApplicationTheme.Dark;     
+            App.Current.RequestedTheme = ApplicationTheme.Dark;
             DataProvider = new SqliteDataProvider();
             Services = ConfigureServices();
             this.InitializeComponent();
@@ -67,6 +52,7 @@ namespace WinUITest
         {
             var services = new ServiceCollection();
             services.AddSingleton<CustomerPageViewModel>();
+            services.AddSingleton<TransactionsPageViewModel>();
             services.AddSingleton(new CustomerViewModel(new Customer()));
             services.AddSingleton<ProductPageViewModel>();
             services.AddSingleton(new ProductViewModel(new Product()));

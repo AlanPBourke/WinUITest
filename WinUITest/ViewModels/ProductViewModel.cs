@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels

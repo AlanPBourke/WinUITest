@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="WinUITest.ProductPage"
+    x:Class="WinUITest.Pages.ProductPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
@@ -109,7 +109,7 @@
             </AppBarButton>
         </CommandBar>
 
-        <RelativePanel Grid.Row="2">
+        <RelativePanel Name="ProductDetailsPanel" Grid.Row="2">
 
             <TextBox
                 Name="CodeTextBox"

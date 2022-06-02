@@ -6,6 +6,8 @@ namespace WinUITest.ViewModels
     public class TransactionViewModel : ObservableObject
     {
         private readonly Transaction _transaction;
+        public string ExpandedType => _transaction.Type == "I" ? "Invoice" : "Credit";
+        public string CustomerCode { get => _transaction.Customer.CustomerCode; }
 
         public int TransactionId
         {
@@ -21,7 +23,6 @@ namespace WinUITest.ViewModels
             }
         }
 
-        public string ExpandedType => _transaction.Type == "I" ? "Invoice" : "Credit";
         public string Type
         {
             get => _transaction.Type;

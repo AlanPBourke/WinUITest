@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 
 namespace WinUITest.ViewModels

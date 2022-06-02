@@ -12,7 +12,7 @@
     <ScrollViewer>
         <Grid>
             <controls:DataGrid
-                Name="TransactionsGrid"
+                Name="CustomerTransactionsGrid"
                 Grid.Row="3"
                 AutoGenerateColumns="False"
                 ItemsSource="{x:Bind TransactionsViewModel.Transactions}"

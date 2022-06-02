@@ -18,6 +18,8 @@
     <None Remove="MainWindow.xaml" />
     <None Remove="Pages\CustomerInfoPage.xaml" />
     <None Remove="Pages\CustomerTransactionsPage.xaml" />
+    <None Remove="Pages\Transactions\TransactionDetailsPage.xaml" />
+    <None Remove="Pages\Transactions\TransactionInfoPage.xaml" />
     <None Remove="ProductContentDialog.xaml" />
     <None Remove="ProductPage.xaml" />
     <None Remove="ResourceDictionary.xaml" />
@@ -52,6 +54,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Transactions\TransactionDetailsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Transactions\TransactionInfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\Customer\CustomerTransactionsPage.xaml">

@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="WinUITest.TransactionsPage"
+    x:Class="WinUITest.Pages.TransactionsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
@@ -18,19 +18,19 @@
             <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
         </DataTemplate>
         <converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />
-    </Page.Resources>
+    </Page.Resources>-->
 
-    <Grid Name="MainTransactionsGrid" BorderThickness="15">
+    <Grid BorderThickness="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="50*" />
             <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
 
-        <Grid Name="TransactionListGrid" Grid.Row="0">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="50*" />
             </Grid.RowDefinitions>
 
             <controls:DataGrid
@@ -38,35 +38,38 @@
                 Grid.Row="1"
                 AutoGenerateColumns="False"
                 GridLinesVisibility="Horizontal"
-                ItemsSource="{x:Bind ViewModel.Customers}"
-                SelectionChanged="CustomersGrid_SelectionChanged"
+                ItemsSource="{x:Bind ViewModel.Transactions}"
                 SelectionMode="Single">
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn
                         Binding="{Binding CustomerCode}"
-                        Header="Code"
+                        Header="Customer Code"
                         IsReadOnly="true" />
                     <controls:DataGridTextColumn
-                        Binding="{Binding Name}"
-                        Header="Name"
+                        Binding="{Binding ExpandedType}"
+                        Header="Type"
                         IsReadOnly="true" />
                     <controls:DataGridTextColumn
-                        Binding="{Binding Balance, Converter={StaticResource PriceDecimalConverter}}"
-                        Header="Balance"
+                        Binding="{Binding TransactionDateAsString}"
+                        Header="Date"
+                        IsReadOnly="true" />
+                    <controls:DataGridTextColumn
+                        Binding="{Binding ValueAsString}"
+                        Header="Value"
                         IsReadOnly="true" />
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
 
         </Grid>
 
-        <Pivot x:Name="CustomerPivot" Grid.Row="2">
+        <Pivot x:Name="TransactionPivot" Grid.Row="2">
             <PivotItem Header="Information">
-                <views:CustomerInfoPage />
+                <views:TransactionInfoPage />
             </PivotItem>
             <PivotItem Header="Transactions">
-                <views:CustomerTransactionsPage TransactionsViewModel="{x:Bind ViewModel}" />
+                <views:TransactionDetailsPage />
             </PivotItem>
         </Pivot>
 
-    </Grid>-->
+    </Grid>
 </Page>

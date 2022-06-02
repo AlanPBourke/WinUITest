@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels
 {
     public class CustomerPageViewModel : ObservableObject
     {
-        public bool IsTransactionSelected => SelectedCustomer != null;
+        //public bool IsTransactionSelected => SelectedCustomer != null;
         public ObservableCollection<CustomerViewModel> Customers { get; } = new();
         public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
         public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; } = new();

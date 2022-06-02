@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-        <RelativePanel>
+        <RelativePanel Name="CustomerDetailsPanel">
             <CommandBar
                 Name="CustomerEditDeleteCommandBar"
                 HorizontalAlignment="Left"
