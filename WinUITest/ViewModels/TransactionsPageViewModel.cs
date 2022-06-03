@@ -21,7 +21,7 @@ namespace WinUITest.ViewModels
         }
 
         private bool _isTransactionSelected;
-        public bool IsTransactionmSelected
+        public bool IsTransactionSelected
         {
             get => _isTransactionSelected;
             set => SetProperty(ref _isTransactionSelected, value);
@@ -34,7 +34,7 @@ namespace WinUITest.ViewModels
             set
             {
                 SetProperty(ref _selectedTransaction, value);
-                IsCustomerSelected = true;
+                IsTransactionSelected = true;
             }
         }
 
@@ -59,9 +59,30 @@ namespace WinUITest.ViewModels
             }
         }
 
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                SetProperty(ref _isEditing, value);
+                OnPropertyChanged(nameof(IsAddingOrEditing));
+            }
+        }
+
         public bool IsAddingOrEditing
         {
             get => IsAdding || IsEditing;
+        }
+
+        public void SetTransaction(int transactionId)
+        {
+            var txn = App.DataProvider.Transactions.GetById(transactionId);
+
+            if (txn != null)
+            {
+                SelectedTransaction = new TransactionViewModel(txn);
+            }
         }
 
         public TransactionsPageViewModel()

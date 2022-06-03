@@ -47,7 +47,7 @@
                                     <TextBlock
                                         Name="TextBlock"
                                         Style="{ThemeResource BaseTextBlockStyle}"
-                                        Text="Customer will be deleted. Do you want to continue?" />
+                                        Text="Transaction will be deleted. Do you want to continue?" />
                                     <Button
                                         Name="YesButton"
                                         Click="DeleteConfirmationClick"
@@ -106,7 +106,7 @@
                 Text="{x:Bind ViewModel.SelectedCustomer.Errors, Mode=OneWay}"
                 Visibility="{x:Bind ViewModel.SelectedCustomer.HasErrors, Mode=OneWay}" />-->
 
-                <!--<controls:InAppNotification
+                <controls:InAppNotification
                     x:Name="UserMaintenanceInAppNotification"
                     Grid.Row="3"
                     AnimationDuration="00:00:00.1000000"
@@ -127,7 +127,7 @@
                             </StackPanel>
                         </DataTemplate>
                     </controls:InAppNotification.ContentTemplate>
-                </controls:InAppNotification>-->
+                </controls:InAppNotification>
             </RelativePanel>
         </ScrollViewer>
 

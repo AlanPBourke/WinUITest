@@ -30,6 +30,78 @@ namespace WinUITest.Pages
             SetMode("navigate");
         }
 
+        private void Add()
+        {
+            SetMode("add");
+            ViewModel.SelectedTransaction = new TransactionViewModel(new Data.Transaction());
+            ViewModel.SelectedTransaction.BeginEdit();
+        }
+
+        private void Edit()
+        {
+            SetMode("edit");
+            ViewModel.SelectedTransaction.BeginEdit();
+        }
+
+        private void Save()
+        {
+            if (ViewModel.SelectedTransaction.HasErrors == false)
+            {
+                ViewModel.SelectedTransaction.Save();
+                ViewModel.SelectedTransaction.EndEdit();
+                ViewModel.Load();
+                ViewModel.SetTransaction(ViewModel.SelectedTransaction.TransactionId);
+                SetMode("navigate");
+            }
+        }
+
+        private void Cancel()
+        {
+            if (ViewModel.IsEditing)
+            {
+                ViewModel.SelectedTransaction.CancelEdit();
+            }
+            else
+            {
+                ViewModel.SetTransaction(ViewModel.Customers[0].CustomerId);
+            }
+
+            if (ViewModel.SelectedCustomer != null)
+            {
+                ViewModel.SetCustomer(ViewModel.SelectedCustomer.CustomerId);
+            }
+
+            SetMode("navigate");
+        }
+
+        private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+
+            //if (InfoViewModel.SelectedCustomer.HasErrors == false)
+            //{
+            if (ViewModel.CanDelete())
+            {
+                ViewModel.SelectedCustomer.Delete();
+                ViewModel.Load();
+                ViewModel.SetFirstCustomer();
+            }
+            else
+            {
+                UserMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
+            }
+            DeleteButton.Flyout.Hide();
+            SetMode("navigate");
+        }
+
+        private void DeleteCancelClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            ViewModel.IsAdding = false;
+            ViewModel.IsNavigating = true;
+            ViewModel.IsEditing = false;
+            DeleteButton.Flyout.Hide();
+            SetMode("navigate");
+        }
+
         private void SetMode(string mode)
         {
             switch (mode)
