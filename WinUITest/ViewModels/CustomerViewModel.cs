@@ -10,117 +10,130 @@ using WinUITest.Data;
 
 // https://github.com/CommunityToolkit/MVVM-Samples/blob/master/docs/mvvm/PuttingThingsTogether.md
 
-namespace WinUITest.ViewModels
+namespace WinUITest.ViewModels;
+
+public class CustomerViewModel : ObservableValidator, IEditableObject
 {
-    public class CustomerViewModel : ObservableValidator, IEditableObject
+    internal IDataProvider DataProvider;
+
+    public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
+    //public bool CanSave => (string.IsNullOrEmpty(Name) == false);
+    private Customer _customer;
+    private CustomerViewModel _backup;
+
+    private string _name;
+    [Required]
+    [MinLength(1, ErrorMessage = "Name is required.")]
+    [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
+    public string Name
     {
-        public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
-        //public bool CanSave => (string.IsNullOrEmpty(Name) == false);
-        private readonly Customer _customer;
-        private CustomerViewModel _backup;
+        get => _name;
+        set => SetProperty(ref _name, value, true);
+    }
 
-        private string _name;
-        [Required]
-        [MinLength(1, ErrorMessage = "Name is required.")]
-        [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value, true);
-        }
+    private string _customercode;
+    [Required]
+    [MinLength(1, ErrorMessage = "Codeis required.")]
+    [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
+    public string CustomerCode
+    {
+        get => _customercode;
+        set => SetProperty(ref _customercode, value, true);
+    }
 
-        private string _customercode;
-        [Required]
-        [MinLength(1, ErrorMessage = "Codeis required.")]
-        [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
-        public string CustomerCode
-        {
-            get => _customercode;
-            set => SetProperty(ref _customercode, value, true);
-        }
+    private int _customerid;
+    public int CustomerId
+    {
+        get => _customerid;
+        set => SetProperty(ref _customerid, value, true);
+    }
 
-        private int _customerid;
-        public int CustomerId
-        {
-            get => _customerid;
-            set => SetProperty(ref _customerid, value, true);
-        }
+    public Double Balance { get; set; }
 
-        public Double Balance { get; set; }
+    public string BalanceForDisplay
+    {
+        get => Balance.ToString("0.##");
+    }
 
-        public string BalanceForDisplay
-        {
-            get => Balance.ToString("0.##");
-        }
+    public CustomerViewModel(IDataProvider dataprovider, Customer customer)
+    {
+        DataProvider = dataprovider;
 
-        public CustomerViewModel(Customer customer)
-        {
-            _customer = customer;
-            CustomerId = _customer.CustomerId;
-            CustomerCode = _customer.CustomerCode;
-            Name = _customer.Name;
-            Balance = _customer.Balance;
-            PropertyChanged += CustomerViewModel_PropertyChanged;
-            ErrorsChanged += CustomerViewModel_ErrorsChanged;
-        }
+        _customer = customer;
+        CustomerId = _customer.CustomerId;
+        CustomerCode = _customer.CustomerCode;
+        Name = _customer.Name;
+        Balance = _customer.Balance;
 
-        public void Delete()
-        {
-            App.DataProvider.Customers.DeleteCustomer(CustomerId);
-        }
+        PropertyChanged += CustomerViewModel_PropertyChanged;
+        ErrorsChanged += CustomerViewModel_ErrorsChanged;
+    }
 
-        public void Save()
-        {
-            _customer.CustomerCode = CustomerCode;
-            _customer.Name = Name;
+    public void SetCustomer(Customer customer)
+    {
+        _customer = customer;
+        CustomerId = _customer.CustomerId;
+        CustomerCode = _customer.CustomerCode;
+        Name = _customer.Name;
+        Balance = _customer.Balance;
+    }
 
-            App.DataProvider.Customers.Save(_customer);
-        }
+    public void Delete()
+    {
+        DataProvider.Customers.DeleteCustomer(CustomerId);
+    }
 
-        public override string ToString()
-        {
-            return $"{CustomerCode}\t{Name}";
-        }
+    public void Save()
+    {
+        _customer.CustomerCode = CustomerCode;
+        _customer.Name = Name;
 
-        public void BeginEdit()
-        {
-            _backup = this.MemberwiseClone() as CustomerViewModel;
-        }
+        DataProvider.Customers.Save(_customer);
+    }
 
-        public void CancelEdit()
-        {
-            CustomerCode = _backup.CustomerCode;
-            Name = _backup.Name;
-        }
+    public override string ToString()
+    {
+        return $"{CustomerCode}\t{Name}";
+    }
 
-        public void EndEdit()
-        {
+    public void BeginEdit()
+    {
+        _backup = this.MemberwiseClone() as CustomerViewModel;
+    }
 
-        }
+    public void CancelEdit()
+    {
+        CustomerCode = _backup.CustomerCode;
+        Name = _backup.Name;
+    }
 
-        public static ValidationResult CanDeleteCustomer(int id, ValidationContext context)
-        {
-
-            if (App.DataProvider.Customers.CustomerHasTransactions(id))
-            {
-                return new("The customer has transactions and cannot be deleted.");
-            }
-
-            return ValidationResult.Success;
-        }
-
-        private void CustomerViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
-        }
-
-        private void CustomerViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(HasErrors))
-            {
-                OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
-            }
-        }
+    public void EndEdit()
+    {
 
     }
+
+    public ValidationResult CanDeleteCustomer(int id, ValidationContext context)
+    {
+
+        if (DataProvider.Customers.CustomerHasTransactions(id))
+        {
+            return new("The customer has transactions and cannot be deleted.");
+        }
+
+        return ValidationResult.Success;
+    }
+
+    private void CustomerViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+    }
+
+    private void CustomerViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(HasErrors))
+        {
+            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
+        }
+    }
+
 }

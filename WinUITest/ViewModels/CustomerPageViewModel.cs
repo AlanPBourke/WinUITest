@@ -1,149 +1,160 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using WinUITest.Data;
 
-namespace WinUITest.ViewModels
+namespace WinUITest.ViewModels;
+
+public class CustomerPageViewModel : ObservableObject
 {
-    public class CustomerPageViewModel : ObservableObject
+    //public bool IsTransactionSelected => SelectedCustomer != null;
+    public ObservableCollection<CustomerViewModel> Customers { get; } = new();
+    public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
+    public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; } = new();
+
+    internal IDataProvider DataProvider;
+
+    private bool _isCustomerSelected;
+    public bool IsCustomerSelected
     {
-        //public bool IsTransactionSelected => SelectedCustomer != null;
-        public ObservableCollection<CustomerViewModel> Customers { get; } = new();
-        public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
-        public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; } = new();
+        get => _isCustomerSelected;
+        set => SetProperty(ref _isCustomerSelected, value);
+    }
 
-        private bool _isCustomerSelected;
-        public bool IsCustomerSelected
+    private CustomerViewModel _selectedCustomer;
+    public CustomerViewModel SelectedCustomer
+    {
+        get => _selectedCustomer;
+        set
         {
-            get => _isCustomerSelected;
-            set => SetProperty(ref _isCustomerSelected, value);
+            SetProperty(ref _selectedCustomer, value);
+            IsCustomerSelected = true;
         }
+    }
 
-        private CustomerViewModel _selectedCustomer;
-        public CustomerViewModel SelectedCustomer
+    private TransactionViewModel _selectedTransaction;
+    public TransactionViewModel SelectedTransaction
+    {
+        get => _selectedTransaction;
+        set => SetProperty(ref _selectedTransaction, value);
+    }
+
+    private TransactionDetailViewModel _selectedTransactionDetail;
+    public TransactionDetailViewModel SelectedTransactionDetail
+    {
+        get => _selectedTransactionDetail;
+        set => SetProperty(ref _selectedTransactionDetail, value);
+    }
+
+    // -- The constructor is never explicitly called with a parameter, instead the DI framework will
+    // -- resolve it as long as there is a concrete instance of IDataProvider registered.
+    // -- See App.xaml.cs
+    public CustomerPageViewModel(IDataProvider provider)
+    {
+        //DataProvider = App.Current.Services.GetService(typeof(SqliteDataProvider)) as SqliteDataProvider;
+        DataProvider = provider;
+    }
+
+    private bool _isEditing;
+    public bool IsEditing
+    {
+        get => _isEditing;
+        set
         {
-            get => _selectedCustomer;
-            set
+            SetProperty(ref _isEditing, value);
+            OnPropertyChanged(nameof(IsAddingOrEditing));
+        }
+    }
+
+    private bool _isNavigating;
+    public bool IsNavigating
+    {
+        get => _isNavigating;
+        set
+        {
+            SetProperty(ref _isNavigating, value);
+        }
+    }
+
+    private bool _isAdding;
+    public bool IsAdding
+    {
+        get => _isAdding;
+        set
+        {
+            SetProperty(ref _isAdding, value);
+            OnPropertyChanged(nameof(IsAddingOrEditing));
+        }
+    }
+
+    public bool IsAddingOrEditing
+    {
+        get => IsAdding || IsEditing;
+    }
+
+    public void SetFirstCustomer()
+    {
+        if (Customers.Count > 0)
+        {
+            SelectedCustomer = Customers[0];
+        }
+    }
+
+    public void Load()
+    {
+        var customers = DataProvider.Customers.GetAll();
+
+        Customers.Clear();
+
+        foreach (var customer in customers)
+        {
+            var newcust = App.Current.Services.GetService(typeof(CustomerViewModel)) as CustomerViewModel;
+            newcust.SetCustomer(customer);
+            Customers.Add(newcust);
+        }
+    }
+
+    public void SetCustomer(int customerId)
+    {
+        var customer = DataProvider.Customers.Get(customerId);
+
+        if (customer != null)
+        {
+            var newcust = App.Current.Services.GetService(typeof(CustomerViewModel)) as CustomerViewModel;
+            newcust.SetCustomer(customer);
+            SelectedCustomer = newcust;
+            //OnPropertyChanged(nameof(SelectedCustomer));
+            //OnPropertyChanged(nameof(IsCustomerSelected));
+
+            Transactions.Clear();
+            var transactionsForCustomer = DataProvider.Transactions.GetForCustomer(customerId);
+            foreach (var transaction in transactionsForCustomer)
             {
-                SetProperty(ref _selectedCustomer, value);
-                IsCustomerSelected = true;
+                Transactions.Add(new TransactionViewModel(transaction));
             }
         }
+    }
 
-        private TransactionViewModel _selectedTransaction;
-        public TransactionViewModel SelectedTransaction
+    public void SetTransaction(int transactionId)
+    {
+        var txn = DataProvider.Transactions.GetById(transactionId);
+        SelectedTransaction = new TransactionViewModel(txn);
+
+        TransactionDetails.Clear();
+        var transactionDetailsForTransaction = DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);
+        foreach (var transaction in transactionDetailsForTransaction)
         {
-            get => _selectedTransaction;
-            set => SetProperty(ref _selectedTransaction, value);
+            TransactionDetails.Add(new TransactionDetailViewModel(transaction));
         }
-
-        private TransactionDetailViewModel _selectedTransactionDetail;
-        public TransactionDetailViewModel SelectedTransactionDetail
-        {
-            get => _selectedTransactionDetail;
-            set => SetProperty(ref _selectedTransactionDetail, value);
-        }
-
-        public CustomerPageViewModel()
-        {
-        }
-
-        private bool _isEditing;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                SetProperty(ref _isEditing, value);
-                OnPropertyChanged(nameof(IsAddingOrEditing));
-            }
-        }
-
-        private bool _isNavigating;
-        public bool IsNavigating
-        {
-            get => _isNavigating;
-            set
-            {
-                SetProperty(ref _isNavigating, value);
-            }
-        }
-
-        private bool _isAdding;
-        public bool IsAdding
-        {
-            get => _isAdding;
-            set
-            {
-                SetProperty(ref _isAdding, value);
-                OnPropertyChanged(nameof(IsAddingOrEditing));
-            }
-        }
-
-        public bool IsAddingOrEditing
-        {
-            get => IsAdding || IsEditing;
-        }
-
-        public void SetFirstCustomer()
-        {
-            if (Customers.Count > 0)
-            {
-                SelectedCustomer = Customers[0];
-            }
-        }
-
-        public void Load()
-        {
-            var customers = App.DataProvider.Customers.GetAll();
-
-            Customers.Clear();
-
-            foreach (var customer in customers)
-            {
-                Customers.Add(new CustomerViewModel(customer));
-            }
-        }
-
-        public void SetCustomer(int customerId)
-        {
-            var customer = App.DataProvider.Customers.Get(customerId);
-
-            if (customer != null)
-            {
-                SelectedCustomer = new CustomerViewModel(customer);
-                //OnPropertyChanged(nameof(SelectedCustomer));
-                //OnPropertyChanged(nameof(IsCustomerSelected));
-
-                Transactions.Clear();
-                var transactionsForCustomer = App.DataProvider.Transactions.GetForCustomer(customerId);
-                foreach (var transaction in transactionsForCustomer)
-                {
-                    Transactions.Add(new TransactionViewModel(transaction));
-                }
-            }
-        }
-
-        public void SetTransaction(int transactionId)
-        {
-            var txn = App.DataProvider.Transactions.GetById(transactionId);
-            SelectedTransaction = new TransactionViewModel(txn);
-
-            TransactionDetails.Clear();
-            var transactionDetailsForTransaction = App.DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);
-            foreach (var transaction in transactionDetailsForTransaction)
-            {
-                TransactionDetails.Add(new TransactionDetailViewModel(transaction));
-            }
-        }
+    }
 
 
-        public bool CanDelete()
-        {
-            return App.DataProvider.Customers.CustomerHasTransactions(SelectedCustomer.CustomerId) == false;
-        }
+    public bool CanDelete()
+    {
+        return DataProvider.Customers.CustomerHasTransactions(SelectedCustomer.CustomerId) == false;
+    }
 
-        public void DeleteCustomer()
-        {
-            App.DataProvider.Customers.DeleteCustomer(SelectedCustomer.CustomerId);
-        }
+    public void DeleteCustomer()
+    {
+        DataProvider.Customers.DeleteCustomer(SelectedCustomer.CustomerId);
     }
 }

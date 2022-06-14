@@ -63,12 +63,12 @@ namespace WinUITest.Pages
             }
             else
             {
-                ViewModel.SetTransaction(ViewModel.Customers[0].CustomerId);
+                ViewModel.SetTransaction(ViewModel.Transactions[0].TransactionId);
             }
 
-            if (ViewModel.SelectedCustomer != null)
+            if (ViewModel.SelectedTransaction != null)
             {
-                ViewModel.SetCustomer(ViewModel.SelectedCustomer.CustomerId);
+                ViewModel.SetTransaction(ViewModel.SelectedTransaction.TransactionId);
             }
 
             SetMode("navigate");
@@ -81,13 +81,13 @@ namespace WinUITest.Pages
             //{
             if (ViewModel.CanDelete())
             {
-                ViewModel.SelectedCustomer.Delete();
+                ViewModel.SelectedTransaction.Delete();
                 ViewModel.Load();
-                ViewModel.SetFirstCustomer();
+                ViewModel.SetFirstTransaction();
             }
             else
             {
-                UserMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
+                UserMaintenanceInAppNotification.Show("This transaction cannot be deleted.", 0);
             }
             DeleteButton.Flyout.Hide();
             SetMode("navigate");

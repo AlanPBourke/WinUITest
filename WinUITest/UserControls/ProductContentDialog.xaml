@@ -14,7 +14,7 @@
     mc:Ignorable="d">
 
     <ContentDialog.Resources>
-        <converters:PriceDecimalConverter x:Name="PriceDecimalConverter" />
+        <converters:DecimalToStringConverter x:Name="PriceDecimalConverter" />
     </ContentDialog.Resources>
 
     <RelativePanel>

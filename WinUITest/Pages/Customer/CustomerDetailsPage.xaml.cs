@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
+using WinUITest.Data;
 using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -32,7 +33,9 @@ namespace WinUITest.Pages
         private void Add()
         {
             SetMode("add");
-            ViewModel.SelectedCustomer = new CustomerViewModel(new Data.Customer());
+            var newcust = App.Current.Services.GetService(typeof(CustomerViewModel)) as CustomerViewModel;
+            newcust.SetCustomer(new Customer());
+            ViewModel.SelectedCustomer = newcust;
             ViewModel.SelectedCustomer.BeginEdit();
         }
 

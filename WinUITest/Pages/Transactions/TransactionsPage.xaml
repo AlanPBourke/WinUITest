@@ -13,56 +13,64 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <!--<Page.Resources>
-        <DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerNavigationMenuItemViewModel">
+    <Page.Resources>
+        <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerNavigationMenuItemViewModel">
             <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
-        </DataTemplate>
-        <converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />
-    </Page.Resources>-->
+        </DataTemplate>-->
+        <converters:DecimalToStringConverter x:Key="PriceDecimalConverter" />
+        <converters:DateStringConverter x:Key="DateStringConverter" />
+    </Page.Resources>
 
-    <Grid BorderThickness="15">
+    <Grid
+        Name="TransactionsPageGrid"
+        BorderBrush="AliceBlue"
+        BorderThickness="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="50*" />
             <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <!--<Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50*" />
                 <RowDefinition Height="50*" />
-            </Grid.RowDefinitions>
+            </Grid.RowDefinitions>-->
 
-            <controls:DataGrid
-                x:Name="TransactionsGrid"
-                Grid.Row="1"
-                AutoGenerateColumns="False"
-                GridLinesVisibility="Horizontal"
-                ItemsSource="{x:Bind ViewModel.Transactions}"
-                SelectionMode="Single">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn
-                        Binding="{Binding CustomerCode}"
-                        Header="Customer Code"
-                        IsReadOnly="true" />
-                    <controls:DataGridTextColumn
-                        Binding="{Binding ExpandedType}"
-                        Header="Type"
-                        IsReadOnly="true" />
-                    <controls:DataGridTextColumn
-                        Binding="{Binding TransactionDateAsString}"
+        <controls:DataGrid
+            x:Name="TransactionsGrid"
+            Grid.Row="0"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.Transactions}"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding CustomerCode}"
+                    Header="Customer Code"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ExpandedType}"
+                    Header="Type"
+                    IsReadOnly="true" />
+                <!--<controls:DataGridTextColumn
+                        Binding="{Binding TransactionDate, Converter={StaticResource DateStringConverter}}"
                         Header="Date"
-                        IsReadOnly="true" />
-                    <controls:DataGridTextColumn
-                        Binding="{Binding ValueAsString}"
-                        Header="Value"
-                        IsReadOnly="true" />
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+                        IsReadOnly="true" />-->
+                <controls:DataGridTextColumn
+                    Binding="{Binding TransactionDate}"
+                    Header="Date"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ValueAsString}"
+                    Header="Value"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
 
-        </Grid>
+        <!--</Grid>-->
 
-        <Pivot x:Name="TransactionPivot" Grid.Row="2">
+        <Pivot x:Name="TransactionPivot" Grid.Row="1">
             <PivotItem Header="Information">
                 <views:TransactionInfoPage />
             </PivotItem>

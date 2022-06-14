@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using WinUITest.Data;
@@ -29,9 +31,11 @@ namespace WinUITest
         public App()
         {
             // Can't see textbox caret unless Dark in App SDK 1.1 !
-            App.Current.RequestedTheme = ApplicationTheme.Dark;
+            //App.Current.RequestedTheme = ApplicationTheme.Dark;
+
             DataProvider = new SqliteDataProvider();
             Services = ConfigureServices();
+            CultureInfo.DefaultThreadCurrentCulture = Thread.CurrentThread.CurrentCulture;
             this.InitializeComponent();
         }
 
@@ -51,11 +55,23 @@ namespace WinUITest
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<CustomerPageViewModel>();
-            services.AddSingleton<TransactionsPageViewModel>();
-            services.AddSingleton(new CustomerViewModel(new Customer()));
-            services.AddSingleton<ProductPageViewModel>();
+
+            // -- As long is this is registered here then it does not need 
+            // -- to be passed to ViewModel constructors.
+            // -- See https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection
+            services.AddSingleton<IDataProvider, SqliteDataProvider>();
+
+            services.AddTransient<CustomerPageViewModel>();
+            services.AddTransient<TransactionsPageViewModel>();
+
+            //services.AddSingleton(new CustomerViewModel(new Customer()));
+            services.AddTransient<CustomerViewModel>();
+            services.AddTransient<ProductPageViewModel>();
+
             services.AddSingleton(new ProductViewModel(new Product()));
+            //services.AddSingleton(new SqliteDataProvider());
+
+
             return services.BuildServiceProvider();
         }
     }

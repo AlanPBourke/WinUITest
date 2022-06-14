@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <converters:PriceDecimalConverter x:Name="PriceDecimalConverter" />
+        <converters:DecimalToStringConverter x:Name="PriceDecimalConverter" />
     </Page.Resources>
 
     <Grid BorderThickness="15">
@@ -133,7 +133,7 @@
                 IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                 IsTabStop="True"
                 RelativePanel.Below="NameTextBox"
-                Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PriceDecimalConverter}}" />
+                Text="{x:Bind Path=ViewModel.SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToStringConverter}}" />
 
             <!--  NumberBox is shite - doesn't work with PropertyChanged, or Explicit binding  -->
             <!--<NumberBox

@@ -18,52 +18,57 @@
         <!--<converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />-->
     </Page.Resources>
 
-    <Grid Name="MainCustomerGrid" BorderThickness="15">
+    <Grid
+        Name="CustomerPageGrid"
+        BorderBrush="CadetBlue"
+        BorderThickness="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="50*" />
             <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
 
-        <Grid Name="CustomerListGrid" Grid.Row="0">
+        <!--<Grid
+            Name="CustomerListGrid"
+            Grid.Row="0"
+            BorderBrush="AntiqueWhite"
+            BorderThickness="15">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
                 <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            </Grid.RowDefinitions>-->
 
-            <controls:DataGrid
-                x:Name="CustomersGrid"
-                Grid.Row="1"
-                AutoGenerateColumns="False"
-                GridLinesVisibility="Horizontal"
-                ItemsSource="{x:Bind ViewModel.Customers}"
-                SelectionChanged="CustomersGrid_SelectionChanged"
-                SelectionMode="Single">
-                <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn
-                        Binding="{Binding CustomerCode}"
-                        Header="Code"
-                        IsReadOnly="true" />
-                    <controls:DataGridTextColumn
-                        Binding="{Binding Name}"
-                        Header="Name"
-                        IsReadOnly="true" />
-                    <controls:DataGridTextColumn
-                        Binding="{Binding BalanceForDisplay}"
-                        Header="Balance"
-                        IsReadOnly="true" />
+        <controls:DataGrid
+            x:Name="CustomersGrid"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.Customers}"
+            SelectionChanged="CustomersGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding CustomerCode}"
+                    Header="Code"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Name}"
+                    Header="Name"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding BalanceForDisplay}"
+                    Header="Balance"
+                    IsReadOnly="true" />
 
-                </controls:DataGrid.Columns>
-            </controls:DataGrid>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
 
-        </Grid>
+        <!--</Grid>-->
 
-        <Pivot x:Name="CustomerPivot" Grid.Row="2">
+        <Pivot x:Name="CustomerPivot" Grid.Row="1">
             <PivotItem Header="Information">
                 <views:CustomerDetailsPage />
             </PivotItem>
             <PivotItem Header="Transactions">
-                <views:CustomerTransactionsPage TransactionsViewModel="{x:Bind ViewModel}" />
+                <views:CustomerTransactionsPage />
             </PivotItem>
         </Pivot>
 

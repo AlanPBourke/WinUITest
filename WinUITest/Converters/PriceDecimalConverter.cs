@@ -3,7 +3,7 @@ using Microsoft.UI.Xaml.Data;
 
 namespace WinUITest.Converters
 {
-    public class PriceDecimalConverter : IValueConverter
+    public class DecimalToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
