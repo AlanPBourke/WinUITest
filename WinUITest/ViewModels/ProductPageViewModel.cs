@@ -69,7 +69,7 @@ public class ProductPageViewModel : ObservableObject
     public ProductPageViewModel(IDataProvider dataprovider)
     {
         DataProvider = dataprovider;
-        //SelectedProduct = App.Current.Services.GetService<ProductViewModel>();
+        SelectedProduct = App.Current.Services.GetService<ProductViewModel>();
     }
 
     public void Load()
@@ -87,7 +87,7 @@ public class ProductPageViewModel : ObservableObject
 
     public void SetProduct(int productId)
     {
-        var product = App.DataProvider.Products.Get(productId);
+        var product = DataProvider.Products.Get(productId);
         if (product != null)
         {
             ProductViewModel newproductmodel = App.Current.Services.GetService<ProductViewModel>();

@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
+using WinUITest.Data;
 using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -33,7 +35,9 @@ public sealed partial class TransactionInfoPage : Page
     private void Add()
     {
         SetMode("add");
-        ViewModel.SelectedTransaction = new TransactionViewModel(new Data.Transaction());
+        TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+        newtxnviewmodel.SetTransaction(new Transaction());
+        ViewModel.SelectedTransaction = newtxnviewmodel;
         ViewModel.SelectedTransaction.BeginEdit();
     }
 

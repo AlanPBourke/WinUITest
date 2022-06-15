@@ -1,23 +1,14 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
 public class TransactionsPageViewModel : ObservableObject
 {
+    private IDataProvider DataProvider;
     public List<TransactionViewModel> Transactions { get; } = new();
     //public bool IsTransactionSelected => SelectedCustomer != null;
-
-    public void Load()
-    {
-        var transactions = App.DataProvider.Transactions.GetAll();
-
-        Transactions.Clear();
-
-        foreach (var transaction in transactions)
-        {
-            Transactions.Add(new TransactionViewModel(transaction));
-        }
-    }
 
     private bool _isTransactionSelected;
     public bool IsTransactionSelected
@@ -76,11 +67,13 @@ public class TransactionsPageViewModel : ObservableObject
 
     public void SetTransaction(int transactionId)
     {
-        var txn = App.DataProvider.Transactions.GetById(transactionId);
+        var txn = DataProvider.Transactions.GetById(transactionId);
 
         if (txn != null)
         {
-            SelectedTransaction = new TransactionViewModel(txn);
+            TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+            newtxnviewmodel.SetTransaction(txn);
+            SelectedTransaction = newtxnviewmodel;
         }
     }
 
@@ -96,6 +89,21 @@ public class TransactionsPageViewModel : ObservableObject
 
     }
 
+    public void Load()
+    {
+        var transactions = DataProvider.Transactions.GetAll();
+
+        Transactions.Clear();
+
+        foreach (var transaction in transactions)
+        {
+            TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+            newtxnviewmodel.SetTransaction(transaction);
+            Transactions.Add(newtxnviewmodel);
+        }
+    }
+
+
     public void SetFirstTransaction()
     {
         if (Transactions.Count > 0)
@@ -104,8 +112,8 @@ public class TransactionsPageViewModel : ObservableObject
         }
     }
 
-    public TransactionsPageViewModel()
+    public TransactionsPageViewModel(IDataProvider dataprovider)
     {
-
+        DataProvider = dataprovider;
     }
 }

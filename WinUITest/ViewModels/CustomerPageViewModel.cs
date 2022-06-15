@@ -130,7 +130,9 @@ public class CustomerPageViewModel : ObservableObject
             var transactionsForCustomer = DataProvider.Transactions.GetForCustomer(customerId);
             foreach (var transaction in transactionsForCustomer)
             {
-                Transactions.Add(new TransactionViewModel(transaction));
+                TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+                newtxnviewmodel.SetTransaction(new Transaction());
+                Transactions.Add(newtxnviewmodel);
             }
         }
     }
@@ -138,7 +140,9 @@ public class CustomerPageViewModel : ObservableObject
     public void SetTransaction(int transactionId)
     {
         var txn = DataProvider.Transactions.GetById(transactionId);
-        SelectedTransaction = new TransactionViewModel(txn);
+        TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+        newtxnviewmodel.SetTransaction(txn);
+        SelectedTransaction = newtxnviewmodel;
 
         TransactionDetails.Clear();
         var transactionDetailsForTransaction = DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);

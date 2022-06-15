@@ -8,8 +8,10 @@ using WinUITest.Data;
 namespace WinUITest.ViewModels;
 public class TransactionViewModel : ObservableValidator, IEditableObject
 {
+    private IDataProvider DataProvider;
+
     public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
-    private readonly Transaction _transaction;
+    private Transaction _transaction;
     private TransactionViewModel _backup;
 
     public string CustomerCode
@@ -75,16 +77,21 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
         set => SetProperty(ref _value, value, true);
     }
 
-    public TransactionViewModel(Transaction transaction)
+    public TransactionViewModel(IDataProvider dataprovider)
+    {
+        DataProvider = dataprovider;
+        PropertyChanged += TransactionViewModel_PropertyChanged;
+        ErrorsChanged += TransactionViewModel_ErrorsChanged;
+
+    }
+
+    public void SetTransaction(Transaction transaction)
     {
         _transaction = transaction;
         TransactionId = _transaction.TransactionId;
         CustomerId = _transaction.CustomerId;
         Value = _transaction.Value;
         Type = _transaction.Type;
-        PropertyChanged += TransactionViewModel_PropertyChanged;
-        ErrorsChanged += TransactionViewModel_ErrorsChanged;
-
     }
 
     private void TransactionViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
@@ -122,6 +129,6 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
     }
     public void Save()
     {
-        App.DataProvider.Transactions.Save(_transaction);
+        DataProvider.Transactions.Save(_transaction);
     }
 }

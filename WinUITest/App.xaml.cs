@@ -16,7 +16,6 @@ namespace WinUITest;
 /// </summary>
 public partial class App : Application
 {
-    public static IDataProvider DataProvider { get; set; }
     public IServiceProvider Services { get; }
 
     /// <summary>
@@ -33,7 +32,6 @@ public partial class App : Application
         // Can't see textbox caret unless Dark in App SDK 1.1 !
         //App.Current.RequestedTheme = ApplicationTheme.Dark;
 
-        DataProvider = new SqliteDataProvider();
         Services = ConfigureServices();
         CultureInfo.DefaultThreadCurrentCulture = Thread.CurrentThread.CurrentCulture;
         this.InitializeComponent();
@@ -65,10 +63,11 @@ public partial class App : Application
         // tabs.
         services.AddSingleton<CustomerPageViewModel>();
         services.AddSingleton<ProductPageViewModel>();
+        services.AddSingleton<TransactionsPageViewModel>();
 
-        services.AddTransient<TransactionsPageViewModel>();
         services.AddTransient<CustomerViewModel>();
         services.AddTransient<ProductViewModel>();
+        services.AddTransient<TransactionViewModel>();
 
         //services.AddSingleton(new ProductViewModel(new Product()));
         //services.AddSingleton(new SqliteDataProvider());
