@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
@@ -11,7 +12,7 @@ public class CustomerPageViewModel : ObservableObject
     public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
     public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; } = new();
 
-    internal IDataProvider DataProvider;
+    private IDataProvider DataProvider;
 
     private bool _isCustomerSelected;
     public bool IsCustomerSelected
@@ -107,9 +108,9 @@ public class CustomerPageViewModel : ObservableObject
 
         foreach (var customer in customers)
         {
-            var newcust = App.Current.Services.GetService(typeof(CustomerViewModel)) as CustomerViewModel;
-            newcust.SetCustomer(customer);
-            Customers.Add(newcust);
+            CustomerViewModel newcustmodel = App.Current.Services.GetService<CustomerViewModel>();
+            newcustmodel.SetCustomer(customer);
+            Customers.Add(newcustmodel);
         }
     }
 
@@ -119,9 +120,9 @@ public class CustomerPageViewModel : ObservableObject
 
         if (customer != null)
         {
-            var newcust = App.Current.Services.GetService(typeof(CustomerViewModel)) as CustomerViewModel;
-            newcust.SetCustomer(customer);
-            SelectedCustomer = newcust;
+            CustomerViewModel newcustmodel = App.Current.Services.GetService<CustomerViewModel>();
+            newcustmodel.SetCustomer(customer);
+            SelectedCustomer = newcustmodel;
             //OnPropertyChanged(nameof(SelectedCustomer));
             //OnPropertyChanged(nameof(IsCustomerSelected));
 

@@ -38,11 +38,11 @@
             </Grid.RowDefinitions>-->
 
         <controls:DataGrid
-            x:Name="CustomersGrid"
+            x:Name="CustomersDataGrid"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
             ItemsSource="{x:Bind ViewModel.Customers}"
-            SelectionChanged="CustomersGrid_SelectionChanged"
+            SelectionChanged="CustomersDataGrid_SelectionChanged"
             SelectionMode="Single">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn

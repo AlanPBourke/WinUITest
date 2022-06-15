@@ -27,3 +27,6 @@ from Transactions t left join Customers c on t.CustomerId = c.CustomerId
 BINDING
 http://www.blackwasp.co.uk/WPFDataContext_2.aspx
 http://www.blackwasp.co.uk/WPFValueConverter.aspx
+
+DI
+https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc

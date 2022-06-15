@@ -8,6 +8,7 @@
 
 using System.Windows.Input;
 using CommunityToolkit.WinUI.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using WinUITest.Data;
@@ -43,7 +44,7 @@ public sealed partial class ProductPage : Page
     {
         if (ViewModel.Products.Count > 0)
         {
-            ProductGrid.SelectedItem = ViewModel.Products[0];
+            //  ProductsDataGrid.SelectedItem = ViewModel.Products[0];
             ViewModel.SetFirstProduct();
         }
     }
@@ -51,7 +52,9 @@ public sealed partial class ProductPage : Page
     private void Add()
     {
         SetMode("add");
-        ViewModel.SelectedProduct = new ProductViewModel(new Product());
+        ProductViewModel p = App.Current.Services.GetService<ProductViewModel>();
+        p.SetProduct(new Product());
+        ViewModel.SelectedProduct = p;
         ViewModel.SelectedProduct.BeginEdit();
     }
 
@@ -92,7 +95,7 @@ public sealed partial class ProductPage : Page
         SetMode("navigate");
     }
 
-    private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ProductsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         DataGrid g = sender as DataGrid;
         if (g != null && g.SelectedItem != null)

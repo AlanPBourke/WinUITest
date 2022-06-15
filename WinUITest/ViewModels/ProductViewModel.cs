@@ -9,8 +9,9 @@ namespace WinUITest.ViewModels;
 
 public class ProductViewModel : ObservableValidator, IEditableObject
 {
+    private IDataProvider DataProvider;
     public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
-    private readonly Product _product;
+    private Product _product;
     private ProductViewModel _backup;
 
     private int _productid;
@@ -56,15 +57,20 @@ public class ProductViewModel : ObservableValidator, IEditableObject
         set => SetProperty(ref _pricestring, value, true);
     }
 
-    public ProductViewModel(Product product)
+    public ProductViewModel(IDataProvider dataprovider)
+    {
+        DataProvider = dataprovider;
+        PropertyChanged += ProductViewModel_PropertyChanged;
+        ErrorsChanged += ProductViewModel_ErrorsChanged;
+    }
+
+    public void SetProduct(Product product)
     {
         _product = product;
         ProductCode = _product.ProductCode;
         ProductName = _product.ProductName;
         ProductId = _product.ProductId;
         Price = _product.Price;
-        PropertyChanged += ProductViewModel_PropertyChanged;
-        ErrorsChanged += ProductViewModel_ErrorsChanged;
     }
 
     public void Save()
@@ -72,12 +78,12 @@ public class ProductViewModel : ObservableValidator, IEditableObject
         _product.ProductCode = ProductCode;
         _product.ProductName = ProductName;
         _product.Price = Price;
-        App.DataProvider.Products.Save(_product);
+        DataProvider.Products.Save(_product);
     }
 
     public void Delete()
     {
-        App.DataProvider.Products.Delete(_product.ProductId);
+        DataProvider.Products.Delete(_product.ProductId);
     }
 
     public void BeginEdit()

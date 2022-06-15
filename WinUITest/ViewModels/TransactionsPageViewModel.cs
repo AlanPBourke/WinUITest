@@ -2,7 +2,6 @@
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace WinUITest.ViewModels;
-
 public class TransactionsPageViewModel : ObservableObject
 {
     public List<TransactionViewModel> Transactions { get; } = new();

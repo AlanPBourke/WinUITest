@@ -11,13 +11,12 @@ using WinUITest.Data;
 // https://github.com/CommunityToolkit/MVVM-Samples/blob/master/docs/mvvm/PuttingThingsTogether.md
 
 namespace WinUITest.ViewModels;
-
 public class CustomerViewModel : ObservableValidator, IEditableObject
 {
-    internal IDataProvider DataProvider;
+    private IDataProvider DataProvider;
 
     public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
-    //public bool CanSave => (string.IsNullOrEmpty(Name) == false);
+
     private Customer _customer;
     private CustomerViewModel _backup;
 
@@ -55,16 +54,9 @@ public class CustomerViewModel : ObservableValidator, IEditableObject
         get => Balance.ToString("0.##");
     }
 
-    public CustomerViewModel(IDataProvider dataprovider, Customer customer)
+    public CustomerViewModel(IDataProvider dataprovider)
     {
         DataProvider = dataprovider;
-
-        _customer = customer;
-        CustomerId = _customer.CustomerId;
-        CustomerCode = _customer.CustomerCode;
-        Name = _customer.Name;
-        Balance = _customer.Balance;
-
         PropertyChanged += CustomerViewModel_PropertyChanged;
         ErrorsChanged += CustomerViewModel_ErrorsChanged;
     }

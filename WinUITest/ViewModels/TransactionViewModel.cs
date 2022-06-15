@@ -6,7 +6,6 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
-
 public class TransactionViewModel : ObservableValidator, IEditableObject
 {
     public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);

@@ -27,11 +27,11 @@
         </Grid.ColumnDefinitions>
 
         <controls:DataGrid
-            Name="ProductGrid"
+            Name="ProductsDataGrid"
             Grid.Row="0"
             AutoGenerateColumns="False"
             ItemsSource="{x:Bind ViewModel.Products}"
-            SelectionChanged="DataGrid_SelectionChanged"
+            SelectionChanged="ProductsDataGrid_SelectionChanged"
             SelectionMode="Single">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn

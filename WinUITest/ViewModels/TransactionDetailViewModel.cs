@@ -2,7 +2,6 @@
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
-
 public class TransactionDetailViewModel : ObservableObject
 {
     private readonly TransactionDetail _transactionDetail;
