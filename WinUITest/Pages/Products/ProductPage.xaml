@@ -14,7 +14,7 @@
         <converters:DecimalToStringConverter x:Name="PriceDecimalConverter" />
     </Page.Resources>
 
-    <Grid BorderThickness="15">
+    <Grid Name="ProductPageGrid" BorderThickness="15">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="50*" />
@@ -22,9 +22,9 @@
             <RowDefinition Height="35*" />
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>-->
 
         <controls:DataGrid
             Name="ProductsDataGrid"

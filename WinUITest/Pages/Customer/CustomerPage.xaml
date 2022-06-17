@@ -11,12 +11,14 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerPageMenuViewModel">
+    <!--<Page.Resources>
+    -->
+    <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerPageMenuViewModel">
             <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
         </DataTemplate>-->
-        <!--<converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />-->
-    </Page.Resources>
+    <!--<converters:PriceDecimalConverter x:Key="PriceDecimalConverter" />-->
+    <!--
+    </Page.Resources>-->
 
     <Grid
         Name="CustomerPageGrid"
@@ -39,6 +41,7 @@
 
         <controls:DataGrid
             x:Name="CustomersDataGrid"
+            Grid.Row="0"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
             ItemsSource="{x:Bind ViewModel.Customers}"
