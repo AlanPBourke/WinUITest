@@ -35,6 +35,13 @@ public partial class App : Application
         Services = ConfigureServices();
         CultureInfo.DefaultThreadCurrentCulture = Thread.CurrentThread.CurrentCulture;
         this.InitializeComponent();
+        UnhandledException += App_UnhandledException;
+    }
+
+    private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine($"Unhandled: {e.Exception.Message}");
+
     }
 
     /// <summary>

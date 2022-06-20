@@ -44,6 +44,8 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
         set => SetProperty(ref _type, value, true);
     }
 
+    // SQLite doesn't have DateTime, it's stored as Text  
+    // EF will translate it 
     public string TransactionDateAsString => _transaction.TransactionDate.ToShortDateString();
 
     private DateTime _transactiondate;

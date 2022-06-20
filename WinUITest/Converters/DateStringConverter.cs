@@ -8,7 +8,7 @@ public class DateStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        Debug.WriteLine($"{value.ToString()}");
+        Debug.WriteLine($"Date: {value.ToString()}");
         if (value == null) return null;
         var dt = (DateTime)value;
         return dt.ToShortDateString();

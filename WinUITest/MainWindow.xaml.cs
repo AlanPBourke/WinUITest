@@ -39,6 +39,7 @@ public sealed partial class MainWindow : Window
                 break;
             case "products":
                 pageType = typeof(ProductPage);
+                //pageType = typeof(ProductPage2);
                 break;
         }
 

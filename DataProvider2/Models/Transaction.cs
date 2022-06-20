@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace WinUITest.Data;
-
 public class Transaction
 {
     public int TransactionId { get; set; }

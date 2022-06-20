@@ -6,6 +6,7 @@ using WinUITest.Data;
 using WinUITest.ViewModels;
 
 
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -14,30 +15,20 @@ namespace WinUITest.Pages;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class ProductPage : Page
+public sealed partial class ProductPage2 : Page
 {
     public ICommand AddCommand => new RelayCommand(Add);
     public ICommand EditCommand => new RelayCommand(BeginEdit);
     public ICommand SaveCommand => new RelayCommand(Save);
     public ICommand CancelCommand => new RelayCommand(Cancel);
-
     public ProductPageViewModel ViewModel { get; }
-    //private ProductViewModel SelectedProduct { get; set; }
-    public ProductPage()
+    public ProductPage2()
     {
-        InitializeComponent();
+        this.InitializeComponent();
         ViewModel = App.Current.Services.GetService(typeof(ProductPageViewModel)) as ProductPageViewModel;
         ViewModel.Load();
         SetMode("navigating");
         DataContext = ViewModel;
-    }
-    private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        if (ViewModel.Products.Count > 0)
-        {
-            //  ProductsDataGrid.SelectedItem = ViewModel.Products[0];
-            ViewModel.SetFirstProduct();
-        }
     }
 
     private void Add()
@@ -86,16 +77,6 @@ public sealed partial class ProductPage : Page
         SetMode("navigate");
     }
 
-    private void ProductsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        DataGrid g = sender as DataGrid;
-        if (g != null && g.SelectedItem != null)
-        {
-            var product = g.SelectedItem as ProductViewModel;
-            ViewModel.SetProduct(product.ProductId);
-        }
-    }
-
     private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
 
@@ -109,7 +90,7 @@ public sealed partial class ProductPage : Page
         }
         else
         {
-            ProductMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
+            // ProductMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
         }
         DeleteButton.Flyout.Hide();
         SetMode("navigate");
@@ -122,6 +103,16 @@ public sealed partial class ProductPage : Page
         ViewModel.IsEditing = false;
         DeleteButton.Flyout.Hide();
         SetMode("navigate");
+    }
+
+    private void ProductsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        DataGrid g = sender as DataGrid;
+        if (g != null && g.SelectedItem != null)
+        {
+            var product = g.SelectedItem as ProductViewModel;
+            ViewModel.SetProduct(product.ProductId);
+        }
     }
 
     private void SetMode(string mode)
@@ -146,5 +137,4 @@ public sealed partial class ProductPage : Page
                 break;
         }
     }
-
 }

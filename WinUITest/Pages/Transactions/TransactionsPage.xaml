@@ -19,6 +19,7 @@
         </DataTemplate>-->
         <converters:DecimalToStringConverter x:Key="PriceDecimalConverter" />
         <converters:DateStringConverter x:Key="DateStringConverter" />
+        <converters:DateToStringConverter x:Key="DateToStringConverter" />
     </Page.Resources>
 
     <Grid
@@ -53,12 +54,8 @@
                     Binding="{Binding ExpandedType}"
                     Header="Type"
                     IsReadOnly="true" />
-                <!--<controls:DataGridTextColumn
-                        Binding="{Binding TransactionDate, Converter={StaticResource DateStringConverter}}"
-                        Header="Date"
-                        IsReadOnly="true" />-->
                 <controls:DataGridTextColumn
-                    Binding="{Binding TransactionDate}"
+                    Binding="{Binding TransactionDateAsString}"
                     Header="Date"
                     IsReadOnly="true" />
                 <controls:DataGridTextColumn

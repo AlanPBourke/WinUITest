@@ -1,7 +1,8 @@
 {
   "profiles": {
     "WinUITest (Package)": {
-      "commandName": "MsixPackage"
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
     },
     "WinUITest (Unpackaged)": {
       "commandName": "Project"
