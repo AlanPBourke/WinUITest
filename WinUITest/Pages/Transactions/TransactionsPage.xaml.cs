@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls;
 using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -11,6 +13,7 @@ namespace WinUITest.Pages;
 /// </summary>
 public sealed partial class TransactionsPage : Page
 {
+    public ICommand AddCommand => new RelayCommand(Add);
     public TransactionsPageViewModel ViewModel { get; }
     public TransactionsPage()
     {
@@ -21,7 +24,12 @@ public sealed partial class TransactionsPage : Page
 
     private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
+    }
 
+    private void Add()
+    {
+        NewTransactionWindow NewWindow = new NewTransactionWindow();
+        NewWindow.Activate();
     }
 }
 

@@ -96,7 +96,7 @@ public class CustomerPageViewModel : ObservableObject
     {
         if (Customers.Count > 0)
         {
-            SelectedCustomer = Customers[0];
+            SetCustomer(Customers[0].CustomerId);
         }
     }
 
@@ -131,7 +131,7 @@ public class CustomerPageViewModel : ObservableObject
             foreach (var transaction in transactionsForCustomer)
             {
                 TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
-                newtxnviewmodel.SetTransaction(new Transaction());
+                newtxnviewmodel.SetTransaction(transaction);
                 Transactions.Add(newtxnviewmodel);
             }
         }
@@ -148,7 +148,9 @@ public class CustomerPageViewModel : ObservableObject
         var transactionDetailsForTransaction = DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);
         foreach (var transaction in transactionDetailsForTransaction)
         {
-            TransactionDetails.Add(new TransactionDetailViewModel(transaction));
+            var newtxndetail = App.Current.Services.GetService<TransactionDetailViewModel>();
+            newtxndetail.SetTransactionDetail(transaction);
+            TransactionDetails.Add(newtxndetail);
         }
     }
 

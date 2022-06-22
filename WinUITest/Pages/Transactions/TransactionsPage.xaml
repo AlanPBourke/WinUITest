@@ -29,14 +29,10 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="50*" />
-            <RowDefinition Height="50*" />
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="35*" />
         </Grid.RowDefinitions>
 
-        <!--<Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50*" />
-                <RowDefinition Height="50*" />
-            </Grid.RowDefinitions>-->
 
         <controls:DataGrid
             x:Name="TransactionsGrid"
@@ -65,9 +61,67 @@
             </controls:DataGrid.Columns>
         </controls:DataGrid>
 
-        <!--</Grid>-->
+        <CommandBar
+            Name="ProductMaintenanceCommandBar"
+            Grid.Row="1"
+            Grid.ColumnSpan="1"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="True">
+            <AppBarButton
+                Name="AddButton"
+                Command="{x:Bind AddCommand}"
+                Icon="Add"
+                Label="Add"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+            <!--<AppBarButton
+                Name="EditButton"
+                Command="{x:Bind EditCommand}"
+                Icon="Edit"
+                Label="Edit"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+            <AppBarButton
+                Name="SaveButton"
+                Command="{x:Bind SaveCommand}"
+                Icon="Save"
+                Label="Save"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="CancelButton"
+                Command="{x:Bind CancelCommand}"
+                Icon="Cancel"
+                Label="Cancel"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="DeleteButton"
+                Icon="Delete"
+                Label="Delete"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <RelativePanel Width="600">
+                            <TextBlock
+                                Name="TextBlock"
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Text="Product will be deleted. Do you want to continue?" />
+                            <Button
+                                Name="YesButton"
+                                Click="DeleteConfirmationClick"
+                                Content="Yes"
+                                RelativePanel.Below="TextBlock" />
+                            <Button
+                                Click="DeleteCancelClick"
+                                Content="No"
+                                RelativePanel.Below="TextBlock"
+                                RelativePanel.RightOf="YesButton" />
+                        </RelativePanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>-->
+        </CommandBar>
 
-        <Pivot x:Name="TransactionPivot" Grid.Row="1">
+        <Pivot x:Name="TransactionPivot" Grid.Row="2">
             <PivotItem Header="Information">
                 <views:TransactionInfoPage />
             </PivotItem>

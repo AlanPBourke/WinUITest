@@ -4,67 +4,70 @@ using WinUITest.Data;
 namespace WinUITest.ViewModels;
 public class TransactionDetailViewModel : ObservableObject
 {
-    private readonly TransactionDetail _transactionDetail;
+    private TransactionDetail _transactionDetail;
 
-    public TransactionDetailViewModel(TransactionDetail transactionDetail)
+    public TransactionDetailViewModel()
+    {
+
+    }
+
+    public void SetTransactionDetail(TransactionDetail transactionDetail)
     {
         _transactionDetail = transactionDetail;
+        TransactionDetailId = transactionDetail.TransactionDetailId;
+        Value = transactionDetail.Value;
+        ProductCode = transactionDetail.ProductCode;
+        Value = transactionDetail.Value;
     }
 
+    private string _quantitystring;
     public string QuantityString
     {
-        get => _transactionDetail.Quantity.ToString();
+        get => _quantitystring;
+        set => SetProperty(ref _quantitystring, value);
     }
 
+    private int _quantity;
     public int Quantity
     {
-        get => _transactionDetail.Quantity;
-
+        get => _quantity;
         set
         {
-            if (_transactionDetail.Quantity != value)
-            {
-                _transactionDetail.Quantity = value;
-                OnPropertyChanged(nameof(Quantity));
-            }
+            SetProperty(ref _quantity, value);
+            QuantityString = value.ToString();
         }
     }
 
+    private string _valuestring;
     public string ValueString
     {
-        get => _transactionDetail.Value.ToString();
+        get => _valuestring;
+        set => SetProperty(ref _valuestring, value);
     }
 
+    private double _value;
     public double Value
     {
-        get => _transactionDetail.Value;
+        get => _value;
 
         set
         {
-            if (_transactionDetail.Value != value)
-            {
-                _transactionDetail.Value = value;
-                OnPropertyChanged(nameof(Value));
-            }
+            SetProperty(ref _value, value);
+            ValueString = value.ToString();
         }
     }
+
+    private string _productcode;
     public string ProductCode
     {
-        get => _transactionDetail.ProductCode;
-
-        set
-        {
-            if (_transactionDetail.ProductCode != value)
-            {
-                _transactionDetail.ProductCode = value;
-                OnPropertyChanged(nameof(ProductCode));
-            }
-        }
-
+        get => _productcode;
+        set => SetProperty(ref _productcode, value);
     }
 
-    public int TransactionId
+    private int _transactiondetailid;
+    public int TransactionDetailId
     {
-        get => _transactionDetail.TransactionId;
+        get => _transactiondetailid;
+        set => SetProperty(ref _transactiondetailid, value);
     }
 }

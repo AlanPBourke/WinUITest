@@ -40,6 +40,7 @@
     <None Remove="Pages\CustomerInfoPage.xaml" />
     <None Remove="Pages\CustomerTransactionsPage.xaml" />
     <None Remove="Pages\Products\ProductPage2.xaml" />
+    <None Remove="Pages\Transactions\NewTransactionWindow.xaml" />
     <None Remove="Pages\Transactions\TransactionDetailsPage.xaml" />
     <None Remove="Pages\Transactions\TransactionInfoPage.xaml" />
     <None Remove="ProductContentDialog.xaml" />
@@ -142,5 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Remove="Pages\Products\ProductPage2.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Transactions\NewTransactionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
