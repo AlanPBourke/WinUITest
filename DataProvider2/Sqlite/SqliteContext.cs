@@ -52,10 +52,10 @@ public class SqliteContext : DbContext
 
         modelBuilder.Entity<TransactionDetail>().HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
         modelBuilder.Entity<TransactionDetail>().HasData(
-            new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Value = 25.98 },
-            new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Value = 22.19 },
-            new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Value = -22.19 },
-            new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Value = -14.30 }
+            new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Price = 12.99, Value = 25.98 },
+            new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = 22.19 },
+            new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = -22.19 },
+            new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Price = 7.15, Value = -14.30 }
             );
 
         // Map to database view

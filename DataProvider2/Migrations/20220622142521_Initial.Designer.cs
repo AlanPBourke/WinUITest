@@ -11,13 +11,13 @@ using WinUITest.Data;
 namespace WinUITest.DataProvider.Migrations
 {
     [DbContext(typeof(SqliteContext))]
-    [Migration("20220517103829_initial")]
-    partial class initial
+    [Migration("20220622142521_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.6");
 
             modelBuilder.Entity("WinUITest.Data.Customer", b =>
                 {
@@ -169,7 +169,7 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2022, 5, 17, 11, 38, 29, 87, DateTimeKind.Local).AddTicks(8463));
+                        .HasDefaultValue(new DateTime(2022, 6, 22, 15, 25, 21, 447, DateTimeKind.Local).AddTicks(8754));
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -218,6 +218,9 @@ namespace WinUITest.DataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -241,6 +244,7 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             TransactionDetailId = 1,
+                            Price = 12.99,
                             ProductCode = "EGG48",
                             Quantity = 2,
                             TransactionId = 1,
@@ -249,6 +253,7 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             TransactionDetailId = 2,
+                            Price = 22.190000000000001,
                             ProductCode = "VAN001",
                             Quantity = 1,
                             TransactionId = 1,
@@ -257,6 +262,7 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             TransactionDetailId = 3,
+                            Price = 22.190000000000001,
                             ProductCode = "VAN001",
                             Quantity = 1,
                             TransactionId = 2,
@@ -265,6 +271,7 @@ namespace WinUITest.DataProvider.Migrations
                         new
                         {
                             TransactionDetailId = 4,
+                            Price = 7.1500000000000004,
                             ProductCode = "SUGAR2KG",
                             Quantity = 2,
                             TransactionId = 3,

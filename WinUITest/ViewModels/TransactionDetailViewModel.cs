@@ -38,6 +38,13 @@ public class TransactionDetailViewModel : ObservableObject
         }
     }
 
+    private double _price;
+    public double Price
+    {
+        get => _price;
+        set => SetProperty(ref _price, value);
+    }
+
     private string _valuestring;
     public string ValueString
     {
@@ -70,4 +77,6 @@ public class TransactionDetailViewModel : ObservableObject
         get => _transactiondetailid;
         set => SetProperty(ref _transactiondetailid, value);
     }
+
+
 }

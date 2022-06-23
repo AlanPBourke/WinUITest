@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WinUITest.DataProvider.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,7 +48,7 @@ namespace WinUITest.DataProvider.Migrations
                     Type = table.Column<string>(type: "TEXT", maxLength: 1, nullable: false),
                     Value = table.Column<double>(type: "REAL", nullable: false),
                     CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2022, 5, 17, 11, 38, 29, 87, DateTimeKind.Local).AddTicks(8463))
+                    TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2022, 6, 22, 15, 25, 21, 447, DateTimeKind.Local).AddTicks(8754))
                 },
                 constraints: table =>
                 {
@@ -68,6 +68,7 @@ namespace WinUITest.DataProvider.Migrations
                     TransactionDetailId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<double>(type: "REAL", nullable: false),
                     Value = table.Column<double>(type: "REAL", nullable: false),
                     TransactionId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductCode = table.Column<string>(type: "TEXT", nullable: false)
@@ -145,23 +146,23 @@ namespace WinUITest.DataProvider.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransactionDetails",
-                columns: new[] { "TransactionDetailId", "ProductCode", "Quantity", "TransactionId", "Value" },
-                values: new object[] { 1, "EGG48", 2, 1, 25.98 });
+                columns: new[] { "TransactionDetailId", "Price", "ProductCode", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 1, 12.99, "EGG48", 2, 1, 25.98 });
 
             migrationBuilder.InsertData(
                 table: "TransactionDetails",
-                columns: new[] { "TransactionDetailId", "ProductCode", "Quantity", "TransactionId", "Value" },
-                values: new object[] { 2, "VAN001", 1, 1, 22.190000000000001 });
+                columns: new[] { "TransactionDetailId", "Price", "ProductCode", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 2, 22.190000000000001, "VAN001", 1, 1, 22.190000000000001 });
 
             migrationBuilder.InsertData(
                 table: "TransactionDetails",
-                columns: new[] { "TransactionDetailId", "ProductCode", "Quantity", "TransactionId", "Value" },
-                values: new object[] { 3, "VAN001", 1, 2, -22.190000000000001 });
+                columns: new[] { "TransactionDetailId", "Price", "ProductCode", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 3, 22.190000000000001, "VAN001", 1, 2, -22.190000000000001 });
 
             migrationBuilder.InsertData(
                 table: "TransactionDetails",
-                columns: new[] { "TransactionDetailId", "ProductCode", "Quantity", "TransactionId", "Value" },
-                values: new object[] { 4, "SUGAR2KG", 2, 3, -14.300000000000001 });
+                columns: new[] { "TransactionDetailId", "Price", "ProductCode", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 4, 7.1500000000000004, "SUGAR2KG", 2, 3, -14.300000000000001 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TransactionDetails_TransactionId",

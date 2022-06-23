@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -79,6 +80,27 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
         set => SetProperty(ref _value, value, true);
     }
 
+    private double _price;
+    public double Price
+    {
+        get => _price;
+        set => SetProperty(ref _price, value, true);
+    }
+
+    private Customer _customer;
+    public Customer Customer
+    {
+        get => _customer;
+        set => SetProperty(ref _customer, value, true);
+    }
+
+    private List<TransactionDetail> _transactiondetails;
+    public List<TransactionDetail> TransactionDetails
+    {
+        get => _transactiondetails;
+        set => SetProperty(ref _transactiondetails, value, true);
+    }
+
     public TransactionViewModel(IDataProvider dataprovider)
     {
         DataProvider = dataprovider;
@@ -90,10 +112,12 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
     public void SetTransaction(Transaction transaction)
     {
         _transaction = transaction;
-        TransactionId = _transaction.TransactionId;
-        CustomerId = _transaction.CustomerId;
-        Value = _transaction.Value;
-        Type = _transaction.Type;
+        TransactionId = transaction.TransactionId;
+        CustomerId = transaction.CustomerId;
+        Value = transaction.Value;
+        Type = transaction.Type;
+        Customer = transaction.Customer;
+        _transactiondetails = transaction.TransactionDetails;
     }
 
     private void TransactionViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
@@ -117,6 +141,13 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
     public void CancelEdit()
     {
         Value = _backup.Value;
+        TransactionId = _backup.TransactionId;
+        CustomerId = _backup.CustomerId;
+        Value = _backup.Value;
+        Type = _backup.Type;
+        Customer = _backup.Customer;
+        _transactiondetails = _backup.TransactionDetails;
+
     }
 
     public void EndEdit()

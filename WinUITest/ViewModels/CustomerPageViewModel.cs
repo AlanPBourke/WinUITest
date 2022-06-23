@@ -146,11 +146,11 @@ public class CustomerPageViewModel : ObservableObject
 
         TransactionDetails.Clear();
         var transactionDetailsForTransaction = DataProvider.Transactions.GetTransactionDetailsForId(SelectedTransaction.TransactionId);
-        foreach (var transaction in transactionDetailsForTransaction)
+        foreach (var transactiondetail in transactionDetailsForTransaction)
         {
-            var newtxndetail = App.Current.Services.GetService<TransactionDetailViewModel>();
-            newtxndetail.SetTransactionDetail(transaction);
-            TransactionDetails.Add(newtxndetail);
+            var newtxndetailviewmodel = App.Current.Services.GetService<TransactionDetailViewModel>();
+            newtxndetailviewmodel.SetTransactionDetail(transactiondetail);
+            TransactionDetails.Add(newtxndetailviewmodel);
         }
     }
 

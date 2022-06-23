@@ -28,7 +28,8 @@ public sealed partial class TransactionsPage : Page
 
     private void Add()
     {
-        NewTransactionWindow NewWindow = new NewTransactionWindow();
+        EditTransactionWindow NewWindow = new EditTransactionWindow();
+
         NewWindow.Activate();
     }
 }
