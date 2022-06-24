@@ -15,11 +15,11 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
     private Transaction _transaction;
     private TransactionViewModel _backup;
 
-    public string CustomerCode
-    {
-        get => _transaction.Customer.CustomerCode;
-        set => _transaction.Customer.CustomerCode = value;
-    }
+    //public string CustomerCode
+    //{
+    //    get => _transaction.Customer.CustomerCode;
+    //    set => _transaction.Customer.CustomerCode = value;
+    //}
 
     private int _transactionid;
     public int TransactionId

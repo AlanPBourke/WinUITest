@@ -76,7 +76,7 @@ public partial class App : Application
         services.AddTransient<ProductViewModel>();
         services.AddTransient<TransactionViewModel>();
         services.AddTransient<TransactionDetailViewModel>();
-        services.AddTransient<EditTransactionViewModel>();
+        services.AddTransient<EditTransactionWindowViewModel>();
 
         //services.AddSingleton(new ProductViewModel(new Product()));
         //services.AddSingleton(new SqliteDataProvider());

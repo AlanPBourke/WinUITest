@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
+using WinUITest.Enums;
 using WinUITest.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -29,7 +30,7 @@ public sealed partial class TransactionsPage : Page
     private void Add()
     {
         EditTransactionWindow NewWindow = new EditTransactionWindow();
-
+        NewWindow.SetEditMode(EditType.Add);
         NewWindow.Activate();
     }
 }

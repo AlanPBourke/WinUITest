@@ -19,7 +19,7 @@
             Name="TransactionDetailsDataGrid"
             Grid.Row="0"
             AutoGenerateColumns="False"
-            ItemsSource="{x:Bind ViewModel.TransactionDetails}"
+            ItemsSource="{x:Bind ViewModel.Transaction.TransactionDetails}"
             SelectionChanged="TransactionDetailsDataGrid_SelectionChanged"
             SelectionMode="Single">
             <controls:DataGrid.Columns>
@@ -57,12 +57,12 @@
                 Icon="Add"
                 Label="Add"
                 Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
-            <AppBarButton
+            <!--<AppBarButton
                 Name="EditButton"
                 Command="{x:Bind EditCommand}"
                 Icon="Edit"
                 Label="Edit"
-                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />-->
             <AppBarButton
                 Name="DeleteButton"
                 Icon="Delete"
@@ -76,7 +76,7 @@
                                 Name="TextBlock"
                                 Style="{ThemeResource BaseTextBlockStyle}"
                                 Text="Customer will be deleted. Do you want to continue?" />
-                            <Button
+                            <!--<Button
                                 Name="YesButton"
                                 Click="DeleteConfirmationClick"
                                 Content="Yes"
@@ -85,13 +85,13 @@
                                 Click="DeleteCancelClick"
                                 Content="No"
                                 RelativePanel.Below="TextBlock"
-                                RelativePanel.RightOf="YesButton" />
+                                RelativePanel.RightOf="YesButton" />-->
                         </RelativePanel>
                     </Flyout>
                 </AppBarButton.Flyout>
 
             </AppBarButton>
-            <AppBarButton
+            <!--<AppBarButton
                 Name="SaveButton"
                 Command="{x:Bind SaveCommand}"
                 Icon="Save"
@@ -102,20 +102,17 @@
                 Command="{x:Bind CancelCommand}"
                 Icon="Cancel"
                 Label="Cancel"
-                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />-->
         </CommandBar>
 
         <RelativePanel Grid.Row="2">
 
-            <TextBox
-                Name="CodeTextBox"
-                Width="250"
-                CharacterCasing="Upper"
-                Header="Code"
-                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
-                MaxLength="16"
-                RelativePanel.Below="CustomerEditDeleteCommandBar"
-                Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox
+                Name="CustomersComboBox"
+                DisplayMemberPath="Name"
+                IsEditable="false"
+                ItemsSource="{x:Bind ViewModel.CustomerList}" />
+
 
         </RelativePanel>
 

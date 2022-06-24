@@ -15,7 +15,7 @@ namespace WinUITest.Pages;
 public sealed partial class EditTransactionWindow : Window
 {
     private EditType TransactionEditType { get; set; }
-    private TransactionViewModel ViewModel;
+    private EditTransactionWindowViewModel ViewModel;
     public ICommand AddCommand => new RelayCommand(Add);
     //public ICommand EditCommand => new RelayCommand(Edit);
     //public ICommand SaveCommand => new RelayCommand(Save);
@@ -24,7 +24,7 @@ public sealed partial class EditTransactionWindow : Window
     public EditTransactionWindow()
     {
         this.InitializeComponent();
-        ViewModel = App.Current.Services.GetService(typeof(TransactionViewModel)) as TransactionViewModel;
+        ViewModel = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
     }
 
     public void SetEditMode(EditType edittype)
@@ -54,8 +54,15 @@ public sealed partial class EditTransactionWindow : Window
     private void Add()
     {
         //SetMode("add");
+        var newtxnvm = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
         var newtxn = App.Current.Services.GetService(typeof(TransactionViewModel)) as TransactionViewModel;
-        ViewModel = newtxn;
+        newtxn.SetTransaction(new Data.Transaction());
+        newtxnvm.SetTransaction(newtxn);
+        ViewModel = newtxnvm;
+        ViewModel.IsAdding = true;
+        ViewModel.IsEditing = false;
+
+
     }
 
     //private void Edit()

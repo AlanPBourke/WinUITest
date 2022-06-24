@@ -87,7 +87,7 @@
                     IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                     MaxLength="16"
                     RelativePanel.Below="TransactionEditDeleteCommandBar"
-                    Text="{x:Bind Path=ViewModel.SelectedTransaction.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{x:Bind Path=ViewModel.SelectedTransaction.Customer.CustomerCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBox
                     Name="TypeTextBox"

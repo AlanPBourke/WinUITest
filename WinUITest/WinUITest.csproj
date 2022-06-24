@@ -34,9 +34,6 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="ViewModels\EditTransactionViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="CustomerPage.xaml" />
     <None Remove="InvoicingPage.xaml" />
     <None Remove="MainWindow.xaml" />
