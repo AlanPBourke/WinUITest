@@ -108,11 +108,18 @@
         <RelativePanel Grid.Row="2">
 
             <ComboBox
-                Name="CustomersComboBox"
-                DisplayMemberPath="Name"
+                Name="CustomersComboBox2"
+                Width="200"
+                Header="Customers"
                 IsEditable="false"
                 ItemsSource="{x:Bind ViewModel.CustomerList}" />
 
+            <ComboBox
+                Name="CustomersComboBox"
+                Width="200"
+                Header="Customers"
+                IsEditable="false"
+                RelativePanel.Below="CustomersComboBox2" />
 
         </RelativePanel>
 

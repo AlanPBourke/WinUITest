@@ -25,6 +25,8 @@ public sealed partial class EditTransactionWindow : Window
     {
         this.InitializeComponent();
         ViewModel = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
+        ViewModel.Load();
+
     }
 
     public void SetEditMode(EditType edittype)

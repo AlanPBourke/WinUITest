@@ -9,6 +9,8 @@ namespace WinUITest.ViewModels;
 
 public class EditTransactionWindowViewModel : ObservableObject
 {
+    public List<string> CustomerList => new();
+
     private IDataProvider DataProvider;
 
     private TransactionViewModel _transaction;
@@ -17,8 +19,6 @@ public class EditTransactionWindowViewModel : ObservableObject
         get => _transaction;
         set => SetProperty(ref _transaction, value);
     }
-
-    public List<CustomerViewModel> CustomerList = new();
 
     private CustomerViewModel _selectedcustomer;
     public CustomerViewModel SelectedCustomer
@@ -84,8 +84,7 @@ public class EditTransactionWindowViewModel : ObservableObject
         var custs = DataProvider.Customers.GetAll();
         foreach (Customer c in custs)
         {
-            var addcust = App.Current.Services.GetService<CustomerViewModel>();
-            addcust.SetCustomer(c);
+            CustomerList.Add(c.Name);
         }
 
         //TransactionDetailViewModel nd = App.Current.Services.GetService<TransactionDetailViewModel>();
