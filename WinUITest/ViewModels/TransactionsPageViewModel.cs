@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
@@ -7,7 +7,9 @@ namespace WinUITest.ViewModels;
 public class TransactionsPageViewModel : ObservableObject
 {
     private IDataProvider DataProvider;
-    public List<TransactionViewModel> Transactions { get; } = new();
+    public ObservableCollection<TransactionViewModel> Transactions { get; } = new();
+    public ObservableCollection<TransactionDetailViewModel> TransactionDetails { get; set; } = new();
+
     //public bool IsTransactionSelected => SelectedCustomer != null;
 
     private bool _isTransactionSelected;
@@ -74,6 +76,14 @@ public class TransactionsPageViewModel : ObservableObject
             TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
             newtxnviewmodel.SetTransaction(txn);
             SelectedTransaction = newtxnviewmodel;
+            var detail = DataProvider.Transactions.GetTransactionDetailsForId(transactionId);
+            TransactionDetails.Clear();
+            foreach (var transactiondetail in detail)
+            {
+                var newtxndetail = App.Current.Services.GetService<TransactionDetailViewModel>();
+                newtxndetail.SetTransactionDetail(transactiondetail);
+                TransactionDetails.Add(newtxndetail);
+            }
         }
     }
 

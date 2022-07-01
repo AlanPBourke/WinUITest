@@ -25,45 +25,17 @@
     <Grid
         Name="TransactionsPageGrid"
         BorderBrush="AliceBlue"
-        BorderThickness="15">
+        BorderThickness="2">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*" />
             <RowDefinition Height="15*" />
             <RowDefinition Height="35*" />
+            <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
-
-
-        <controls:DataGrid
-            x:Name="TransactionsGrid"
-            Grid.Row="0"
-            AutoGenerateColumns="False"
-            GridLinesVisibility="Horizontal"
-            ItemsSource="{x:Bind ViewModel.Transactions}"
-            SelectionMode="Single">
-            <controls:DataGrid.Columns>
-                <controls:DataGridTextColumn
-                    Binding="{Binding CustomerCode}"
-                    Header="Customer Code"
-                    IsReadOnly="true" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding ExpandedType}"
-                    Header="Type"
-                    IsReadOnly="true" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding TransactionDateAsString}"
-                    Header="Date"
-                    IsReadOnly="true" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding ValueAsString}"
-                    Header="Value"
-                    IsReadOnly="true" />
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
 
         <CommandBar
             Name="ProductMaintenanceCommandBar"
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.ColumnSpan="1"
             HorizontalAlignment="Left"
             Background="Transparent"
@@ -73,8 +45,7 @@
                 Name="AddButton"
                 Command="{x:Bind AddCommand}"
                 Icon="Add"
-                Label="Add"
-                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+                Label="Add" />
             <!--<AppBarButton
                 Name="EditButton"
                 Command="{x:Bind EditCommand}"
@@ -121,14 +92,78 @@
             </AppBarButton>-->
         </CommandBar>
 
-        <Pivot x:Name="TransactionPivot" Grid.Row="2">
+        <controls:DataGrid
+            x:Name="TransactionsGrid"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.Transactions}"
+            SelectionChanged="TransactionsGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding CustomerCode}"
+                    Header="Customer Code"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Customer.Name}"
+                    Header="Name"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ExpandedType}"
+                    Header="Type"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding TransactionDateAsString}"
+                    Header="Date"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ValueAsString}"
+                    Header="Value"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+        <controls:DataGrid
+            x:Name="TransactionDetailsGrid"
+            Grid.Row="2"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.TransactionDetails}"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding ProductCode}"
+                    Header="Product"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Product.ProductName}"
+                    Header="Product"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding QuantityString}"
+                    Header="Qty"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Price}"
+                    Header="Price"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Value}"
+                    Header="Value"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+
+        <!--<Pivot x:Name="TransactionPivot" Grid.Row="2">
             <PivotItem Header="Information">
                 <views:TransactionInfoPage />
             </PivotItem>
             <PivotItem Header="Transactions">
                 <views:TransactionDetailsPage />
             </PivotItem>
-        </Pivot>
+        </Pivot>-->
 
     </Grid>
 </Page>

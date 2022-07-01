@@ -1,5 +1,7 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.WinUI.UI.Controls;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WinUITest.Enums;
 using WinUITest.ViewModels;
@@ -29,9 +31,23 @@ public sealed partial class TransactionsPage : Page
 
     private void Add()
     {
-        EditTransactionWindow NewWindow = new EditTransactionWindow();
-        NewWindow.SetEditMode(EditType.Add);
-        NewWindow.Activate();
+        Window editTransactionWindow = new Window();
+        EditTransactionPage editTransactionPage = new EditTransactionPage();
+        editTransactionPage.SetEditMode(EditType.Add);
+
+        editTransactionWindow.Content = editTransactionPage;
+        editTransactionWindow.Activate();
+    }
+
+    private void TransactionsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        DataGrid g = sender as DataGrid;
+        if (g != null && g.SelectedItem != null)
+        {
+            var txn = g.SelectedItem as TransactionViewModel;
+            ViewModel.SetTransaction(txn.TransactionId);
+        }
+        //var selectedtransaction = sender as TransactionViewModel;
+        // ViewModel.SetTransaction(selectedtransaction.TransactionId);
     }
 }
-

@@ -2,6 +2,7 @@
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
+
 public class TransactionDetailViewModel : ObservableObject
 {
     private TransactionDetail _transactionDetail;
@@ -15,9 +16,10 @@ public class TransactionDetailViewModel : ObservableObject
     {
         _transactionDetail = transactionDetail;
         TransactionDetailId = transactionDetail.TransactionDetailId;
+        Quantity = transactionDetail.Quantity;
+        Price = transactionDetail.Price;
         Value = transactionDetail.Value;
         ProductCode = transactionDetail.ProductCode;
-        Value = transactionDetail.Value;
     }
 
     private string _quantitystring;

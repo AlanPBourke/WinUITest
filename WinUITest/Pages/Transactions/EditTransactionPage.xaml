@@ -1,11 +1,15 @@
-﻿<Window
-    x:Class="WinUITest.Pages.EditTransactionWindow"
+﻿<Page
+    x:Class="WinUITest.Pages.EditTransactionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:WinUITest.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Activated="Window_Activated"
+    xmlns:models="using:WinUITest.Data"
+    xmlns:viewmodels="using:WinUITest.ViewModels"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Grid>
@@ -91,13 +95,13 @@
                 </AppBarButton.Flyout>
 
             </AppBarButton>
-            <!--<AppBarButton
+            <AppBarButton
                 Name="SaveButton"
                 Command="{x:Bind SaveCommand}"
                 Icon="Save"
                 Label="Save"
                 Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
-            <AppBarButton
+            <!--<AppBarButton
                 Name="CancelButton"
                 Command="{x:Bind CancelCommand}"
                 Icon="Cancel"
@@ -108,21 +112,27 @@
         <RelativePanel Grid.Row="2">
 
             <ComboBox
-                Name="CustomersComboBox2"
-                Width="200"
-                Header="Customers"
-                IsEditable="false"
-                ItemsSource="{x:Bind ViewModel.CustomerList}" />
-
-            <ComboBox
                 Name="CustomersComboBox"
                 Width="200"
                 Header="Customers"
                 IsEditable="false"
-                RelativePanel.Below="CustomersComboBox2" />
+                ItemsSource="{x:Bind ViewModel.CustomerList}"
+                RelativePanel.AlignTopWithPanel="True"
+                SelectionChanged="CustomersComboBox_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:CustomerViewModel">
+                        <StackPanel>
+                            <TextBlock Text="{x:Bind CustomerCode}" />
+                            <TextBlock Text="{x:Bind Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+
 
         </RelativePanel>
 
 
     </Grid>
-</Window>
+</Page>

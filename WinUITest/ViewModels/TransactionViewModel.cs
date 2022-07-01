@@ -32,17 +32,18 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
     public string ExpandedType
     {
         get => _expandedtype;
-        set
-        {
-            _expandedtype = Type == "I" ? "Invoice" : "Credit";
-        }
+        set => SetProperty(ref _expandedtype, value, true);
     }
 
     private string _type;
     public string Type
     {
         get => _type;
-        set => SetProperty(ref _type, value, true);
+        set
+        {
+            SetProperty(ref _type, value, true);
+            ExpandedType = value == "I" ? "Invoice" : "Credit";
+        }
     }
 
     // SQLite doesn't have DateTime, it's stored as Text  

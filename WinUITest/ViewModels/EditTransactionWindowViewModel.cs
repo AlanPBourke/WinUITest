@@ -1,6 +1,6 @@
 ﻿// NOT USED
 
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
@@ -9,9 +9,18 @@ namespace WinUITest.ViewModels;
 
 public class EditTransactionWindowViewModel : ObservableObject
 {
-    public List<string> CustomerList => new();
+    //    public ObservableCollection<Customer> CustomerList { get; set; } = new ObservableCollection<Customer>();
+    public ObservableCollection<CustomerViewModel> CustomerList { get; set; } = new ObservableCollection<CustomerViewModel>();
+    public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new ObservableCollection<TransactionDetailViewModel>();
 
     private IDataProvider DataProvider;
+
+    private TransactionDetailViewModel _selectedtransactiondetail;
+    public TransactionDetailViewModel SelectedTransactionDetail
+    {
+        get => _selectedtransactiondetail;
+        set => SetProperty(ref _selectedtransactiondetail, value);
+    }
 
     private TransactionViewModel _transaction;
     public TransactionViewModel Transaction
@@ -77,14 +86,22 @@ public class EditTransactionWindowViewModel : ObservableObject
         return false;
     }
 
+    public void AddTransactionDetail()
+    {
+        TransactionDetailsList.Add(new TransactionDetailViewModel());
+        SelectedTransactionDetail = TransactionDetailsList[TransactionDetailsList.Count];
+    }
 
     public void Load()
     {
+
         Transaction = App.Current.Services.GetService<TransactionViewModel>();
         var custs = DataProvider.Customers.GetAll();
         foreach (Customer c in custs)
         {
-            CustomerList.Add(c.Name);
+            var n = new CustomerViewModel(DataProvider);
+            n.SetCustomer(c);
+            CustomerList.Add(n);
         }
 
         //TransactionDetailViewModel nd = App.Current.Services.GetService<TransactionDetailViewModel>();
@@ -104,7 +121,6 @@ public class EditTransactionWindowViewModel : ObservableObject
         //newtransactiondetail.ProductCode = "PLIP";
         //NewTransactionDetails.Add(newtransactiondetail);
     }
-
 
     //public void SetFirstTransaction()
     //{
