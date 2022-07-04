@@ -7,7 +7,7 @@ public class TransactionDetail
     public int TransactionDetailId { get; set; }
     public int TransactionId { get; set; }
     public string ProductCode { get; set; }
-    public virtual Product Product { get; set; }
+    public virtual Product? Product { get; set; }
     public virtual Transaction? Transaction { get; set; }
 
 }

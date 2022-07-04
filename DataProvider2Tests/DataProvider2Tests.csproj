@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -9,12 +9,12 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
 
     <PlatformTarget>x64</PlatformTarget>
-
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.6.4" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="coverlet.collector" Version="3.1.2">
@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
-    <ProjectReference Include="..\WinUITest\WinUITest.csproj" />
   </ItemGroup>
 
 </Project>
