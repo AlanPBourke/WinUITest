@@ -5,4 +5,6 @@ public class Product
     public string? ProductCode { get; set; }
     public string? ProductName { get; set; }
     public double Price { get; set; }
+    public int TransactionDetailId { get; set; }
+
 }

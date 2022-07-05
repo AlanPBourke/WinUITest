@@ -45,7 +45,7 @@ public sealed partial class TransactionsPage : Page
         if (g != null && g.SelectedItem != null)
         {
             var txn = g.SelectedItem as TransactionViewModel;
-            ViewModel.SetTransaction(txn.TransactionId);
+            ViewModel.SetTransaction2(txn);
         }
         //var selectedtransaction = sender as TransactionViewModel;
         // ViewModel.SetTransaction(selectedtransaction.TransactionId);

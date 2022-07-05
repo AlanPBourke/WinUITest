@@ -11,8 +11,8 @@ using WinUITest.Data;
 namespace WinUITest.DataProvider.Migrations
 {
     [DbContext(typeof(SqliteContext))]
-    [Migration("20220704165235_initial")]
-    partial class initial
+    [Migration("20220705162914_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,7 +110,6 @@ namespace WinUITest.DataProvider.Migrations
             modelBuilder.Entity("WinUITest.Data.Product", b =>
                 {
                     b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Price")
@@ -122,6 +121,9 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TransactionDetailId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
@@ -132,28 +134,32 @@ namespace WinUITest.DataProvider.Migrations
                             ProductId = 1,
                             Price = 12.99,
                             ProductCode = "EGG48",
-                            ProductName = "48 Class A Eggs"
+                            ProductName = "48 Class A Eggs",
+                            TransactionDetailId = 0
                         },
                         new
                         {
                             ProductId = 2,
                             Price = 8.5,
                             ProductCode = "MILK25L",
-                            ProductName = "25L Full Fat Milk"
+                            ProductName = "25L Full Fat Milk",
+                            TransactionDetailId = 0
                         },
                         new
                         {
                             ProductId = 3,
                             Price = 7.1500000000000004,
                             ProductCode = "SUGAR2KG",
-                            ProductName = "2KG White Sugar"
+                            ProductName = "2KG White Sugar",
+                            TransactionDetailId = 0
                         },
                         new
                         {
                             ProductId = 4,
                             Price = 22.190000000000001,
                             ProductCode = "VAN001",
-                            ProductName = "500ml Vanilla Essence"
+                            ProductName = "500ml Vanilla Essence",
+                            TransactionDetailId = 0
                         });
                 });
 
@@ -169,7 +175,7 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2022, 7, 4, 17, 52, 34, 745, DateTimeKind.Local).AddTicks(5232));
+                        .HasDefaultValue(new DateTime(2022, 7, 5, 17, 29, 14, 233, DateTimeKind.Local).AddTicks(7895));
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -221,11 +227,7 @@ namespace WinUITest.DataProvider.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
@@ -239,11 +241,56 @@ namespace WinUITest.DataProvider.Migrations
 
                     b.HasKey("TransactionDetailId");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("TransactionId");
 
                     b.ToTable("TransactionDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            TransactionDetailId = 1,
+                            Price = 12.99,
+                            ProductId = 1,
+                            Quantity = 2,
+                            TransactionId = 1,
+                            Value = 25.98
+                        },
+                        new
+                        {
+                            TransactionDetailId = 2,
+                            Price = 22.190000000000001,
+                            ProductId = 4,
+                            Quantity = 1,
+                            TransactionId = 1,
+                            Value = 22.190000000000001
+                        },
+                        new
+                        {
+                            TransactionDetailId = 3,
+                            Price = 22.190000000000001,
+                            ProductId = 4,
+                            Quantity = 1,
+                            TransactionId = 2,
+                            Value = -22.190000000000001
+                        },
+                        new
+                        {
+                            TransactionDetailId = 4,
+                            Price = 7.1500000000000004,
+                            ProductId = 3,
+                            Quantity = 2,
+                            TransactionId = 3,
+                            Value = -14.300000000000001
+                        });
+                });
+
+            modelBuilder.Entity("WinUITest.Data.Product", b =>
+                {
+                    b.HasOne("WinUITest.Data.TransactionDetail", null)
+                        .WithOne("Product")
+                        .HasForeignKey("WinUITest.Data.Product", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WinUITest.Data.Transaction", b =>
@@ -259,17 +306,11 @@ namespace WinUITest.DataProvider.Migrations
 
             modelBuilder.Entity("WinUITest.Data.TransactionDetail", b =>
                 {
-                    b.HasOne("WinUITest.Data.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("WinUITest.Data.Transaction", "Transaction")
                         .WithMany("TransactionDetails")
                         .HasForeignKey("TransactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("Transaction");
                 });
@@ -282,6 +323,11 @@ namespace WinUITest.DataProvider.Migrations
             modelBuilder.Entity("WinUITest.Data.Transaction", b =>
                 {
                     b.Navigation("TransactionDetails");
+                });
+
+            modelBuilder.Entity("WinUITest.Data.TransactionDetail", b =>
+                {
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

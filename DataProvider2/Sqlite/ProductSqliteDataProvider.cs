@@ -39,7 +39,7 @@
             var product = DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
             if (product != null)
             {
-                return DataContext.TransactionDetails.Where(p => p.ProductCode == product.ProductCode).Any();
+                return DataContext.TransactionDetails.Where(p => p.ProductId == id).Any();
             }
             return false;
         }

@@ -87,6 +87,15 @@ public class TransactionsPageViewModel : ObservableObject
         }
     }
 
+    public void SetTransaction2(TransactionViewModel txn)
+    {
+        if (txn != null)
+        {
+            SelectedTransaction = txn;
+            OnPropertyChanged(nameof(SelectedTransaction));
+        }
+    }
+
     // TODO implement
     public bool CanDelete()
     {

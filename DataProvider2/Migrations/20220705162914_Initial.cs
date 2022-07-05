@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WinUITest.DataProvider.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,21 +25,6 @@ namespace WinUITest.DataProvider.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ProductCode = table.Column<string>(type: "TEXT", nullable: true),
-                    ProductName = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<double>(type: "REAL", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -48,7 +33,7 @@ namespace WinUITest.DataProvider.Migrations
                     Type = table.Column<string>(type: "TEXT", maxLength: 1, nullable: false),
                     Value = table.Column<double>(type: "REAL", nullable: false),
                     CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2022, 7, 4, 17, 52, 34, 745, DateTimeKind.Local).AddTicks(5232))
+                    TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2022, 7, 5, 17, 29, 14, 233, DateTimeKind.Local).AddTicks(7895))
                 },
                 constraints: table =>
                 {
@@ -71,22 +56,37 @@ namespace WinUITest.DataProvider.Migrations
                     Price = table.Column<double>(type: "REAL", nullable: false),
                     Value = table.Column<double>(type: "REAL", nullable: false),
                     TransactionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductCode = table.Column<string>(type: "TEXT", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionDetails", x => x.TransactionDetailId);
                     table.ForeignKey(
-                        name: "FK_TransactionDetails_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId");
-                    table.ForeignKey(
                         name: "FK_TransactionDetails_Transactions_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transactions",
                         principalColumn: "TransactionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductCode = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductName = table.Column<string>(type: "TEXT", nullable: true),
+                    Price = table.Column<double>(type: "REAL", nullable: false),
+                    TransactionDetailId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Products_TransactionDetails_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "TransactionDetails",
+                        principalColumn: "TransactionDetailId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -116,26 +116,6 @@ namespace WinUITest.DataProvider.Migrations
                 values: new object[] { 5, 0.0, "P145", "Bob's Burger Restaurants Ltd" });
 
             migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName" },
-                values: new object[] { 1, 12.99, "EGG48", "48 Class A Eggs" });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName" },
-                values: new object[] { 2, 8.5, "MILK25L", "25L Full Fat Milk" });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName" },
-                values: new object[] { 3, 7.1500000000000004, "SUGAR2KG", "2KG White Sugar" });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName" },
-                values: new object[] { 4, 22.190000000000001, "VAN001", "500ml Vanilla Essence" });
-
-            migrationBuilder.InsertData(
                 table: "Transactions",
                 columns: new[] { "TransactionId", "CustomerId", "TransactionDate", "Type", "Value" },
                 values: new object[] { 1, 1, new DateTime(2021, 12, 13, 0, 0, 0, 0, DateTimeKind.Local), "I", 48.170000000000002 });
@@ -150,10 +130,45 @@ namespace WinUITest.DataProvider.Migrations
                 columns: new[] { "TransactionId", "CustomerId", "TransactionDate", "Type", "Value" },
                 values: new object[] { 3, 3, new DateTime(2021, 12, 14, 0, 0, 0, 0, DateTimeKind.Local), "C", -14.300000000000001 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TransactionDetails_ProductId",
+            migrationBuilder.InsertData(
                 table: "TransactionDetails",
-                column: "ProductId");
+                columns: new[] { "TransactionDetailId", "Price", "ProductId", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 1, 12.99, 1, 2, 1, 25.98 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionDetails",
+                columns: new[] { "TransactionDetailId", "Price", "ProductId", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 2, 22.190000000000001, 4, 1, 1, 22.190000000000001 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionDetails",
+                columns: new[] { "TransactionDetailId", "Price", "ProductId", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 3, 22.190000000000001, 4, 1, 2, -22.190000000000001 });
+
+            migrationBuilder.InsertData(
+                table: "TransactionDetails",
+                columns: new[] { "TransactionDetailId", "Price", "ProductId", "Quantity", "TransactionId", "Value" },
+                values: new object[] { 4, 7.1500000000000004, 3, 2, 3, -14.300000000000001 });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName", "TransactionDetailId" },
+                values: new object[] { 1, 12.99, "EGG48", "48 Class A Eggs", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName", "TransactionDetailId" },
+                values: new object[] { 2, 8.5, "MILK25L", "25L Full Fat Milk", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName", "TransactionDetailId" },
+                values: new object[] { 3, 7.1500000000000004, "SUGAR2KG", "2KG White Sugar", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "Price", "ProductCode", "ProductName", "TransactionDetailId" },
+                values: new object[] { 4, 22.190000000000001, "VAN001", "500ml Vanilla Essence", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TransactionDetails_TransactionId",
@@ -169,10 +184,10 @@ namespace WinUITest.DataProvider.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TransactionDetails");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "TransactionDetails");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

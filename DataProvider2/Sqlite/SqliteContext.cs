@@ -50,13 +50,24 @@ public class SqliteContext : DbContext
             new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, DateTimeKind.Local), Type = "C", Value = -14.30 }
             );
 
-        modelBuilder.Entity<TransactionDetail>().HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
+        modelBuilder.Entity<TransactionDetail>()
+            .HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
+        modelBuilder.Entity<TransactionDetail>()
+            .HasOne(p => p.Product).WithOne().HasForeignKey<Product>(p => p.ProductId);
+
         modelBuilder.Entity<TransactionDetail>().HasData(
-            new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Price = 12.99, Value = 25.98 },
-            new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = 22.19 },
-            new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = -22.19 },
-            new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Price = 7.15, Value = -14.30 }
+            new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductId = 1, Quantity = 2, Price = 12.99, Value = 25.98 },
+            new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductId = 4, Quantity = 1, Price = 22.19, Value = 22.19 },
+            new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductId = 4, Quantity = 1, Price = 22.19, Value = -22.19 },
+            new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductId = 3, Quantity = 2, Price = 7.15, Value = -14.30 }
             );
+
+        //    modelBuilder.Entity<TransactionDetail>().HasData(
+        //new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Price = 12.99, Value = 25.98 },
+        //new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = 22.19 },
+        //new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = -22.19 },
+        //new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Price = 7.15, Value = -14.30 }
+        //);
 
         // Map to database view
         modelBuilder

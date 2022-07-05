@@ -129,11 +129,11 @@
             Grid.Row="2"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
-            ItemsSource="{x:Bind ViewModel.TransactionDetails}"
+            ItemsSource="{x:Bind ViewModel.SelectedTransaction.TransactionDetails}"
             SelectionMode="Single">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
-                    Binding="{Binding ProductCode}"
+                    Binding="{Binding Product.ProductCode, Mode=OneWay}"
                     Header="Product"
                     IsReadOnly="true" />
                 <controls:DataGridTextColumn

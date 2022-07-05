@@ -19,7 +19,7 @@ public class TransactionDetailViewModel : ObservableObject
         Quantity = transactionDetail.Quantity;
         Price = transactionDetail.Price;
         Value = transactionDetail.Value;
-        ProductCode = transactionDetail.ProductCode;
+        ProductId = transactionDetail.ProductId;
     }
 
     private string _quantitystring;
@@ -66,11 +66,11 @@ public class TransactionDetailViewModel : ObservableObject
         }
     }
 
-    private string _productcode;
-    public string ProductCode
+    private int _productid;
+    public int ProductId
     {
-        get => _productcode;
-        set => SetProperty(ref _productcode, value);
+        get => _productid;
+        set => SetProperty(ref _productid, value);
     }
 
     private int _transactiondetailid;

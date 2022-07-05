@@ -27,7 +27,8 @@
 
         public IEnumerable<TransactionDetail> GetTransactionDetailsForId(int transactionId)
         {
-            return DataContext.TransactionDetails.Where(td => td.TransactionId == transactionId);
+            return DataContext.TransactionDetails
+                .Where(td => td.TransactionId == transactionId);
         }
 
         public IEnumerable<Transaction> GetAll()
