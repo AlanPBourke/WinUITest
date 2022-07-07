@@ -4,9 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:WinUITest.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:WinUITest.Data"
     xmlns:viewmodels="using:WinUITest.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
@@ -109,7 +107,7 @@
                 Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />-->
         </CommandBar>
 
-        <RelativePanel Grid.Row="2">
+        <StackPanel Grid.Row="2">
 
             <ComboBox
                 Name="CustomersComboBox"
@@ -117,7 +115,7 @@
                 Header="Customers"
                 IsEditable="false"
                 ItemsSource="{x:Bind ViewModel.CustomerList}"
-                RelativePanel.AlignTopWithPanel="True"
+                Loaded="CustomersComboBox_Loaded"
                 SelectionChanged="CustomersComboBox_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:CustomerViewModel">
@@ -129,9 +127,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-
-
-        </RelativePanel>
+        </StackPanel>
 
 
     </Grid>

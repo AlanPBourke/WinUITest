@@ -34,7 +34,6 @@ public sealed partial class TransactionsPage : Page
         Window editTransactionWindow = new Window();
         EditTransactionPage editTransactionPage = new EditTransactionPage();
         editTransactionPage.SetEditMode(EditType.Add);
-
         editTransactionWindow.Content = editTransactionPage;
         editTransactionWindow.Activate();
     }

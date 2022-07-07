@@ -129,19 +129,19 @@
             Grid.Row="2"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
-            ItemsSource="{x:Bind ViewModel.SelectedTransaction.TransactionDetails}"
+            ItemsSource="{x:Bind ViewModel.SelectedTransaction.TransactionDetails, Mode=OneWay}"
             SelectionMode="Single">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
-                    Binding="{Binding Product.ProductCode, Mode=OneWay}"
+                    Binding="{Binding Product.ProductCode}"
                     Header="Product"
                     IsReadOnly="true" />
                 <controls:DataGridTextColumn
                     Binding="{Binding Product.ProductName}"
-                    Header="Product"
+                    Header="Name"
                     IsReadOnly="true" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding QuantityString}"
+                    Binding="{Binding Quantity}"
                     Header="Qty"
                     IsReadOnly="true" />
                 <controls:DataGridTextColumn

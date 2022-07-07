@@ -1,17 +1,19 @@
 ﻿// NOT USED
 
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
 
-public class EditTransactionWindowViewModel : ObservableObject
+public class EditTransactionWindowViewModel : ObservableValidator, IEditableObject
 {
     //    public ObservableCollection<Customer> CustomerList { get; set; } = new ObservableCollection<Customer>();
-    public ObservableCollection<CustomerViewModel> CustomerList { get; set; } = new ObservableCollection<CustomerViewModel>();
-    public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new ObservableCollection<TransactionDetailViewModel>();
+    public ObservableCollection<CustomerViewModel> CustomerList { get; set; } = new();
+    public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new();
 
     private IDataProvider DataProvider;
 
@@ -77,7 +79,6 @@ public class EditTransactionWindowViewModel : ObservableObject
     public void SetTransaction(TransactionViewModel transactionViewModel)
     {
         _transaction = transactionViewModel;
-
     }
 
     // TODO implement
@@ -88,22 +89,24 @@ public class EditTransactionWindowViewModel : ObservableObject
 
     public void AddTransactionDetail()
     {
-        TransactionDetailsList.Add(new TransactionDetailViewModel());
+        var newtxdvm = new TransactionDetailViewModel();
+        newtxdvm.SetTransactionDetail(new TransactionDetail());
+
+        TransactionDetailsList.Add(newtxdvm);
         SelectedTransactionDetail = TransactionDetailsList[TransactionDetailsList.Count];
+    }
+
+    public void AddTransactionDetail2()
+    {
+        TransactionDetail newtxd = new TransactionDetail();
+        Transaction.TransactionDetails.Add(newtxd);
     }
 
     public void Load()
     {
 
         Transaction = App.Current.Services.GetService<TransactionViewModel>();
-        var custs = DataProvider.Customers.GetAll();
-        foreach (Customer c in custs)
-        {
-            var n = new CustomerViewModel(DataProvider);
-            n.SetCustomer(c);
-            CustomerList.Add(n);
-        }
-
+        LoadCustomerList();
         //TransactionDetailViewModel nd = App.Current.Services.GetService<TransactionDetailViewModel>();
 
         //nd.Quantity = 10;
@@ -120,6 +123,33 @@ public class EditTransactionWindowViewModel : ObservableObject
         //var newtransactiondetail = App.Current.Services.GetService<TransactionDetailViewModel>();
         //newtransactiondetail.ProductCode = "PLIP";
         //NewTransactionDetails.Add(newtransactiondetail);
+    }
+
+    public void LoadCustomerList()
+    {
+        var custs = DataProvider.Customers.GetAll();
+        foreach (Customer c in custs)
+        {
+            var n = new CustomerViewModel(DataProvider);
+            n.SetCustomer(c);
+            CustomerList.Add(n);
+        }
+        Debug.WriteLine($"ViewModel, Customer list loaded, {CustomerList.Count}");
+    }
+
+    public void BeginEdit()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void CancelEdit()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void EndEdit()
+    {
+        throw new System.NotImplementedException();
     }
 
     //public void SetFirstTransaction()

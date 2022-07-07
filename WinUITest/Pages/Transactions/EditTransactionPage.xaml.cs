@@ -59,8 +59,8 @@ public sealed partial class EditTransactionPage : Page
 
     private void NewTransactionDetail()
     {
-        var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
-        ViewModel.AddTransactionDetail();
+        //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
+        ViewModel.AddTransactionDetail2();
 
     }
 
@@ -88,8 +88,18 @@ public sealed partial class EditTransactionPage : Page
 
     private void CustomersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var vombo = sender as ComboBox;
-        var i = vombo.SelectedItem as CustomerViewModel;
-        Debug.WriteLine($"{i.CustomerCode}");
+        var combo = sender as ComboBox;
+        if (combo.SelectedItem != null)
+        {
+            var i = combo.SelectedItem as CustomerViewModel;
+            ViewModel.SelectedCustomer = i;
+        }
     }
+
+    private void CustomersComboBox_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ViewModel.LoadCustomerList();
+        Debug.WriteLine($"Codebehind, Customer list loaded, {ViewModel.CustomerList.Count}");
+    }
+
 }
