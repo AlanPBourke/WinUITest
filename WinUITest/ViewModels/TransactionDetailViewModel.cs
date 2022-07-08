@@ -22,6 +22,13 @@ public class TransactionDetailViewModel : ObservableObject
         ProductId = transactionDetail.ProductId;
     }
 
+    private string _productcode;
+    public string ProductCode
+    {
+        get => _productcode;
+        set => SetProperty(ref _productcode, value);
+    }
+
     private string _quantitystring;
     public string QuantityString
     {

@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
+using WinUITest.Data;
 using WinUITest.Enums;
 using WinUITest.ViewModels;
 
@@ -18,20 +18,63 @@ public sealed partial class EditTransactionPage : Page
     private EditType TransactionEditType { get; set; }
     private EditTransactionWindowViewModel ViewModel;
 
-    public ICommand AddCommand => new RelayCommand(NewTransactionDetail);
-    public ICommand SaveCommand => new RelayCommand(Save);
+    public ICommand AddDetailLineCommand => new RelayCommand(NewTransactionDetail);
+    public ICommand SaveDetailLineCommand => new RelayCommand(SaveTransactionDetail);
 
     public EditTransactionPage()
     {
         this.InitializeComponent();
         ViewModel = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
         ViewModel.Load();
+
+        //switch (TransactionEditType)
+        //{
+        //    case EditType.Add:
+        //        NewTransaction();
+        //        break;
+        //    case EditType.Edit:
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     public void SetEditMode(EditType edittype)
     {
         TransactionEditType = edittype;
+    }
 
+    private void NewTransaction()
+    {
+        //SetMode("add");
+        //var newtxnvm = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
+        var newtxn = App.Current.Services.GetService(typeof(Transaction)) as Transaction;
+        ViewModel.SetTransaction(newtxn);
+        ViewModel.IsAdding = false;
+        ViewModel.IsEditing = false;
+        ViewModel.IsNavigating = true;
+    }
+
+    private void NewTransactionDetail()
+    {
+        //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
+        ViewModel.AddTransactionDetail();
+
+    }
+
+    private void SaveTransactionDetail()
+    {
+        // TODO ViewModel.CurrentTransaction.Save();
+        ViewModel.SaveTransactionDetail();
+    }
+
+    private void TransactionDetailsDataGrid_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
         switch (TransactionEditType)
         {
             case EditType.Add:
@@ -44,62 +87,20 @@ public sealed partial class EditTransactionPage : Page
         }
     }
 
-    private void NewTransaction()
-    {
-        //SetMode("add");
-        var newtxnvm = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
-        var newtxn = App.Current.Services.GetService(typeof(TransactionViewModel)) as TransactionViewModel;
-        newtxn.SetTransaction(new Data.Transaction());
-        newtxnvm.SetTransaction(newtxn);
-        ViewModel = newtxnvm;
-        ViewModel.IsAdding = false;
-        ViewModel.IsEditing = false;
-        ViewModel.IsNavigating = true;
-    }
-
-    private void NewTransactionDetail()
-    {
-        //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
-        ViewModel.AddTransactionDetail2();
-
-    }
-
-    private void Save()
-    {
-        ViewModel.Transaction.Save();
-        ViewModel.IsEditing = false;
-        ViewModel.IsAdding = false;
-        ViewModel.IsNavigating = true;
-    }
-
-    private void TransactionDetailsDataGrid_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
-    {
-
-    }
-
-    private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        //foreach (var c in ViewModel.CustomerList)
-        //{
-        //    var i = new ComboBoxItem { AccessKey = c.CustomerCode, Content = c.Name };
-        //    CustomersComboBox.Items.Add(i);
-        //}
-    }
-
     private void CustomersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var combo = sender as ComboBox;
         if (combo.SelectedItem != null)
         {
-            var i = combo.SelectedItem as CustomerViewModel;
+            var i = combo.SelectedItem as Customer;
             ViewModel.SelectedCustomer = i;
         }
     }
 
     private void CustomersComboBox_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        ViewModel.LoadCustomerList();
-        Debug.WriteLine($"Codebehind, Customer list loaded, {ViewModel.CustomerList.Count}");
+        //ViewModel.LoadCustomerList();
+        // Debug.WriteLine($"Codebehind, Customer list loaded, {ViewModel.CustomerList.Count}");
     }
 
 }

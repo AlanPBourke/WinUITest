@@ -11,11 +11,12 @@ namespace WinUITest.ViewModels;
 
 public class EditTransactionWindowViewModel : ObservableValidator, IEditableObject
 {
+    private IDataProvider DataProvider;
+
     //    public ObservableCollection<Customer> CustomerList { get; set; } = new ObservableCollection<Customer>();
     public ObservableCollection<CustomerViewModel> CustomerList { get; set; } = new();
+    public ObservableCollection<ProductViewModel> ProductList { get; set; } = new();
     public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new();
-
-    private IDataProvider DataProvider;
 
     private TransactionDetailViewModel _selectedtransactiondetail;
     public TransactionDetailViewModel SelectedTransactionDetail
@@ -24,15 +25,16 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         set => SetProperty(ref _selectedtransactiondetail, value);
     }
 
-    private TransactionViewModel _transaction;
-    public TransactionViewModel Transaction
+
+    private Transaction _currenttransaction;
+    public Transaction CurrentTransaction
     {
-        get => _transaction;
-        set => SetProperty(ref _transaction, value);
+        get => _currenttransaction;
+        set => SetProperty(ref _currenttransaction, value);
     }
 
-    private CustomerViewModel _selectedcustomer;
-    public CustomerViewModel SelectedCustomer
+    private Customer _selectedcustomer;
+    public Customer SelectedCustomer
     {
         get => _selectedcustomer;
         set => SetProperty(ref _selectedcustomer, value);
@@ -76,9 +78,9 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     }
 
 
-    public void SetTransaction(TransactionViewModel transactionViewModel)
+    public void SetTransaction(Transaction transaction)
     {
-        _transaction = transactionViewModel;
+        _currenttransaction = transaction;
     }
 
     // TODO implement
@@ -89,24 +91,43 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
 
     public void AddTransactionDetail()
     {
-        var newtxdvm = new TransactionDetailViewModel();
-        newtxdvm.SetTransactionDetail(new TransactionDetail());
+        //if (CurrentTransaction != null)
+        //  {
+        var newtxd = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
+        SelectedTransactionDetail = newtxd;
+        IsAdding = true;
+        IsEditing = false;
+        IsNavigating = false;
+        Debug.WriteLine($"Detail Lines:{TransactionDetailsList.Count}");
+        //   }
 
-        TransactionDetailsList.Add(newtxdvm);
-        SelectedTransactionDetail = TransactionDetailsList[TransactionDetailsList.Count];
+        //TransactionDetailsList.Add(newtxdvm);
+        //SelectedTransactionDetail = TransactionDetailsList[TransactionDetailsList.Count];
+    }
+
+    public void SaveTransactionDetail()
+    {
+        if (SelectedTransactionDetail != null)
+        {
+            TransactionDetailsList.Add(SelectedTransactionDetail);
+            IsAdding = false;
+            IsEditing = false;
+            IsNavigating = true;
+        }
     }
 
     public void AddTransactionDetail2()
     {
         TransactionDetail newtxd = new TransactionDetail();
-        Transaction.TransactionDetails.Add(newtxd);
+        CurrentTransaction.TransactionDetails.Add(newtxd);
     }
 
     public void Load()
     {
 
-        Transaction = App.Current.Services.GetService<TransactionViewModel>();
+        //CurrentTransaction = App.Current.Services.GetService<Transaction>();
         LoadCustomerList();
+        LoadProductList();
         //TransactionDetailViewModel nd = App.Current.Services.GetService<TransactionDetailViewModel>();
 
         //nd.Quantity = 10;
@@ -128,13 +149,29 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     public void LoadCustomerList()
     {
         var custs = DataProvider.Customers.GetAll();
+        CustomerList.Clear();
         foreach (Customer c in custs)
         {
-            var n = new CustomerViewModel(DataProvider);
+            //CustomerList.Add(c);
+            var n = App.Current.Services.GetService<CustomerViewModel>() as CustomerViewModel;
             n.SetCustomer(c);
             CustomerList.Add(n);
         }
         Debug.WriteLine($"ViewModel, Customer list loaded, {CustomerList.Count}");
+    }
+
+    public void LoadProductList()
+    {
+        var prods = DataProvider.Products.GetAll();
+        ProductList.Clear();
+        foreach (Product p in prods)
+        {
+            //CustomerList.Add(c);
+            var n = App.Current.Services.GetService<ProductViewModel>() as ProductViewModel;
+            n.SetProduct(p);
+            ProductList.Add(n);
+        }
+        Debug.WriteLine($"ViewModel, Product list loaded, {ProductList.Count}");
     }
 
     public void BeginEdit()
@@ -163,6 +200,7 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     public EditTransactionWindowViewModel(IDataProvider dataprovider)
     {
         DataProvider = dataprovider;
+        CurrentTransaction = new Transaction();
     }
 
     //public void Delete()

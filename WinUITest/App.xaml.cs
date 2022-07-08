@@ -72,6 +72,8 @@ public partial class App : Application
         services.AddSingleton<ProductPageViewModel>();
         services.AddSingleton<TransactionsPageViewModel>();
 
+        services.AddTransient<Transaction>();
+        services.AddTransient<TransactionDetail>();
         services.AddTransient<CustomerViewModel>();
         services.AddTransient<ProductViewModel>();
         services.AddTransient<TransactionViewModel>();

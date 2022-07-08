@@ -102,6 +102,11 @@ public class TransactionViewModel : ObservableValidator, IEditableObject
         set => SetProperty(ref _transactiondetails, value, true);
     }
 
+    public void AddTransactionDetail()
+    {
+        TransactionDetails.Add(new TransactionDetail());
+    }
+
     public TransactionViewModel(IDataProvider dataprovider)
     {
         DataProvider = dataprovider;
