@@ -1,5 +1,6 @@
 ﻿// NOT USED
 
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -18,11 +19,20 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     public ObservableCollection<ProductViewModel> ProductList { get; set; } = new();
     public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new();
 
+    public String TransactionType { get; set; }
+
     private TransactionDetailViewModel _selectedtransactiondetail;
     public TransactionDetailViewModel SelectedTransactionDetail
     {
         get => _selectedtransactiondetail;
         set => SetProperty(ref _selectedtransactiondetail, value);
+    }
+
+    private ProductViewModel _selectedproduct;
+    public ProductViewModel SelectedProduct
+    {
+        get => _selectedproduct;
+        set => SetProperty(ref _selectedproduct, value);
     }
 
 
@@ -109,17 +119,14 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     {
         if (SelectedTransactionDetail != null)
         {
+            SelectedTransactionDetail.ProductCode = SelectedProduct.ProductCode;
+            SelectedTransactionDetail.ProductName = SelectedProduct.ProductName;
+            SelectedTransactionDetail.Value = SelectedTransactionDetail.Price * SelectedTransactionDetail.Quantity;
             TransactionDetailsList.Add(SelectedTransactionDetail);
             IsAdding = false;
             IsEditing = false;
             IsNavigating = true;
         }
-    }
-
-    public void AddTransactionDetail2()
-    {
-        TransactionDetail newtxd = new TransactionDetail();
-        CurrentTransaction.TransactionDetails.Add(newtxd);
     }
 
     public void Load()
@@ -128,6 +135,9 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         //CurrentTransaction = App.Current.Services.GetService<Transaction>();
         LoadCustomerList();
         LoadProductList();
+        IsNavigating = true;
+        IsAdding = false;
+        IsEditing = false;
         //TransactionDetailViewModel nd = App.Current.Services.GetService<TransactionDetailViewModel>();
 
         //nd.Quantity = 10;

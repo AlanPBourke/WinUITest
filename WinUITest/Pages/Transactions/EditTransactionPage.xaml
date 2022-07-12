@@ -7,6 +7,7 @@
     xmlns:data="using:WinUITest.Data"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="using:WinUITest.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:EditTransactionWindowViewModel}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
@@ -14,19 +15,23 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*" />
-            <RowDefinition Height="35*" />
-            <RowDefinition Height="20*" />
-            <RowDefinition Height="30*" />
+            <RowDefinition Height="25*" />
+            <RowDefinition Height="60*" />
         </Grid.RowDefinitions>
 
         <CommandBar
             Name="MainCommandBar"
             Grid.Row="0"
+            Grid.Column="0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Background="Transparent"
             DefaultLabelPosition="Right"
             IsOpen="True">
+            <AppBarButton
+                Name="PlaceholderButton"
+                Icon="Emoji2"
+                Label="Placeholder" />
             <!--<AppBarButton
                 Name="AddButton"
                 Command="{x:Bind AddCommand}"
@@ -73,44 +78,46 @@
 
         <Grid Grid.Row="2">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="15*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*" />
+                <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
 
-            <CommandBar
-                Name="DetailLineCommandBar"
+            <StackPanel
                 Grid.Row="0"
-                Grid.ColumnSpan="1"
-                HorizontalAlignment="Left"
-                Background="Transparent"
-                DefaultLabelPosition="Right"
-                IsOpen="True">
-                <AppBarButton
-                    Name="AddButton"
-                    Command="{x:Bind AddDetailLineCommand}"
-                    Icon="Add"
-                    Label="Add"
-                    Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
-                <!--<AppBarButton
+                Grid.Column="0"
+                Orientation="Vertical">
+                <CommandBar
+                    Name="DetailLineCommandBar"
+                    HorizontalAlignment="Left"
+                    DefaultLabelPosition="Right"
+                    IsOpen="True">
+                    <AppBarButton
+                        Name="AddButton"
+                        Command="{x:Bind AddDetailLineCommand}"
+                        Icon="Add"
+                        Label="Add"
+                        Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+                    <!--<AppBarButton
                     Name="EditButton"
                     Command="{x:Bind EditCommand}"
                     Icon="Edit"
                     Label="Edit"
                     Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />-->
-                <AppBarButton
-                    Name="SaveButton"
-                    Command="{x:Bind SaveDetailLineCommand}"
-                    Icon="Save"
-                    Label="Save"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
-                <!--<AppBarButton
-                    Name="CancelButton"
-                    Command="{x:Bind CancelCommand}"
-                    Icon="Cancel"
-                    Label="Cancel"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />-->
-                <!--<AppBarButton
+                    <AppBarButton
+                        Name="SaveButton"
+                        Command="{x:Bind SaveDetailLineCommand}"
+                        Icon="Save"
+                        Label="Save"
+                        Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                    <AppBarButton
+                        Name="CancelButton"
+                        Command="{x:Bind CancelDetailLineCommand}"
+                        Icon="Cancel"
+                        Label="Cancel"
+                        Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+
+                    <!--<AppBarButton
                     Name="DeleteButton"
                     Icon="Delete"
                     Label="Delete"
@@ -136,9 +143,7 @@
                         </Flyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>-->
-            </CommandBar>
-
-            <RelativePanel Name="RowDetailsPanel" Grid.Row="1">
+                </CommandBar>
 
                 <ComboBox
                     Name="ProductsComboBox"
@@ -146,7 +151,8 @@
                     Header="Product"
                     IsEditable="false"
                     ItemsSource="{x:Bind ViewModel.ProductList}"
-                    SelectedItem="{x:Bind ViewModel.SelectedTransactionDetail.ProductCode, Mode=OneWay}"
+                    SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectionChanged="ProductsComboBox_SelectionChanged"
                     Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ProductViewModel">
@@ -165,56 +171,61 @@
                     IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                     IsTabStop="True"
                     RelativePanel.Below="ProductsComboBox"
-                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
 
-                <!--<TextBox
-                Name="ProductCodeTextBox"
-                Width="150"
-                Header="Code"
-                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
-                IsTabStop="True"
-                Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-                <!--<TextBox
-                Name="NameTextBox"
-                Width="400"
-                Header="Name"
-                IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
-                IsTabStop="True"
-                RelativePanel.Below="CodeTextBox"
-                Text="{x:Bind Path=ViewModel.SelectedProduct.ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+                <TextBox
+                    Name="PriceTextBox"
+                    Width="400"
+                    Header="Price"
+                    IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                    IsTabStop="True"
+                    RelativePanel.Below="QuantityTextBox"
+                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                <TextBlock
+                    Name="ErrorTextBlock"
+                    Width="350"
+                    Foreground="Red"
+                    RelativePanel.Below="PriceTextBox"
+                    Text="{x:Bind ViewModel.HasErrors, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.HasErrors, Mode=OneWay}" />
 
-            </RelativePanel>
+            </StackPanel>
+
+            <controls:DataGrid
+                Name="TransactionDetailsDataGrid"
+                Grid.Row="0"
+                Grid.Column="1"
+                AutoGenerateColumns="False"
+                ItemsSource="{x:Bind ViewModel.TransactionDetailsList}"
+                SelectionChanged="TransactionDetailsDataGrid_SelectionChanged"
+                SelectionMode="Single">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn
+                        Binding="{Binding ProductCode}"
+                        Header="Code"
+                        IsReadOnly="True" />
+                    <controls:DataGridTextColumn
+                        Binding="{Binding ProductName}"
+                        Header="Code"
+                        IsReadOnly="True" />
+                    <controls:DataGridTextColumn
+                        Binding="{Binding Quantity}"
+                        Header="Name"
+                        IsReadOnly="True" />
+                    <controls:DataGridTextColumn
+                        Binding="{Binding Price}"
+                        Header="Price"
+                        IsReadOnly="True" />
+                    <controls:DataGridTextColumn
+                        Binding="{Binding Value}"
+                        Header="Value"
+                        IsReadOnly="True" />
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
 
         </Grid>
-
-        <controls:DataGrid
-            Name="TransactionDetailsDataGrid"
-            Grid.Row="3"
-            AutoGenerateColumns="False"
-            Background="LightGray"
-            Foreground="Black"
-            ItemsSource="{x:Bind ViewModel.TransactionDetailsList}"
-            SelectionChanged="TransactionDetailsDataGrid_SelectionChanged"
-            SelectionMode="Single">
-            <controls:DataGrid.Columns>
-                <controls:DataGridTextColumn
-                    Binding="{Binding ProductCode}"
-                    Header="Code"
-                    IsReadOnly="True" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding Quantity}"
-                    Header="Name"
-                    IsReadOnly="True" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding Price}"
-                    Header="Price"
-                    IsReadOnly="True" />
-                <controls:DataGridTextColumn
-                    Binding="{Binding Value}"
-                    Header="Value"
-                    IsReadOnly="True" />
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
 
     </Grid>
 </Page>

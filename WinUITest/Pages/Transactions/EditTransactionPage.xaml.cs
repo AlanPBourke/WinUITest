@@ -18,8 +18,9 @@ public sealed partial class EditTransactionPage : Page
     private EditType TransactionEditType { get; set; }
     private EditTransactionWindowViewModel ViewModel;
 
-    public ICommand AddDetailLineCommand => new RelayCommand(NewTransactionDetail);
+    public ICommand AddDetailLineCommand => new RelayCommand(AddTransactionDetail);
     public ICommand SaveDetailLineCommand => new RelayCommand(SaveTransactionDetail);
+    public ICommand CancelDetailLineCommand => new RelayCommand(CancelTransactionDetail);
 
     public EditTransactionPage()
     {
@@ -55,7 +56,7 @@ public sealed partial class EditTransactionPage : Page
         ViewModel.IsNavigating = true;
     }
 
-    private void NewTransactionDetail()
+    private void AddTransactionDetail()
     {
         //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
         ViewModel.AddTransactionDetail();
@@ -66,6 +67,13 @@ public sealed partial class EditTransactionPage : Page
     {
         // TODO ViewModel.CurrentTransaction.Save();
         ViewModel.SaveTransactionDetail();
+    }
+
+    public void CancelTransactionDetail()
+    {
+        ViewModel.IsAdding = false;
+        ViewModel.IsEditing = false;
+        ViewModel.IsNavigating = true;
     }
 
     private void TransactionDetailsDataGrid_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
@@ -103,4 +111,11 @@ public sealed partial class EditTransactionPage : Page
         // Debug.WriteLine($"Codebehind, Customer list loaded, {ViewModel.CustomerList.Count}");
     }
 
+    private void ProductsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ViewModel.SelectedProduct != null)
+        {
+            ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
+        }
+    }
 }

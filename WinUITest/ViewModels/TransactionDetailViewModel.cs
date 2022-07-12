@@ -1,15 +1,34 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
 
-public class TransactionDetailViewModel : ObservableObject
+public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 {
     private TransactionDetail _transactionDetail;
-
+    private TransactionDetailViewModel _backup;
+    public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
     public TransactionDetailViewModel()
     {
+        PropertyChanged += TransactionDetailViewModel_PropertyChanged;
+        ErrorsChanged += TransactionDetailViewModel_ErrorsChanged;
+    }
 
+    private void TransactionDetailViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+    }
+
+    private void TransactionDetailViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(HasErrors))
+        {
+            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
+        }
     }
 
     public void SetTransactionDetail(TransactionDetail transactionDetail)
@@ -20,6 +39,34 @@ public class TransactionDetailViewModel : ObservableObject
         Price = transactionDetail.Price;
         Value = transactionDetail.Value;
         ProductId = transactionDetail.ProductId;
+        ProductName = transactionDetail.Product.ProductName;
+        ProductCode = transactionDetail.Product.ProductCode;
+    }
+
+    public void BeginEdit()
+    {
+        _backup = this.MemberwiseClone() as TransactionDetailViewModel;
+    }
+
+    public void CancelEdit()
+    {
+        ProductCode = _backup.ProductCode;
+        ProductName = _backup.ProductName;
+        Price = _backup.Price;
+        Quantity = _backup.Quantity;
+        Value = _backup.Value;
+    }
+
+    public void EndEdit()
+    {
+
+    }
+
+    private string _productname;
+    public string ProductName
+    {
+        get => _productname;
+        set => SetProperty(ref _productname, value);
     }
 
     private string _productcode;
@@ -37,6 +84,9 @@ public class TransactionDetailViewModel : ObservableObject
     }
 
     private int _quantity;
+
+    [Required]
+    [Range(1, 99, ErrorMessage = $"Quantity must be between 1 and 99.")]
     public int Quantity
     {
         get => _quantity;
@@ -48,6 +98,8 @@ public class TransactionDetailViewModel : ObservableObject
     }
 
     private double _price;
+    [Required]
+    [Range(0.01, 999999999.99, ErrorMessage = $"Price must be between 0.01 and 999999999.99")]
     public double Price
     {
         get => _price;
