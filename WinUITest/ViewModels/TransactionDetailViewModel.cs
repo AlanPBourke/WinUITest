@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
@@ -85,6 +85,8 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 
     private int _quantity;
 
+    // -- Note the final 'true' parameter in SetProperty is required for 
+    // -- validation to work!
     [Required]
     [Range(1, 99, ErrorMessage = $"Quantity must be between 1 and 99.")]
     public int Quantity
@@ -92,7 +94,7 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
         get => _quantity;
         set
         {
-            SetProperty(ref _quantity, value);
+            SetProperty(ref _quantity, value, true);
             QuantityString = value.ToString();
         }
     }
@@ -103,7 +105,7 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
     public double Price
     {
         get => _price;
-        set => SetProperty(ref _price, value);
+        set => SetProperty(ref _price, value, true);
     }
 
     private string _valuestring;
@@ -138,6 +140,4 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
         get => _transactiondetailid;
         set => SetProperty(ref _transactiondetailid, value);
     }
-
-
 }

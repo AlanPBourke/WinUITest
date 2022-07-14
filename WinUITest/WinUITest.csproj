@@ -38,6 +38,9 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Pages\Products\ProductPage2.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="CustomerPage.xaml" />
     <None Remove="InvoicingPage.xaml" />
     <None Remove="MainWindow.xaml" />
@@ -144,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <CustomAdditionalCompileInputs Remove="Pages\Products\ProductPage2.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Pages\Products\ProductPage2.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Remove="Pages\Products\ProductPage2.xaml" />

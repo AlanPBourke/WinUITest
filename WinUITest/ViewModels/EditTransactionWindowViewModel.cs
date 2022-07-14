@@ -4,13 +4,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
 namespace WinUITest.ViewModels;
 
-public class EditTransactionWindowViewModel : ObservableValidator, IEditableObject
+public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
 {
     private IDataProvider DataProvider;
 

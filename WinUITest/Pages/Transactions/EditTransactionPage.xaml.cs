@@ -113,9 +113,12 @@ public sealed partial class EditTransactionPage : Page
 
     private void ProductsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+
         if (ViewModel.SelectedProduct != null)
         {
             ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
         }
     }
+
+
 }
