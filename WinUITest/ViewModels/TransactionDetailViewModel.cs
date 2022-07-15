@@ -18,50 +18,6 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
         ErrorsChanged += TransactionDetailViewModel_ErrorsChanged;
     }
 
-    private void TransactionDetailViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-    {
-        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
-    }
-
-    private void TransactionDetailViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(HasErrors))
-        {
-            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
-        }
-    }
-
-    public void SetTransactionDetail(TransactionDetail transactionDetail)
-    {
-        _transactionDetail = transactionDetail;
-        TransactionDetailId = transactionDetail.TransactionDetailId;
-        Quantity = transactionDetail.Quantity;
-        Price = transactionDetail.Price;
-        Value = transactionDetail.Value;
-        ProductId = transactionDetail.ProductId;
-        ProductName = transactionDetail.Product.ProductName;
-        ProductCode = transactionDetail.Product.ProductCode;
-    }
-
-    public void BeginEdit()
-    {
-        _backup = this.MemberwiseClone() as TransactionDetailViewModel;
-    }
-
-    public void CancelEdit()
-    {
-        ProductCode = _backup.ProductCode;
-        ProductName = _backup.ProductName;
-        Price = _backup.Price;
-        Quantity = _backup.Quantity;
-        Value = _backup.Value;
-    }
-
-    public void EndEdit()
-    {
-
-    }
-
     private string _productname;
     public string ProductName
     {
@@ -140,4 +96,50 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
         get => _transactiondetailid;
         set => SetProperty(ref _transactiondetailid, value);
     }
+
+    private void TransactionDetailViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+    }
+
+    private void TransactionDetailViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(HasErrors))
+        {
+            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
+        }
+    }
+
+    public void SetTransactionDetail(TransactionDetail transactionDetail)
+    {
+        _transactionDetail = transactionDetail;
+        TransactionDetailId = transactionDetail.TransactionDetailId;
+        Quantity = transactionDetail.Quantity;
+        Price = transactionDetail.Price;
+        Value = transactionDetail.Value;
+        ProductId = transactionDetail.ProductId;
+        ProductName = transactionDetail.Product.ProductName;
+        ProductCode = transactionDetail.Product.ProductCode;
+    }
+
+    public void BeginEdit()
+    {
+        _backup = this.MemberwiseClone() as TransactionDetailViewModel;
+        ValidateAllProperties();
+    }
+
+    public void CancelEdit()
+    {
+        ProductCode = _backup.ProductCode;
+        ProductName = _backup.ProductName;
+        Price = _backup.Price;
+        Quantity = _backup.Quantity;
+        Value = _backup.Value;
+    }
+
+    public void EndEdit()
+    {
+
+    }
+
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using WinUITest.Data;
@@ -27,6 +28,8 @@ public sealed partial class EditTransactionPage : Page
         this.InitializeComponent();
         ViewModel = App.Current.Services.GetService(typeof(EditTransactionWindowViewModel)) as EditTransactionWindowViewModel;
         ViewModel.Load();
+
+
 
         //switch (TransactionEditType)
         //{
@@ -60,13 +63,12 @@ public sealed partial class EditTransactionPage : Page
     {
         //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
         ViewModel.AddTransactionDetail();
-
     }
 
     private void SaveTransactionDetail()
     {
-        // TODO ViewModel.CurrentTransaction.Save();
         ViewModel.SaveTransactionDetail();
+        ProductSearchBox.Text = string.Empty;
     }
 
     public void CancelTransactionDetail()
@@ -95,30 +97,86 @@ public sealed partial class EditTransactionPage : Page
         }
     }
 
-    private void CustomersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+    private void ProductSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        var combo = sender as ComboBox;
-        if (combo.SelectedItem != null)
+
+        if (args.ChosenSuggestion != null && args.ChosenSuggestion is Product)
         {
-            var i = combo.SelectedItem as Customer;
-            ViewModel.SelectedCustomer = i;
+            //User selected an item, take an action
+            ViewModel.SetSelectedProduct(args.ChosenSuggestion as Product);
+
         }
-    }
-
-    private void CustomersComboBox_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        //ViewModel.LoadCustomerList();
-        // Debug.WriteLine($"Codebehind, Customer list loaded, {ViewModel.CustomerList.Count}");
-    }
-
-    private void ProductsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
-        if (ViewModel.SelectedProduct != null)
+        else if (!string.IsNullOrEmpty(args.QueryText))
         {
+            //Do a fuzzy search based on the text
+            var suggestions = ViewModel.SearchProducts(sender.Text);
+            if (suggestions.Count > 0)
+            {
+                ViewModel.SetSelectedProduct(suggestions.FirstOrDefault());
+            }
+        }
+
+    }
+
+    private void ProductSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    {
+        if (args.SelectedItem is Product product)
+        {
+            sender.Text = product.ProductCode;
+            ViewModel.SetSelectedProduct(args.SelectedItem as Product);
             ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
         }
     }
 
+    private void ProductSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+        {
+            var suggestions = ViewModel.SearchProducts(sender.Text);
 
+            if (suggestions.Count > 0)
+                sender.ItemsSource = suggestions;
+            else
+                sender.ItemsSource = new string[] { "No results found" };
+        }
+    }
+
+    private void CustomerSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        if (args.ChosenSuggestion != null && args.ChosenSuggestion is Customer)
+        {
+            //User selected an item, take an action
+            ViewModel.SetSelectedCustomer(args.ChosenSuggestion as Customer);
+
+        }
+        else if (!string.IsNullOrEmpty(args.QueryText))
+        {
+            //Do a fuzzy search based on the text
+            var suggestions = ViewModel.SearchCustomers(sender.Text);
+            if (suggestions.Count > 0)
+            {
+                ViewModel.SetSelectedCustomer(suggestions.FirstOrDefault());
+            }
+        }
+    }
+
+    private void CustomerSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    {
+        if (args.SelectedItem is Customer customer)
+        {
+            sender.Text = customer.CustomerCode;
+            ViewModel.SetSelectedCustomer(args.SelectedItem as Customer);
+        }
+    }
+
+    private void CustomerSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        var suggestions = ViewModel.SearchCustomers(sender.Text);
+
+        if (suggestions.Count > 0)
+            sender.ItemsSource = suggestions;
+        else
+            sender.ItemsSource = new string[] { "No results found" };
+    }
 }

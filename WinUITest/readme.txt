@@ -29,5 +29,5 @@ http://www.blackwasp.co.uk/WPFValueConverter.aspx
 DI
 https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc
 
-Restarig migrations
+Restarting migrations
 https://stackoverflow.com/questions/11679385/reset-entity-framework-migrations

@@ -1,9 +1,11 @@
 ﻿// NOT USED
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using WinUITest.Data;
@@ -43,8 +45,8 @@ public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
         set => SetProperty(ref _currenttransaction, value);
     }
 
-    private Customer _selectedcustomer;
-    public Customer SelectedCustomer
+    private CustomerViewModel _selectedcustomer;
+    public CustomerViewModel SelectedCustomer
     {
         get => _selectedcustomer;
         set => SetProperty(ref _selectedcustomer, value);
@@ -93,6 +95,20 @@ public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
         _currenttransaction = transaction;
     }
 
+    public void SetSelectedProduct(Product product)
+    {
+        ProductViewModel vm = new ProductViewModel(DataProvider);
+        vm.SetProduct(product);
+        SelectedProduct = vm;
+    }
+
+    public void SetSelectedCustomer(Customer customer)
+    {
+        CustomerViewModel vm = new CustomerViewModel(DataProvider);
+        vm.SetCustomer(customer);
+        SelectedCustomer = vm;
+    }
+
     // TODO implement
     public bool CanDelete()
     {
@@ -108,7 +124,7 @@ public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
         IsAdding = true;
         IsEditing = false;
         IsNavigating = false;
-        Debug.WriteLine($"Detail Lines:{TransactionDetailsList.Count}");
+        SelectedTransactionDetail.BeginEdit();
         //   }
 
         //TransactionDetailsList.Add(newtxdvm);
@@ -117,7 +133,7 @@ public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
 
     public void SaveTransactionDetail()
     {
-        if (SelectedTransactionDetail != null)
+        if (SelectedTransactionDetail != null && SelectedTransactionDetail.HasErrors == false)
         {
             SelectedTransactionDetail.ProductCode = SelectedProduct.ProductCode;
             SelectedTransactionDetail.ProductName = SelectedProduct.ProductName;
@@ -182,6 +198,18 @@ public class EditTransactionWindowViewModel : ObservableObject, IEditableObject
             ProductList.Add(n);
         }
         Debug.WriteLine($"ViewModel, Product list loaded, {ProductList.Count}");
+    }
+
+    public List<Product> SearchProducts(string query)
+    {
+        IEnumerable<Product> results = DataProvider.Products.SearchProducts(query);
+        return results.ToList();
+    }
+
+    public List<Customer> SearchCustomers(string query)
+    {
+        IEnumerable<Customer> results = DataProvider.Customers.SearchCustomers(query);
+        return results.ToList();
     }
 
     public void BeginEdit()

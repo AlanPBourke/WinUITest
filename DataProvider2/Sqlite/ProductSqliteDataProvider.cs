@@ -1,4 +1,6 @@
-﻿namespace WinUITest.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WinUITest.Data
 {
     public class ProductSqliteDataProvider : IProductDataProvider
     {
@@ -42,6 +44,13 @@
                 return DataContext.TransactionDetails.Where(p => p.ProductId == id).Any();
             }
             return false;
+        }
+
+        public IEnumerable<Product> SearchProducts(string searchTerm)
+        {
+            return DataContext.Products
+                .Where(c => EF.Functions.Like(c.ProductCode, $"%{searchTerm}%") || EF.Functions.Like(c.ProductName, $"%{searchTerm}%"))
+                .Take(20);
         }
     }
 }

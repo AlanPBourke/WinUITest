@@ -56,23 +56,25 @@
 
         <StackPanel Grid.Row="1">
 
-            <ComboBox
-                Name="CustomersComboBox"
+            <AutoSuggestBox
+                Name="CustomerSearchBox"
                 Width="200"
-                Header="Customers"
-                IsEditable="false"
-                ItemsSource="{x:Bind ViewModel.CustomerList}"
-                Loaded="CustomersComboBox_Loaded"
-                SelectionChanged="CustomersComboBox_SelectionChanged">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:CustomerViewModel">
-                        <StackPanel>
-                            <TextBlock Text="{x:Bind CustomerCode}" />
+                HorizontalAlignment="Left"
+                PlaceholderText="Customer code or name"
+                QueryIcon="Find"
+                QuerySubmitted="CustomerSearchBox_QuerySubmitted"
+                SuggestionChosen="CustomerSearchBox_SuggestionChosen"
+                TextChanged="CustomerSearchBox_TextChanged">
+                <AutoSuggestBox.ItemTemplate>
+                    <DataTemplate x:DataType="data:Customer">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind CustomerCode}" />
                             <TextBlock Text="{x:Bind Name}" />
                         </StackPanel>
                     </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                </AutoSuggestBox.ItemTemplate>
+            </AutoSuggestBox>
+
 
         </StackPanel>
 
@@ -86,7 +88,8 @@
             <StackPanel
                 Grid.Row="0"
                 Grid.Column="0"
-                Orientation="Vertical">
+                Orientation="Vertical"
+                Spacing="15">
                 <CommandBar
                     Name="DetailLineCommandBar"
                     HorizontalAlignment="Left"
@@ -96,7 +99,7 @@
                         Name="AddButton"
                         Command="{x:Bind AddDetailLineCommand}"
                         Icon="Add"
-                        Label="Add"
+                        Label="Add Detail Line"
                         Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
                     <!--<AppBarButton
                     Name="EditButton"
@@ -145,44 +148,23 @@
                 </AppBarButton>-->
                 </CommandBar>
 
-                <ComboBox
-                    Name="ProductsComboBox"
-                    Width="200"
-                    Header="Product"
-                    IsEditable="false"
-                    ItemsSource="{x:Bind ViewModel.ProductList}"
-                    SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionChanged="ProductsComboBox_SelectionChanged"
+                <AutoSuggestBox
+                    Name="ProductSearchBox"
+                    PlaceholderText="Product code or name"
+                    QueryIcon="Find"
+                    QuerySubmitted="ProductSearchBox_QuerySubmitted"
+                    SuggestionChosen="ProductSearchBox_SuggestionChosen"
+                    TextChanged="ProductSearchBox_TextChanged"
                     Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:ProductViewModel">
-                            <RelativePanel>
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate x:DataType="data:Product">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
                                 <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
-                                <TextBlock RelativePanel.RightOf="ProductCodeTextBlock" Text="{x:Bind ProductName}" />
-                            </RelativePanel>
+                                <TextBlock Text="{x:Bind ProductName}" />
+                            </StackPanel>
                         </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-
-                <!--<ComboBox
-                    Name="ProductsComboBox"
-                    Width="200"
-                    Header="Product"
-                    IsEditable="false"
-                    ItemsSource="{x:Bind ViewModel.ProductList}"
-                    SelectedItem="{x:Bind ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionChanged="ProductsComboBox_SelectionChanged"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:ProductViewModel">
-                            <RelativePanel>
-                                <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
-                                <TextBlock RelativePanel.RightOf="ProductCodeTextBlock" Text="{x:Bind ProductName}" />
-                            </RelativePanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>-->
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
 
                 <TextBox
                     Name="QuantityTextBox"
@@ -249,3 +231,65 @@
 
     </Grid>
 </Page>
+
+
+
+
+<!--<ComboBox
+                    Name="ProductsComboBox"
+                    Width="200"
+                    Header="Product"
+                    IsEditable="false"
+                    ItemsSource="{x:Bind ViewModel.ProductList}"
+                    SelectedItem="{x:Bind ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectionChanged="ProductsComboBox_SelectionChanged"
+                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:ProductViewModel">
+                            <RelativePanel>
+                                <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
+                                <TextBlock RelativePanel.RightOf="ProductCodeTextBlock" Text="{x:Bind ProductName}" />
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>-->
+
+
+<!--<ComboBox
+                    Name="ProductsComboBox"
+                    Width="200"
+                    Header="Product"
+                    IsEditable="false"
+                    ItemsSource="{x:Bind ViewModel.ProductList}"
+                    SelectedIndex="0"
+                    SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectionChanged="ProductsComboBox_SelectionChanged"
+                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:ProductViewModel">
+                            <RelativePanel>
+                                <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
+                                <TextBlock RelativePanel.RightOf="ProductCodeTextBlock" Text="{x:Bind ProductName}" />
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>-->
+
+
+<!--<ComboBox
+                Name="CustomersComboBox"
+                Width="200"
+                Header="Customers"
+                IsEditable="false"
+                ItemsSource="{x:Bind ViewModel.CustomerList}"
+                Loaded="CustomersComboBox_Loaded"
+                SelectionChanged="CustomersComboBox_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:CustomerViewModel">
+                        <StackPanel>
+                            <TextBlock Text="{x:Bind CustomerCode}" />
+                            <TextBlock Text="{x:Bind Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>-->    
