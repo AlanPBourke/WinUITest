@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
@@ -100,11 +101,14 @@ public sealed partial class EditTransactionPage : Page
 
     private void ProductSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
+        var found = false;
+        Product foundProduct = new();
 
         if (args.ChosenSuggestion != null && args.ChosenSuggestion is Product)
         {
             //User selected an item, take an action
-            ViewModel.SetSelectedProduct(args.ChosenSuggestion as Product);
+            foundProduct = args.ChosenSuggestion as Product;
+            found = true;
 
         }
         else if (!string.IsNullOrEmpty(args.QueryText))
@@ -113,19 +117,40 @@ public sealed partial class EditTransactionPage : Page
             var suggestions = ViewModel.SearchProducts(sender.Text);
             if (suggestions.Count > 0)
             {
-                ViewModel.SetSelectedProduct(suggestions.FirstOrDefault());
+                foundProduct = suggestions.FirstOrDefault();
+                found = true;
             }
+        }
+
+        if (found)
+        {
+            Debug.WriteLine($"QuerySubmitted found: {foundProduct.ProductCode} {ViewModel.SelectedTransactionDetail.ProductCode}");
+            sender.Text = foundProduct.ProductCode;
+            ViewModel.SetSelectedProduct(foundProduct);
+            ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
+        }
+        else
+        {
+            Debug.WriteLine($"QuerySubmitted found nothing.");
+            ViewModel.SetSelectedProduct(new Product());
         }
 
     }
 
     private void ProductSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     {
+
         if (args.SelectedItem is Product product)
         {
+            Debug.WriteLine($"SuggestionChosen found: {product.ProductCode} {ViewModel.SelectedTransactionDetail.ProductCode}");
             sender.Text = product.ProductCode;
             ViewModel.SetSelectedProduct(args.SelectedItem as Product);
             ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
+        }
+        else
+        {
+            Debug.WriteLine($"SuggestionChosen found nothing.");
+            ViewModel.SetSelectedProduct(new Product());
         }
     }
 
@@ -135,10 +160,10 @@ public sealed partial class EditTransactionPage : Page
         {
             var suggestions = ViewModel.SearchProducts(sender.Text);
 
-            if (suggestions.Count > 0)
-                sender.ItemsSource = suggestions;
-            else
-                sender.ItemsSource = new string[] { "No results found" };
+            //          if (suggestions.Count > 0)
+            //        {
+            sender.ItemsSource = suggestions;
+            //       }
         }
     }
 
@@ -172,11 +197,14 @@ public sealed partial class EditTransactionPage : Page
 
     private void CustomerSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
-        var suggestions = ViewModel.SearchCustomers(sender.Text);
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+        {
+            var suggestions = ViewModel.SearchCustomers(sender.Text);
 
-        if (suggestions.Count > 0)
-            sender.ItemsSource = suggestions;
-        else
-            sender.ItemsSource = new string[] { "No results found" };
+            if (suggestions.Count > 0)
+                sender.ItemsSource = suggestions;
+            else
+                sender.Text = "";
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
@@ -26,10 +27,16 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
     }
 
     private string _productcode;
+
+    [Required(ErrorMessage = "Enter a product code.")]
     public string ProductCode
     {
         get => _productcode;
-        set => SetProperty(ref _productcode, value);
+        set
+        {
+            Debug.WriteLine($"TransactionDetailViewModel.ProductCode setter: [{value}]");
+            SetProperty(ref _productcode, value, true);
+        }
     }
 
     private string _quantitystring;
@@ -44,7 +51,7 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
     // -- Note the final 'true' parameter in SetProperty is required for 
     // -- validation to work!
     [Required]
-    [Range(1, 99, ErrorMessage = $"Quantity must be between 1 and 99.")]
+    [Range(1, 99, ErrorMessage = $"Invalid quantity.")]
     public int Quantity
     {
         get => _quantity;
@@ -57,7 +64,7 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 
     private double _price;
     [Required]
-    [Range(0.01, 999999999.99, ErrorMessage = $"Price must be between 0.01 and 999999999.99")]
+    [Range(0.01, 999999999.99, ErrorMessage = $"Invalid price.")]
     public double Price
     {
         get => _price;
@@ -99,6 +106,7 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 
     private void TransactionDetailViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
     {
+        Debug.WriteLine($"TransactionDetailViewModel errors: [{Errors}]");
         OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
     }
 

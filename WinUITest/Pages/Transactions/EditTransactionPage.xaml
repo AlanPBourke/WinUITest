@@ -166,6 +166,9 @@
                     </AutoSuggestBox.ItemTemplate>
                 </AutoSuggestBox>
 
+                <!--  Text="{x:Bind ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay}"  -->
+                <!--  Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"  -->
+
                 <TextBox
                     Name="QuantityTextBox"
                     Width="400"
@@ -185,14 +188,23 @@
                     RelativePanel.Below="QuantityTextBox"
                     Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
-                <TextBlock
-                    Name="ErrorTextBlock"
-                    Width="350"
-                    Foreground="Red"
-                    RelativePanel.Below="PriceTextBox"
-                    Text="{x:Bind ViewModel.SelectedTransactionDetail.Errors, Mode=OneWay}"
-                    Visibility="{x:Bind ViewModel.SelectedTransactionDetail.HasErrors, Mode=OneWay}" />
 
+                <StackPanel Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
+                    <TextBlock
+                        Name="ErrorTextBlock"
+                        Width="350"
+                        Foreground="Red"
+                        RelativePanel.Below="PriceTextBox"
+                        Text="{x:Bind ViewModel.SelectedTransactionDetail.Errors, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.SelectedTransactionDetail.HasErrors, Mode=OneWay}" />
+                    <!--<TextBlock
+                        Name="ProductErrorTextBlock"
+                        Width="350"
+                        Foreground="Red"
+                        RelativePanel.Below="ErrorTextBlock"
+                        Text="{x:Bind ViewModel.Errors, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.HasErrors, Mode=OneWay}" />-->
+                </StackPanel>
             </StackPanel>
 
             <controls:DataGrid
