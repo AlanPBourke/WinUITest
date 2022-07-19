@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.WinUI.UI.Controls;
 using Microsoft.UI.Xaml.Controls;
 using WinUITest.Data;
 using WinUITest.Enums;
@@ -66,10 +67,16 @@ public sealed partial class EditTransactionPage : Page
         ViewModel.AddTransactionDetail();
     }
 
+
     private void SaveTransactionDetail()
     {
-        ViewModel.SaveTransactionDetail();
-        ProductSearchBox.Text = string.Empty;
+        if (ViewModel.SelectedTransactionDetail.HasErrors == false)
+        {
+            ViewModel.SaveTransactionDetail();
+            ViewModel.SearchProductCode = string.Empty;
+            TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
+        }
+
     }
 
     public void CancelTransactionDetail()
@@ -79,8 +86,38 @@ public sealed partial class EditTransactionPage : Page
         ViewModel.IsNavigating = true;
     }
 
+    private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (ViewModel.SelectedTransactionDetail != null)
+        {
+            ViewModel.DeleteTransactionDetail();
+            DeleteButton.Flyout.Hide();
+        }
+        //SetMode("navigate");
+    }
+
+    private void DeleteCancelClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        ViewModel.IsAdding = false;
+        ViewModel.IsNavigating = true;
+        ViewModel.IsEditing = false;
+        DeleteButton.Flyout.Hide();
+        //SetMode("navigate");
+    }
+
     private void TransactionDetailsDataGrid_SelectionChanged(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
     {
+        DataGrid g = sender as DataGrid;
+        if (g != null && g.SelectedItem != null)
+        {
+            var txn = g.SelectedItem as TransactionDetailViewModel;
+            ViewModel.IsAdding = false;
+            ViewModel.IsEditing = true;
+            ViewModel.IsNavigating = false;
+            ViewModel.EditTransactionDetail(txn);
+
+
+        }
 
     }
 
@@ -125,14 +162,15 @@ public sealed partial class EditTransactionPage : Page
         if (found)
         {
             Debug.WriteLine($"QuerySubmitted found: {foundProduct.ProductCode} {ViewModel.SelectedTransactionDetail.ProductCode}");
-            sender.Text = foundProduct.ProductCode;
-            ViewModel.SetSelectedProduct(foundProduct);
-            ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
+            //sender.Text = foundProduct.ProductCode;
+            ViewModel.SearchProductCode = foundProduct.ProductCode;
+            //ViewModel.SetSelectedProduct(foundProduct);
+            ViewModel.SetSelectedProduct2(foundProduct);
         }
         else
         {
             Debug.WriteLine($"QuerySubmitted found nothing.");
-            ViewModel.SetSelectedProduct(new Product());
+            ViewModel.SetSelectedProduct2(new Product());
         }
 
     }
@@ -143,14 +181,18 @@ public sealed partial class EditTransactionPage : Page
         if (args.SelectedItem is Product product)
         {
             Debug.WriteLine($"SuggestionChosen found: {product.ProductCode} {ViewModel.SelectedTransactionDetail.ProductCode}");
-            sender.Text = product.ProductCode;
-            ViewModel.SetSelectedProduct(args.SelectedItem as Product);
-            ViewModel.SelectedTransactionDetail.Price = ViewModel.SelectedProduct.Price;
+            //sender.Text = product.ProductCode;
+            ViewModel.SearchProductCode = product.ProductCode;
+
+            ViewModel.SetSelectedProduct2(product);
+            //ViewModel.SetSelectedProduct(args.SelectedItem as Product);
+            //ViewModel.SelectedTransactionDetail.Price = product.Price;
+            //ViewModel.SelectedTransactionDetail.ProductCode = product.ProductCode;
         }
         else
         {
             Debug.WriteLine($"SuggestionChosen found nothing.");
-            ViewModel.SetSelectedProduct(new Product());
+            ViewModel.SetSelectedProduct2(new Product());
         }
     }
 

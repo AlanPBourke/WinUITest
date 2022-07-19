@@ -31,3 +31,6 @@ https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc
 
 Restarting migrations
 https://stackoverflow.com/questions/11679385/reset-entity-framework-migrations
+
+FontIcons etc
+https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font

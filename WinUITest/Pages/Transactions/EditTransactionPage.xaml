@@ -85,11 +85,8 @@
                 <ColumnDefinition Width="70*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel
-                Grid.Row="0"
-                Grid.Column="0"
-                Orientation="Vertical"
-                Spacing="15">
+            <RelativePanel Grid.Row="0" Grid.Column="0">
+
                 <CommandBar
                     Name="DetailLineCommandBar"
                     HorizontalAlignment="Left"
@@ -120,51 +117,68 @@
                         Label="Cancel"
                         Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
 
-                    <!--<AppBarButton
-                    Name="DeleteButton"
-                    Icon="Delete"
-                    Label="Delete"
-                    Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}">
-                    <AppBarButton.Flyout>
-                        <Flyout>
-                            <RelativePanel Width="600">
-                                <TextBlock
-                                    Name="TextBlock"
-                                    Style="{ThemeResource BaseTextBlockStyle}"
-                                    Text="Product will be deleted. Do you want to continue?" />
-                                <Button
-                                    Name="YesButton"
-                                    Click="DeleteConfirmationClick"
-                                    Content="Yes"
-                                    RelativePanel.Below="TextBlock" />
-                                <Button
-                                    Click="DeleteCancelClick"
-                                    Content="No"
-                                    RelativePanel.Below="TextBlock"
-                                    RelativePanel.RightOf="YesButton" />
-                            </RelativePanel>
-                        </Flyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>-->
+                    <AppBarButton
+                        Name="DeleteButton"
+                        Icon="Delete"
+                        Label="Delete"
+                        Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay}">
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <RelativePanel Width="600">
+                                    <TextBlock
+                                        Name="TextBlock"
+                                        Style="{ThemeResource BaseTextBlockStyle}"
+                                        Text="Detail line will be deleted. Do you want to continue?" />
+                                    <Button
+                                        Name="YesButton"
+                                        Click="DeleteConfirmationClick"
+                                        Content="Yes"
+                                        RelativePanel.Below="TextBlock" />
+                                    <Button
+                                        Click="DeleteCancelClick"
+                                        Content="No"
+                                        RelativePanel.Below="TextBlock"
+                                        RelativePanel.RightOf="YesButton" />
+                                </RelativePanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
                 </CommandBar>
 
-                <AutoSuggestBox
-                    Name="ProductSearchBox"
-                    PlaceholderText="Product code or name"
-                    QueryIcon="Find"
-                    QuerySubmitted="ProductSearchBox_QuerySubmitted"
-                    SuggestionChosen="ProductSearchBox_SuggestionChosen"
-                    TextChanged="ProductSearchBox_TextChanged"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
-                    <AutoSuggestBox.ItemTemplate>
-                        <DataTemplate x:DataType="data:Product">
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
-                                <TextBlock Text="{x:Bind ProductName}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </AutoSuggestBox.ItemTemplate>
-                </AutoSuggestBox>
+                <StackPanel
+                    Name="ProductDetailsStackPanel"
+                    Padding="10"
+                    Orientation="Horizontal"
+                    RelativePanel.Below="DetailLineCommandBar">
+
+                    <AutoSuggestBox
+                        Name="ProductSearchBox"
+                        Width="200"
+                        HorizontalAlignment="Left"
+                        Header="Product"
+                        IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
+                        PlaceholderText="Product code or name"
+                        QueryIcon="Find"
+                        QuerySubmitted="ProductSearchBox_QuerySubmitted"
+                        SuggestionChosen="ProductSearchBox_SuggestionChosen"
+                        Text="{x:Bind ViewModel.SearchProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextChanged="ProductSearchBox_TextChanged">
+                        <AutoSuggestBox.ItemTemplate>
+                            <DataTemplate x:DataType="data:Product">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
+                                    <TextBlock Text="{x:Bind ProductName}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </AutoSuggestBox.ItemTemplate>
+                    </AutoSuggestBox>
+
+                    <TextBlock
+                        Name="ProductNameTextBlock"
+                        Padding="10"
+                        VerticalAlignment="Bottom"
+                        Text="{x:Bind ViewModel.SelectedTransactionDetail.ProductName, Mode=OneWay}" />
+                </StackPanel>
 
                 <!--  Text="{x:Bind ViewModel.SelectedTransactionDetail.ProductCode, Mode=TwoWay}"  -->
                 <!--  Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"  -->
@@ -175,9 +189,8 @@
                     Header="Qty"
                     IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                     IsTabStop="True"
-                    RelativePanel.Below="ProductsComboBox"
-                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                    RelativePanel.Below="ProductDetailsStackPanel"
+                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBox
                     Name="PriceTextBox"
@@ -186,10 +199,9 @@
                     IsEnabled="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}"
                     IsTabStop="True"
                     RelativePanel.Below="QuantityTextBox"
-                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+                    Text="{x:Bind Path=ViewModel.SelectedTransactionDetail.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                <StackPanel Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
+                <StackPanel RelativePanel.Below="PriceTextBox" Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}">
                     <TextBlock
                         Name="ErrorTextBlock"
                         Width="350"
@@ -205,7 +217,7 @@
                         Text="{x:Bind ViewModel.Errors, Mode=OneWay}"
                         Visibility="{x:Bind ViewModel.HasErrors, Mode=OneWay}" />-->
                 </StackPanel>
-            </StackPanel>
+            </RelativePanel>
 
             <controls:DataGrid
                 Name="TransactionDetailsDataGrid"
@@ -222,11 +234,11 @@
                         IsReadOnly="True" />
                     <controls:DataGridTextColumn
                         Binding="{Binding ProductName}"
-                        Header="Code"
+                        Header="Name"
                         IsReadOnly="True" />
                     <controls:DataGridTextColumn
                         Binding="{Binding Quantity}"
-                        Header="Name"
+                        Header="Qty"
                         IsReadOnly="True" />
                     <controls:DataGridTextColumn
                         Binding="{Binding Price}"
@@ -236,6 +248,20 @@
                         Binding="{Binding Value}"
                         Header="Value"
                         IsReadOnly="True" />
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE104;" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+                    <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;" />
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
 

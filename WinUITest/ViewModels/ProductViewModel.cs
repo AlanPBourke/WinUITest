@@ -11,6 +11,7 @@ public class ProductViewModel : ObservableValidator, IEditableObject
 {
     private IDataProvider DataProvider;
     public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
+
     private Product _product;
     private ProductViewModel _backup;
 

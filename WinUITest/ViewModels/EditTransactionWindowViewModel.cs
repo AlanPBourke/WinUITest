@@ -24,6 +24,14 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
 
     public String TransactionType { get; set; }
 
+
+    private string _searchProductCode;
+    public string SearchProductCode
+    {
+        get => _searchProductCode;
+        set => SetProperty(ref _searchProductCode, value);
+    }
+
     private TransactionDetailViewModel _selectedtransactiondetail;
     public TransactionDetailViewModel SelectedTransactionDetail
     {
@@ -122,11 +130,25 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         ValidateAllProperties();
     }
 
+    public void SetSelectedProduct2(Product product)
+    {
+        SelectedTransactionDetail.ProductCode = product.ProductCode;
+        SelectedTransactionDetail.ProductName = product.ProductName;
+        SelectedTransactionDetail.Price = product.Price;
+        ValidateAllProperties();
+    }
+
     public void SetSelectedCustomer(Customer customer)
     {
         CustomerViewModel vm = new CustomerViewModel(DataProvider);
         vm.SetCustomer(customer);
         SelectedCustomer = vm;
+    }
+
+    public void SetTransactionDetail(TransactionDetailViewModel detail)
+    {
+        SelectedTransactionDetail = detail;
+
     }
 
     // TODO implement
@@ -151,14 +173,41 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         //SelectedTransactionDetail = TransactionDetailsList[TransactionDetailsList.Count];
     }
 
+    public void EditTransactionDetail(TransactionDetailViewModel editTransaction)
+    {
+
+        //ViewModel.SelectedTransactionDetail = txn;
+        //ProductSearchBox.Text = txn.ProductCode;
+        SearchProductCode = editTransaction.ProductCode;
+        SelectedTransactionDetail = editTransaction;
+        SelectedTransactionDetail.BeginEdit();
+    }
+
+    public void DeleteTransactionDetail()
+    {
+        if (SelectedTransactionDetail != null)
+        {
+            TransactionDetailsList.Remove(TransactionDetailsList
+                .Where(d => d.TransactionDetailId == SelectedTransactionDetail.TransactionDetailId).Single());
+        }
+    }
+
+
     public void SaveTransactionDetail()
     {
         if (SelectedTransactionDetail != null && SelectedTransactionDetail.HasErrors == false)
         {
-            SelectedTransactionDetail.ProductCode = SelectedProduct.ProductCode;
-            SelectedTransactionDetail.ProductName = SelectedProduct.ProductName;
+            // SelectedTransactionDetail.ProductCode = SelectedProduct.ProductCode;
+            // SelectedTransactionDetail.ProductName = SelectedProduct.ProductName;
             SelectedTransactionDetail.Value = SelectedTransactionDetail.Price * SelectedTransactionDetail.Quantity;
-            TransactionDetailsList.Add(SelectedTransactionDetail);
+
+            if (IsAdding)
+            {
+                TransactionDetailsList.Add(SelectedTransactionDetail);
+            }
+
+            var newtxd = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
+            SelectedTransactionDetail = newtxd;
             IsAdding = false;
             IsEditing = false;
             IsNavigating = true;
