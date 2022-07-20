@@ -24,6 +24,12 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
 
     public String TransactionType { get; set; }
 
+    private bool _transactiondetailgridrowselected;
+    public bool TransactionDetailGridRowSelected
+    {
+        get => _transactiondetailgridrowselected;
+        set => SetProperty(ref _transactiondetailgridrowselected, true);
+    }
 
     private string _searchProductCode;
     public string SearchProductCode
@@ -157,7 +163,7 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         return false;
     }
 
-    public void AddTransactionDetail()
+    public void NewTransactionDetail()
     {
         //if (CurrentTransaction != null)
         //  {
@@ -178,6 +184,9 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
 
         //ViewModel.SelectedTransactionDetail = txn;
         //ProductSearchBox.Text = txn.ProductCode;
+        IsAdding = false;
+        IsEditing = true;
+        IsNavigating = false;
         SearchProductCode = editTransaction.ProductCode;
         SelectedTransactionDetail = editTransaction;
         SelectedTransactionDetail.BeginEdit();
@@ -193,7 +202,7 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     }
 
 
-    public void SaveTransactionDetail()
+    public void SaveTransactionDetailChange()
     {
         if (SelectedTransactionDetail != null && SelectedTransactionDetail.HasErrors == false)
         {
@@ -213,6 +222,18 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
             IsNavigating = true;
         }
     }
+
+    public void CancelTransactionDetailChange()
+    {
+        if (SelectedTransactionDetail != null)
+        {
+            SelectedTransactionDetail.CancelEdit();
+            IsAdding = false;
+            IsEditing = false;
+            IsNavigating = true;
+        }
+    }
+
 
     public void Load()
     {

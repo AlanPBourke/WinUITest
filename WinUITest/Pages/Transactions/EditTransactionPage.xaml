@@ -117,32 +117,6 @@
                         Label="Cancel"
                         Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
 
-                    <AppBarButton
-                        Name="DeleteButton"
-                        Icon="Delete"
-                        Label="Delete"
-                        Visibility="{x:Bind ViewModel.IsEditing, Mode=OneWay}">
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <RelativePanel Width="600">
-                                    <TextBlock
-                                        Name="TextBlock"
-                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                        Text="Detail line will be deleted. Do you want to continue?" />
-                                    <Button
-                                        Name="YesButton"
-                                        Click="DeleteConfirmationClick"
-                                        Content="Yes"
-                                        RelativePanel.Below="TextBlock" />
-                                    <Button
-                                        Click="DeleteCancelClick"
-                                        Content="No"
-                                        RelativePanel.Below="TextBlock"
-                                        RelativePanel.RightOf="YesButton" />
-                                </RelativePanel>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
                 </CommandBar>
 
                 <StackPanel
@@ -219,11 +193,13 @@
                 </StackPanel>
             </RelativePanel>
 
+
             <controls:DataGrid
                 Name="TransactionDetailsDataGrid"
                 Grid.Row="0"
                 Grid.Column="1"
                 AutoGenerateColumns="False"
+                IsEnabled="{x:Bind ViewModel.IsNavigating, Mode=OneWay}"
                 ItemsSource="{x:Bind ViewModel.TransactionDetailsList}"
                 SelectionChanged="TransactionDetailsDataGrid_SelectionChanged"
                 SelectionMode="Single">
@@ -248,22 +224,41 @@
                         Binding="{Binding Value}"
                         Header="Value"
                         IsReadOnly="True" />
+
                     <controls:DataGridTemplateColumn>
                         <controls:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE104;" />
+                                <Button
+                                    Name="TransactionDetailsDataGridEditButton"
+                                    Click="TransactionDetailsDataGridEditButton_Click"
+                                    Content="&#xE104;"
+                                    FontFamily="Segoe MDL2 Assets" />
+
+                                <!--<FontIcon
+                                    Name="TransactionDetailsDataGridEdit"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xE104;"
+                                    PointerEntered="TransactionDetailsDataGridIcon_PointerEntered"
+                                    PointerExited="TransactionDetailsDataGridIcon_PointerExited"
+                                    PointerPressed="TransactionDetailsDataGridEdit_PointerPressed" />-->
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellTemplate>
                     </controls:DataGridTemplateColumn>
                     <controls:DataGridTemplateColumn>
                         <controls:DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE107;" />
+                                <Button
+                                    Name="TransactionDetailsDataGridDeleteButton"
+                                    Click="TransactionDetailsDataGridDeleteButton_Click"
+                                    Content="&#xE74D;"
+                                    FontFamily="Segoe MDL2 Assets" />
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellTemplate>
                     </controls:DataGridTemplateColumn>
+
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
+
 
         </Grid>
 

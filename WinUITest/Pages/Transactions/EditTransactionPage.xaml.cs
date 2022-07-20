@@ -7,7 +7,6 @@ using Microsoft.UI.Xaml.Controls;
 using WinUITest.Data;
 using WinUITest.Enums;
 using WinUITest.ViewModels;
-
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -21,9 +20,9 @@ public sealed partial class EditTransactionPage : Page
     private EditType TransactionEditType { get; set; }
     private EditTransactionWindowViewModel ViewModel;
 
-    public ICommand AddDetailLineCommand => new RelayCommand(AddTransactionDetail);
-    public ICommand SaveDetailLineCommand => new RelayCommand(SaveTransactionDetail);
-    public ICommand CancelDetailLineCommand => new RelayCommand(CancelTransactionDetail);
+    public ICommand AddDetailLineCommand => new RelayCommand(NewTransactionDetail);
+    public ICommand SaveDetailLineCommand => new RelayCommand(SaveTransactionDetailChange);
+    public ICommand CancelDetailLineCommand => new RelayCommand(CancelTransactionDetailChange);
 
     public EditTransactionPage()
     {
@@ -61,37 +60,38 @@ public sealed partial class EditTransactionPage : Page
         ViewModel.IsNavigating = true;
     }
 
-    private void AddTransactionDetail()
+    private void NewTransactionDetail()
     {
         //var newtxndetailvm = App.Current.Services.GetService(typeof(TransactionDetailViewModel)) as TransactionDetailViewModel;
-        ViewModel.AddTransactionDetail();
+        ViewModel.NewTransactionDetail();
     }
 
 
-    private void SaveTransactionDetail()
+    private void SaveTransactionDetailChange()
     {
         if (ViewModel.SelectedTransactionDetail.HasErrors == false)
         {
-            ViewModel.SaveTransactionDetail();
+            ViewModel.SaveTransactionDetailChange();
             ViewModel.SearchProductCode = string.Empty;
             TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
         }
 
     }
 
-    public void CancelTransactionDetail()
+    public void CancelTransactionDetailChange()
     {
-        ViewModel.IsAdding = false;
-        ViewModel.IsEditing = false;
-        ViewModel.IsNavigating = true;
+        ViewModel.CancelTransactionDetailChange();
+        ViewModel.SearchProductCode = string.Empty;
+        TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
     }
+
 
     private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (ViewModel.SelectedTransactionDetail != null)
         {
             ViewModel.DeleteTransactionDetail();
-            DeleteButton.Flyout.Hide();
+            // DeleteButton.Flyout.Hide();
         }
         //SetMode("navigate");
     }
@@ -101,7 +101,7 @@ public sealed partial class EditTransactionPage : Page
         ViewModel.IsAdding = false;
         ViewModel.IsNavigating = true;
         ViewModel.IsEditing = false;
-        DeleteButton.Flyout.Hide();
+        //DeleteButton.Flyout.Hide();
         //SetMode("navigate");
     }
 
@@ -111,14 +111,13 @@ public sealed partial class EditTransactionPage : Page
         if (g != null && g.SelectedItem != null)
         {
             var txn = g.SelectedItem as TransactionDetailViewModel;
-            ViewModel.IsAdding = false;
-            ViewModel.IsEditing = true;
-            ViewModel.IsNavigating = false;
-            ViewModel.EditTransactionDetail(txn);
-
-
+            ViewModel.SetTransactionDetail(txn);
+            ViewModel.TransactionDetailGridRowSelected = true;
         }
-
+        else
+        {
+            ViewModel.TransactionDetailGridRowSelected = false;
+        }
     }
 
     private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -249,4 +248,30 @@ public sealed partial class EditTransactionPage : Page
                 sender.Text = "";
         }
     }
+
+    private void SetFirstGridRow()
+    {
+        if (ViewModel.TransactionDetailsList.Count > 0)
+        {
+            TransactionDetailsDataGrid.SelectedIndex = 0;
+        }
+    }
+
+    private void TransactionDetailsDataGridEditButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (TransactionDetailsDataGrid.SelectedItem != null)
+        {
+            var txn = TransactionDetailsDataGrid.SelectedItem as TransactionDetailViewModel;
+            ViewModel.EditTransactionDetail(txn);
+        }
+    }
+
+    private void TransactionDetailsDataGridDeleteButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (TransactionDetailsDataGrid.SelectedItem != null)
+        {
+            ViewModel.DeleteTransactionDetail();
+        }
+    }
 }
+
