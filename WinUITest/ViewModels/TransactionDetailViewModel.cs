@@ -1,76 +1,154 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
-namespace WinUITest.ViewModels
+namespace WinUITest.ViewModels;
+
+public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 {
-    public class TransactionDetailViewModel : ViewModelBase
+    private TransactionDetail _transactionDetail;
+    private TransactionDetailViewModel _backup;
+    private TransactionDetailViewModel _edit;
+
+    public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
+    public TransactionDetailViewModel()
     {
-        private readonly TransactionDetail _transactionDetail;
+        PropertyChanged += TransactionDetailViewModel_PropertyChanged;
+        ErrorsChanged += TransactionDetailViewModel_ErrorsChanged;
+    }
 
-        public TransactionDetailViewModel(TransactionDetail transactionDetail)
+    private string _productname;
+    public string ProductName
+    {
+        get => _productname;
+        set => SetProperty(ref _productname, value);
+    }
+
+    private string _productcode;
+
+    [Required(ErrorMessage = "Enter a product code.")]
+    public string ProductCode
+    {
+        get => _productcode;
+        set
         {
-            _transactionDetail = transactionDetail;
-        }
-
-        public string QuantityString
-        {
-            get => _transactionDetail.Quantity.ToString();
-        }
-
-        public int Quantity
-        {
-            get => _transactionDetail.Quantity;
-
-            set
-            {
-                if (_transactionDetail.Quantity != value)
-                {
-                    _transactionDetail.Quantity = value;
-                    RaisePropertyChanged(nameof(Quantity));
-                }
-            }
-        }
-
-        public string ValueString
-        {
-            get => _transactionDetail.Value.ToString();
-        }
-
-        public decimal Value
-        {
-            get => _transactionDetail.Value;
-
-            set
-            {
-                if (_transactionDetail.Value != value)
-                {
-                    _transactionDetail.Value = value;
-                    RaisePropertyChanged(nameof(Value));
-                }
-            }
-        }
-        public string ProductCode
-        {
-            get => _transactionDetail.ProductCode;
-
-            set
-            {
-                if (_transactionDetail.ProductCode != value)
-                {
-                    _transactionDetail.ProductCode = value;
-                    RaisePropertyChanged(nameof(ProductCode));
-                }
-            }
-
-        }
-
-        public int TransactionId
-        {
-            get => _transactionDetail.TransactionId;
+            Debug.WriteLine($"TransactionDetailViewModel.ProductCode setter: [{value}]");
+            SetProperty(ref _productcode, value, true);
         }
     }
+
+    private string _quantitystring;
+    public string QuantityString
+    {
+        get => _quantitystring;
+        set => SetProperty(ref _quantitystring, value);
+    }
+
+    private int _quantity;
+
+    // -- Note the final 'true' parameter in SetProperty is required for 
+    // -- validation to work!
+    [Required]
+    [Range(1, 99, ErrorMessage = $"Invalid quantity.")]
+    public int Quantity
+    {
+        get => _quantity;
+        set
+        {
+            SetProperty(ref _quantity, value, true);
+            QuantityString = value.ToString();
+        }
+    }
+
+    private double _price;
+    [Required]
+    [Range(0.01, 999999999.99, ErrorMessage = $"Invalid price.")]
+    public double Price
+    {
+        get => _price;
+        set => SetProperty(ref _price, value, true);
+    }
+
+    private string _valuestring;
+    public string ValueString
+    {
+        get => _valuestring;
+        set => SetProperty(ref _valuestring, value);
+    }
+
+    private double _value;
+    public double Value
+    {
+        get => _value;
+
+        set
+        {
+            SetProperty(ref _value, value);
+            ValueString = value.ToString();
+        }
+    }
+
+    private int _productid;
+    public int ProductId
+    {
+        get => _productid;
+        set => SetProperty(ref _productid, value);
+    }
+
+    private int _transactiondetailid;
+    public int TransactionDetailId
+    {
+        get => _transactiondetailid;
+        set => SetProperty(ref _transactiondetailid, value);
+    }
+
+    private void TransactionDetailViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+    {
+        Debug.WriteLine($"TransactionDetailViewModel errors: [{Errors}]");
+        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+    }
+
+    private void TransactionDetailViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(HasErrors))
+        {
+            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
+        }
+    }
+
+    public void SetTransactionDetail(TransactionDetail transactionDetail)
+    {
+        _transactionDetail = transactionDetail;
+        TransactionDetailId = transactionDetail.TransactionDetailId;
+        Quantity = transactionDetail.Quantity;
+        Price = transactionDetail.Price;
+        Value = transactionDetail.Value;
+        ProductId = transactionDetail.ProductId;
+        ProductName = transactionDetail.Product.ProductName;
+        ProductCode = transactionDetail.Product.ProductCode;
+    }
+
+    public void BeginEdit()
+    {
+        _backup = this.MemberwiseClone() as TransactionDetailViewModel;
+        ValidateAllProperties();
+    }
+
+    public void CancelEdit()
+    {
+        ProductCode = _backup.ProductCode;
+        ProductName = _backup.ProductName;
+        Price = _backup.Price;
+        Quantity = _backup.Quantity;
+        Value = _backup.Value;
+    }
+
+    public void EndEdit()
+    {
+    }
+
 }

@@ -21,8 +21,8 @@ namespace WinUITest.UserControls
 {
     public sealed partial class CustomerContentDialog : ContentDialog
     {
-        public CustomerMaintenanceViewModel ViewModel;
-        public CustomerContentDialog(CustomerMaintenanceViewModel viewModel)
+        public CustomerPageViewModel ViewModel;
+        public CustomerContentDialog(CustomerPageViewModel viewModel)
         {
             ViewModel = viewModel;
             this.InitializeComponent();

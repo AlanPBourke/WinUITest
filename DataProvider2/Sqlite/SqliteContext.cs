@@ -1,58 +1,79 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 
 // https://docs.microsoft.com/en-us/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/implementing-basic-crud-functionality-with-the-entity-framework-in-asp-net-mvc-application
 // dotnet ef migrations add initial then dotnet ef database update
 
-namespace WinUITest.Data
+namespace WinUITest.Data;
+
+public class SqliteContext : DbContext
 {
-    public class SqliteContext : DbContext
+    public DbSet<TransactionDetail> TransactionDetails { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Product> Products { get; set; }
+
+    public DbSet<CustomerTransaction> CustomerTransactions { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        public DbSet<TransactionDetail> TransactionDetails { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Product> Products { get; set; }
+        var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        DbPath = Path.Combine(DbPath, "winuitest.db");
+        optionsBuilder.UseSqlite($"Data Source={DbPath}");
+        Debug.WriteLine($"db={DbPath}");
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var DbPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            optionsBuilder.UseSqlite($"Data Source={Path.Combine(DbPath, "winuitest.db")}");
-            optionsBuilder.UseLazyLoadingProxies();
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>().HasData(
+            new Product { ProductId = 1, ProductCode = "EGG48", ProductName = "48 Class A Eggs", Price = 12.99 },
+            new Product { ProductId = 2, ProductCode = "MILK25L", ProductName = "25L Full Fat Milk", Price = 8.50 },
+            new Product { ProductId = 3, ProductCode = "SUGAR2KG", ProductName = "2KG White Sugar", Price = 7.15 },
+            new Product { ProductId = 4, ProductCode = "VAN001", ProductName = "500ml Vanilla Essence", Price = 22.19 }
+            );
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = 1, ProductCode = "EGG48", ProductName = "48 Class A Eggs", Price = 12.99m },
-                new Product { ProductId = 2, ProductCode = "MILK25L", ProductName = "25L Full Fat Milk", Price = 8.50m },
-                new Product { ProductId = 3, ProductCode = "SUGAR2KG", ProductName = "2KG White Sugar", Price = 7.15m },
-                new Product { ProductId = 4, ProductCode = "VAN001", ProductName = "500ml Vanilla Essence", Price = 22.19m }
-                );
+        modelBuilder.Entity<Customer>().HasMany(t => t.Transactions).WithOne(c => c.Customer).IsRequired();
+        modelBuilder.Entity<Customer>().HasData(
+            new Customer { CustomerId = 1, CustomerCode = "A001", Name = "Acorn Antiques", Balance = 25.98 },
+            new Customer { CustomerId = 2, CustomerCode = "M123", Name = "Milliways Restaurants Ltd", Balance = 0.00 },
+            new Customer { CustomerId = 3, CustomerCode = "T014", Name = "Trotters Independent Traders", Balance = -25.00 },
+            new Customer { CustomerId = 4, CustomerCode = "S001", Name = "Sunshine Desserts Ltd", Balance = 0.00 },
+            new Customer { CustomerId = 5, CustomerCode = "P145", Name = "Bob's Burger Restaurants Ltd", Balance = 0.00 }
+            );
 
-            modelBuilder.Entity<Customer>().HasMany(t => t.Transactions).WithOne(c => c.Customer).IsRequired();
-            modelBuilder.Entity<Customer>().HasData(
-                new Customer { CustomerId = 1, CustomerCode = "A001", Name = "Acorn Antiques", Balance = 25.98m },
-                new Customer { CustomerId = 2, CustomerCode = "M123", Name = "Milliways Restaurants Ltd", Balance = 0.00m },
-                new Customer { CustomerId = 3, CustomerCode = "T014", Name = "Trotters Independent Traders", Balance = -25.00m },
-                new Customer { CustomerId = 4, CustomerCode = "S001", Name = "Sunshine Desserts Ltd", Balance = 0.00m },
-                new Customer { CustomerId = 5, CustomerCode = "P145", Name = "Bob's Burger Restaurants Ltd", Balance = 0.00m }
-                );
+        modelBuilder.Entity<Transaction>().Property(t => t.TransactionDate).HasDefaultValue(System.DateTime.Now);
+        modelBuilder.Entity<Transaction>().HasData(
+            new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13, 0, 0, 0, DateTimeKind.Local), Type = "I", Value = 48.17 },
+            new Transaction { TransactionId = 2, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, DateTimeKind.Local), Type = "C", Value = -22.19 },
+            new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14, 0, 0, 0, DateTimeKind.Local), Type = "C", Value = -14.30 }
+            );
 
-            modelBuilder.Entity<Transaction>().Property(t => t.TransactionDate).HasDefaultValue(System.DateTime.Now);
-            modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { TransactionId = 1, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 13), Type = "I", Value = 48.17m },
-                new Transaction { TransactionId = 2, CustomerId = 1, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -22.19m },
-                new Transaction { TransactionId = 3, CustomerId = 3, TransactionDate = new DateTime(2021, 12, 14), Type = "C", Value = -14.30m }
-                );
+        modelBuilder.Entity<TransactionDetail>()
+            .HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
+        modelBuilder.Entity<TransactionDetail>()
+            .HasOne(p => p.Product).WithOne().HasForeignKey<Product>(p => p.ProductId);
 
-            modelBuilder.Entity<TransactionDetail>().HasOne(t => t.Transaction).WithMany(d => d.TransactionDetails).HasForeignKey(t => t.TransactionId);
-            modelBuilder.Entity<TransactionDetail>().HasData(
-                new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Value = 25.98m },
-                new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Value = 22.19m },
-                new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Value = -22.19m },
-                new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Value = -14.30m }
-                );
+        modelBuilder.Entity<TransactionDetail>().HasData(
+            new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductId = 1, Quantity = 2, Price = 12.99, Value = 25.98 },
+            new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductId = 4, Quantity = 1, Price = 22.19, Value = 22.19 },
+            new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductId = 4, Quantity = 1, Price = 22.19, Value = -22.19 },
+            new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductId = 3, Quantity = 2, Price = 7.15, Value = -14.30 }
+            );
 
-        }
+        //    modelBuilder.Entity<TransactionDetail>().HasData(
+        //new TransactionDetail { TransactionDetailId = 1, TransactionId = 1, ProductCode = "EGG48", Quantity = 2, Price = 12.99, Value = 25.98 },
+        //new TransactionDetail { TransactionDetailId = 2, TransactionId = 1, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = 22.19 },
+        //new TransactionDetail { TransactionDetailId = 3, TransactionId = 2, ProductCode = "VAN001", Quantity = 1, Price = 22.19, Value = -22.19 },
+        //new TransactionDetail { TransactionDetailId = 4, TransactionId = 3, ProductCode = "SUGAR2KG", Quantity = 2, Price = 7.15, Value = -14.30 }
+        //);
+
+        // Map to database view
+        modelBuilder
+            .Entity<CustomerTransaction>()
+            .ToView(nameof(CustomerTransactions))
+            .HasKey(t => t.TransactionId);
+
     }
 }

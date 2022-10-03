@@ -1,0 +1,169 @@
+﻿<Page
+    x:Class="WinUITest.Pages.TransactionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:converters="using:WinUITest.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:WinUITest"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:WinUITest.Pages"
+    xmlns:vm="using:WinUITest.ViewModels"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!--<DataTemplate x:Key="NavigationViewMenuItem" x:DataType="vm:CustomerNavigationMenuItemViewModel">
+            <NavigationViewItem Content="{x:Bind Name}" Tag="{x:Bind Tag}" />
+        </DataTemplate>-->
+        <converters:DecimalToStringConverter x:Key="PriceDecimalConverter" />
+        <converters:DateStringConverter x:Key="DateStringConverter" />
+        <converters:DateToStringConverter x:Key="DateToStringConverter" />
+    </Page.Resources>
+
+    <Grid
+        Name="TransactionsPageGrid"
+        BorderBrush="AliceBlue"
+        BorderThickness="2">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="35*" />
+            <RowDefinition Height="50*" />
+        </Grid.RowDefinitions>
+
+        <CommandBar
+            Name="ProductMaintenanceCommandBar"
+            Grid.Row="0"
+            Grid.ColumnSpan="1"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="True">
+            <AppBarButton
+                Name="AddButton"
+                Command="{x:Bind AddCommand}"
+                Icon="Add"
+                Label="Add" />
+            <!--<AppBarButton
+                Name="EditButton"
+                Command="{x:Bind EditCommand}"
+                Icon="Edit"
+                Label="Edit"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}" />
+            <AppBarButton
+                Name="SaveButton"
+                Command="{x:Bind SaveCommand}"
+                Icon="Save"
+                Label="Save"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="CancelButton"
+                Command="{x:Bind CancelCommand}"
+                Icon="Cancel"
+                Label="Cancel"
+                Visibility="{x:Bind ViewModel.IsAddingOrEditing, Mode=OneWay}" />
+            <AppBarButton
+                Name="DeleteButton"
+                Icon="Delete"
+                Label="Delete"
+                Visibility="{x:Bind ViewModel.IsNavigating, Mode=OneWay}">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <RelativePanel Width="600">
+                            <TextBlock
+                                Name="TextBlock"
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Text="Product will be deleted. Do you want to continue?" />
+                            <Button
+                                Name="YesButton"
+                                Click="DeleteConfirmationClick"
+                                Content="Yes"
+                                RelativePanel.Below="TextBlock" />
+                            <Button
+                                Click="DeleteCancelClick"
+                                Content="No"
+                                RelativePanel.Below="TextBlock"
+                                RelativePanel.RightOf="YesButton" />
+                        </RelativePanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>-->
+        </CommandBar>
+
+        <controls:DataGrid
+            x:Name="TransactionsGrid"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.Transactions}"
+            SelectionChanged="TransactionsGrid_SelectionChanged"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding CustomerCode}"
+                    Header="Customer Code"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Customer.Name}"
+                    Header="Name"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ExpandedType}"
+                    Header="Type"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding TransactionDateAsString}"
+                    Header="Date"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding ValueAsString}"
+                    Header="Value"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+        <controls:DataGrid
+            x:Name="TransactionDetailsGrid"
+            Grid.Row="2"
+            AutoGenerateColumns="False"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{x:Bind ViewModel.SelectedTransaction.TransactionDetails, Mode=OneWay}"
+            SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn
+                    Binding="{Binding Product.ProductCode}"
+                    Header="Product"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Product.ProductName}"
+                    Header="Name"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Quantity}"
+                    Header="Qty"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Price}"
+                    Header="Price"
+                    IsReadOnly="true" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding Value}"
+                    Header="Value"
+                    IsReadOnly="true" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+
+        <!--<Pivot x:Name="TransactionPivot" Grid.Row="2">
+            <PivotItem Header="Information">
+                <views:TransactionInfoPage />
+            </PivotItem>
+            <PivotItem Header="Transactions">
+                <views:TransactionDetailsPage />
+            </PivotItem>
+        </Pivot>-->
+
+    </Grid>
+</Page>

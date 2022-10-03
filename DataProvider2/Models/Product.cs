@@ -1,16 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WinUITest.Data
+﻿namespace WinUITest.Data;
+public class Product
 {
-    public class Product
-    {
-        public int ProductId { get; set; }
+    public int ProductId { get; set; }
+    public string ProductCode { get; set; } = String.Empty;
+    public string ProductName { get; set; } = String.Empty;
+    public double Price { get; set; }
+    public int TransactionDetailId { get; set; }
 
-        [MaxLength(16)]
-        public string? ProductCode { get; set; }
-
-        [MaxLength(100)]
-        public string? ProductName { get; set; }
-        public decimal Price { get; set; }
-    }
 }

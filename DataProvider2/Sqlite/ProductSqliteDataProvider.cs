@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinUITest.Data;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace WinUITest.Data
 {
@@ -17,7 +12,7 @@ namespace WinUITest.Data
         }
         public Product Get(int id)
         {
-           return DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();  
+            return DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
         }
 
         public void Save(Product p)
@@ -39,6 +34,23 @@ namespace WinUITest.Data
                 DataContext.Products.Remove(product);
                 DataContext.SaveChanges();
             }
+        }
+
+        public bool ProductInUse(int id)
+        {
+            var product = DataContext.Products.Where(p => p.ProductId == id).FirstOrDefault();
+            if (product != null)
+            {
+                return DataContext.TransactionDetails.Where(p => p.ProductId == id).Any();
+            }
+            return false;
+        }
+
+        public IEnumerable<Product> SearchProducts(string searchTerm)
+        {
+            return DataContext.Products
+                .Where(c => EF.Functions.Like(c.ProductCode, $"%{searchTerm}%") || EF.Functions.Like(c.ProductName, $"%{searchTerm}%"))
+                .Take(20);
         }
     }
 }

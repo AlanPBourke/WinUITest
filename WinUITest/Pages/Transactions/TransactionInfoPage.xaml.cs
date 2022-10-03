@@ -1,7 +1,6 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.WinUI.UI.Controls;
-//using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using WinUITest.Data;
 using WinUITest.ViewModels;
@@ -14,56 +13,48 @@ namespace WinUITest.Pages;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class ProductPage : Page
+public sealed partial class TransactionInfoPage : Page
 {
+
     public ICommand AddCommand => new RelayCommand(Add);
-    public ICommand EditCommand => new RelayCommand(BeginEdit);
+    public ICommand EditCommand => new RelayCommand(Edit);
     public ICommand SaveCommand => new RelayCommand(Save);
     public ICommand CancelCommand => new RelayCommand(Cancel);
 
-    public ProductPageViewModel ViewModel { get; }
-    //private ProductViewModel SelectedProduct { get; set; }
-    public ProductPage()
+    public TransactionsPageViewModel ViewModel { get; }
+
+    public TransactionInfoPage()
     {
-        InitializeComponent();
-        ViewModel = App.Current.Services.GetService(typeof(ProductPageViewModel)) as ProductPageViewModel;
+        this.InitializeComponent();
+        ViewModel = App.Current.Services.GetService(typeof(TransactionsPageViewModel)) as TransactionsPageViewModel;
         ViewModel.Load();
-        SetMode("navigating");
         DataContext = ViewModel;
-    }
-    private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        if (ViewModel.Products.Count > 0)
-        {
-            //  ProductsDataGrid.SelectedItem = ViewModel.Products[0];
-            ViewModel.SetFirstProduct();
-        }
+        SetMode("navigate");
     }
 
     private void Add()
     {
         SetMode("add");
-        ProductViewModel p = App.Current.Services.GetService(typeof(ProductViewModel)) as ProductViewModel;
-        p.SetProduct(new Product());
-        ViewModel.SelectedProduct = p;
-        ViewModel.SelectedProduct.BeginEdit();
-
+        TransactionViewModel newtxnviewmodel = App.Current.Services.GetService<TransactionViewModel>();
+        newtxnviewmodel.SetTransaction(new Transaction());
+        ViewModel.SelectedTransaction = newtxnviewmodel;
+        ViewModel.SelectedTransaction.BeginEdit();
     }
 
-    private void BeginEdit()
+    private void Edit()
     {
         SetMode("edit");
-        ViewModel.SelectedProduct.BeginEdit();
+        ViewModel.SelectedTransaction.BeginEdit();
     }
+
     private void Save()
     {
-        if (ViewModel.SelectedProduct.HasErrors == false)
+        if (ViewModel.SelectedTransaction.HasErrors == false)
         {
-            ViewModel.SelectedProduct.Save();
-            ViewModel.SelectedProduct.EndEdit();
-
+            ViewModel.SelectedTransaction.Save();
+            ViewModel.SelectedTransaction.EndEdit();
             ViewModel.Load();
-            ViewModel.SetProduct(ViewModel.SelectedProduct.ProductId);
+            ViewModel.SetTransaction(ViewModel.SelectedTransaction.TransactionId);
             SetMode("navigate");
         }
     }
@@ -72,29 +63,19 @@ public sealed partial class ProductPage : Page
     {
         if (ViewModel.IsEditing)
         {
-            ViewModel.SelectedProduct.CancelEdit();
+            ViewModel.SelectedTransaction.CancelEdit();
         }
         else
         {
-            ViewModel.SetProduct(ViewModel.Products[0].ProductId);
+            ViewModel.SetTransaction(ViewModel.Transactions[0].TransactionId);
         }
 
-        if (ViewModel.SelectedProduct != null)
+        if (ViewModel.SelectedTransaction != null)
         {
-            ViewModel.SetProduct(ViewModel.SelectedProduct.ProductId);
+            ViewModel.SetTransaction(ViewModel.SelectedTransaction.TransactionId);
         }
 
         SetMode("navigate");
-    }
-
-    private void ProductsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        DataGrid g = sender as DataGrid;
-        if (g != null && g.SelectedItem != null)
-        {
-            var product = g.SelectedItem as ProductViewModel;
-            ViewModel.SetProduct(product.ProductId);
-        }
     }
 
     private void DeleteConfirmationClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -104,13 +85,13 @@ public sealed partial class ProductPage : Page
         //{
         if (ViewModel.CanDelete())
         {
-            ViewModel.SelectedProduct.Delete();
+            ViewModel.SelectedTransaction.Delete();
             ViewModel.Load();
-            ViewModel.SetFirstProduct();
+            ViewModel.SetFirstTransaction();
         }
         else
         {
-            ProductMaintenanceInAppNotification.Show("This customer has transactions and cannot be deleted.", 0);
+            UserMaintenanceInAppNotification.Show("This transaction cannot be deleted.", 0);
         }
         DeleteButton.Flyout.Hide();
         SetMode("navigate");
@@ -147,5 +128,4 @@ public sealed partial class ProductPage : Page
                 break;
         }
     }
-
 }

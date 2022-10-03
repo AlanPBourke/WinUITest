@@ -1,112 +1,119 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WinUITest.Data;
 
-namespace WinUITest.ViewModels
-{ 
-    public class ProductViewModel : ViewModelBase, IEditableObject
+namespace WinUITest.ViewModels;
+
+public class ProductViewModel : ObservableValidator, IEditableObject
+{
+    private IDataProvider DataProvider;
+    public string Errors => string.Join(Environment.NewLine, from ValidationResult e in GetErrors(null) select e.ErrorMessage);
+
+    private Product _product;
+    private ProductViewModel _backup;
+
+    private int _productid;
+    public int ProductId
     {
-        private readonly Product _product;
-        private ProductViewModel _backup;
+        get => _productid;
+        set => SetProperty(ref _productid, value, true);
+    }
 
-        public int ProductId
-        {
-            get => _product.ProductId; 
-            set
-            {
-                if (_product.ProductId != value)
-                {
-                    _product.ProductId = value;
-                    RaisePropertyChanged(nameof(ProductId));
-                }
-            }
-        }
+    private string _productname;
+    [Required]
+    [MinLength(1, ErrorMessage = "Name is required.")]
+    [MaxLength(100, ErrorMessage = "Name cannot be > 100.")]
+    public string ProductName
+    {
+        get => _productname;
+        set => SetProperty(ref _productname, value, true);
+    }
 
-        public string ProductName
-        {
-            get => _product.ProductName;
-            set
-            {
-                if (_product.ProductName != value)
-                {
-                    _product.ProductName = value;
-                    RaisePropertyChanged(nameof(ProductName));
-                }
-            }
-        }
+    private string _productcode;
+    [Required]
+    [MinLength(1, ErrorMessage = "Code is required.")]
+    [MaxLength(16, ErrorMessage = "Code cannot be > 16.")]
+    public string ProductCode
+    {
+        get => _productcode;
+        set => SetProperty(ref _productcode, value, true);
+    }
 
-        public string ProductCode
-        {
-            get => _product.ProductCode;
-            set
-            {
-                if (_product.ProductCode != value)
-                {
-                    _product.ProductCode = value;
-                    RaisePropertyChanged(nameof(ProductCode));
-                }
-            }
-        }
-        public decimal Price
-        {
-            get => _product.Price;
-            set
-            {
-                if (_product.Price != value)
-                {
-                    _product.Price = value;
-                    RaisePropertyChanged(nameof(Price));
-                }
-            }
-        }
+    private double _price;
+    [Required]
+    [Range(0.01, 999999999.99, ErrorMessage = $"Price must be nonzero and less than 999999999.99")]
+    public double Price
+    {
+        get => _price;
+        set => SetProperty(ref _price, value, true);
+    }
 
-        public string PriceString
-        {
-            get => _product.Price.ToString();
-            set
-            {
-                if (_product.Price != Convert.ToDecimal(value))
-                {
-                    _product.Price = Convert.ToDecimal(value);
-                    RaisePropertyChanged(nameof(Price));
-                }
-            }
-        }
+    private string _pricestring;
+    public string PriceString
+    {
+        get => _pricestring;
+        set => SetProperty(ref _pricestring, value, true);
+    }
 
-        public ProductViewModel(Product product)
-        {
-            _product = product;
-        }
+    public ProductViewModel(IDataProvider dataprovider)
+    {
+        DataProvider = dataprovider;
+        PropertyChanged += ProductViewModel_PropertyChanged;
+        ErrorsChanged += ProductViewModel_ErrorsChanged;
+    }
 
-        public void Save()
-        {
-            App.DataProvider.Products.Save(_product);
-        }
+    public void SetProduct(Product product)
+    {
+        _product = product;
+        ProductCode = _product.ProductCode;
+        ProductName = _product.ProductName;
+        ProductId = _product.ProductId;
+        Price = _product.Price;
+    }
 
-        public void Delete()
-        {
-            App.DataProvider.Products.Delete(_product.ProductId);
-        }
+    public void Save()
+    {
+        _product.ProductCode = ProductCode;
+        _product.ProductName = ProductName;
+        _product.Price = Price;
+        DataProvider.Products.Save(_product);
+    }
 
-        public void BeginEdit()
-        {
-            _backup = this.MemberwiseClone() as ProductViewModel;
-        }
+    public void Delete()
+    {
+        DataProvider.Products.Delete(_product.ProductId);
+    }
 
-        public void CancelEdit()
-        {
-            this.ProductCode = _backup.ProductCode;
-            this.ProductName = _backup.ProductName;
-            this.Price = _backup.Price; 
-        }
+    public void BeginEdit()
+    {
+        _backup = this.MemberwiseClone() as ProductViewModel;
+    }
 
-        public void EndEdit()
+    public void CancelEdit()
+    {
+        ProductCode = _backup.ProductCode;
+        ProductName = _backup.ProductName;
+        Price = _backup.Price;
+    }
+
+    public void EndEdit()
+    {
+
+    }
+
+    private void ProductViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(Errors)); // Update Errors on every Error change, so I can bind to it.
+    }
+
+    private void ProductViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(HasErrors))
         {
-            throw new NotImplementedException();
+            OnPropertyChanged(nameof(HasErrors)); // Update HasErrors on every change, so I can bind to it.
         }
     }
 }

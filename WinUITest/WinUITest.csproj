@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+	  <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+	  <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>WinUITest</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;arm64</Platforms>
@@ -10,15 +10,47 @@
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+	  <!--<WindowsPackageType>None</WindowsPackageType>
+	  <AppxPackage>false</AppxPackage>-->
+	  <!--<SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>-->
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm64'">
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm64'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Pages\Products\ProductPage2.xaml.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="CustomerPage.xaml" />
     <None Remove="InvoicingPage.xaml" />
     <None Remove="MainWindow.xaml" />
     <None Remove="Pages\CustomerInfoPage.xaml" />
     <None Remove="Pages\CustomerTransactionsPage.xaml" />
-    <None Remove="Pages\Customer\BlankPage1.xaml" />
+    <None Remove="Pages\Products\ProductPage2.xaml" />
+    <None Remove="Pages\Transactions\EditTransactionPage.xaml" />
+    <None Remove="Pages\Transactions\NewTransactionWindow.xaml" />
+    <None Remove="Pages\Transactions\TransactionDetailsPage.xaml" />
+    <None Remove="Pages\Transactions\TransactionInfoPage.xaml" />
     <None Remove="ProductContentDialog.xaml" />
     <None Remove="ProductPage.xaml" />
     <None Remove="ResourceDictionary.xaml" />
@@ -36,12 +68,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0-preview3" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22598-preview" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -52,10 +86,12 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
+    <Page Update="Pages\Transactions\TransactionDetailsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\BlankPage1.xaml">
+    <Page Update="Pages\Transactions\TransactionInfoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -65,7 +101,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Customer\CustomerInfoPage.xaml">
+    <Page Update="Pages\Customer\CustomerDetailsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -106,6 +142,28 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomAdditionalCompileInputs Remove="Pages\Products\ProductPage2.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Pages\Products\ProductPage2.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Remove="Pages\Products\ProductPage2.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataProvider2\DataProvider2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Transactions\EditTransactionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\Transactions\NewTransactionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

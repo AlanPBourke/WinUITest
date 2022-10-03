@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WinUITest.Data
+﻿namespace WinUITest.Data
 {
     public class TransactionSqliteDataProvider : ITransactionDataProvider
     {
@@ -20,7 +14,7 @@ namespace WinUITest.Data
             return DataContext.Transactions.Where(t => t.CustomerId == customerId);
         }
 
-        public Transaction Get(int id)
+        public Transaction GetById(int id)
         {
             return DataContext.Transactions.Where(t => t.TransactionId == id).FirstOrDefault();
         }
@@ -31,9 +25,24 @@ namespace WinUITest.Data
             DataContext.SaveChanges();
         }
 
-        public IEnumerable<TransactionDetail> GetTransactionDetailsForTransaction(int transactionId)
+        public IEnumerable<TransactionDetail> GetTransactionDetailsForId(int transactionId)
         {
-            return DataContext.TransactionDetails.Where(td => td.TransactionId == transactionId);
+            return DataContext.TransactionDetails
+                .Where(td => td.TransactionId == transactionId);
         }
+
+        public IEnumerable<Transaction> GetAll()
+        {
+            return DataContext.Transactions;
+        }
+
+        //public List< GetTransactions()
+        //{
+        //    var query = from t in DataContext.Transactions
+        //                join c in DataContext.Customers on t.CustomerId equals c.CustomerId
+        //                orderby t.TransactionDate
+        //                select new { c.CustomerCode, c.Name, t.TransactionDate, t.Type, t.Value };
+        //    query.ToList<>
+        //}
     }
 }
