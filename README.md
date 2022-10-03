@@ -1,6 +1,6 @@
 # WinUITest
 This is the basics of a Windows desktop application using the following technologies:
-- .NET 10
+- C# 10
 - Windows APP SDK
 - Win UI
 - Entity Framework Core (using SQLite)
