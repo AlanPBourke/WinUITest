@@ -14,16 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.7" />
-    <PackageReference Include="Microsoft.entityframeworkcore" Version="6.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.9" />
+    <PackageReference Include="Microsoft.entityframeworkcore" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="microsoft.entityframeworkcore.proxies" Version="6.0.7" />
-    <PackageReference Include="microsoft.entityframeworkcore.sqlite" Version="6.0.7" />
-    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="6.0.7">
+    <PackageReference Include="microsoft.entityframeworkcore.proxies" Version="6.0.9" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlite" Version="6.0.9" />
+    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="6.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -149,7 +149,6 @@ public class TransactionDetailViewModel : ObservableValidator, IEditableObject
 
     public void EndEdit()
     {
-
     }
 
 }

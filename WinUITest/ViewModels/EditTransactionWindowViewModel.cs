@@ -22,13 +22,22 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
     public ObservableCollection<ProductViewModel> ProductList { get; set; } = new();
     public ObservableCollection<TransactionDetailViewModel> TransactionDetailsList { get; set; } = new();
 
-    public String TransactionType { get; set; }
+    private string _transactionType;
+    public string TransactionType
+    {
+        get => _transactionType;
+        set => SetProperty(ref _transactionType, value);
+    }
 
     private bool _transactiondetailgridrowselected;
     public bool TransactionDetailGridRowSelected
     {
         get => _transactiondetailgridrowselected;
-        set => SetProperty(ref _transactiondetailgridrowselected, true);
+        set
+        {
+            SetProperty(ref _transactiondetailgridrowselected, true);
+            Debug.WriteLine($"TransactionDetailGridRowSelected setter:{_transactiondetailgridrowselected}");
+        }
     }
 
     private string _searchProductCode;
@@ -192,12 +201,13 @@ public class EditTransactionWindowViewModel : ObservableValidator, IEditableObje
         SelectedTransactionDetail.BeginEdit();
     }
 
-    public void DeleteTransactionDetail()
+    public void DeleteSelectedDetailItem()
     {
         if (SelectedTransactionDetail != null)
         {
-            TransactionDetailsList.Remove(TransactionDetailsList
-                .Where(d => d.TransactionDetailId == SelectedTransactionDetail.TransactionDetailId).Single());
+            //TransactionDetailsList.Remove(TransactionDetailsList
+            //    .Where(d => d.TransactionDetailId == SelectedTransactionDetail.TransactionDetailId).Single());
+            TransactionDetailsList.Remove(SelectedTransactionDetail);
         }
     }
 

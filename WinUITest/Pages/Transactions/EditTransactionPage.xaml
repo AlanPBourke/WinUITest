@@ -54,12 +54,13 @@
 
         </CommandBar>
 
-        <StackPanel Grid.Row="1">
+        <RelativePanel Grid.Row="1">
 
             <AutoSuggestBox
                 Name="CustomerSearchBox"
                 Width="200"
                 HorizontalAlignment="Left"
+                VerticalAlignment="Center"
                 PlaceholderText="Customer code or name"
                 QueryIcon="Find"
                 QuerySubmitted="CustomerSearchBox_QuerySubmitted"
@@ -68,15 +69,30 @@
                 <AutoSuggestBox.ItemTemplate>
                     <DataTemplate x:DataType="data:Customer">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind CustomerCode}" />
-                            <TextBlock Text="{x:Bind Name}" />
+                            <TextBlock Name="CustomerCodeTextBlock" Text="{x:Bind CustomerCode}" />
+                            <TextBlock Name="CustomerNameTextBlock" Text="{x:Bind Name}" />
                         </StackPanel>
                     </DataTemplate>
                 </AutoSuggestBox.ItemTemplate>
             </AutoSuggestBox>
 
+            <TextBlock
+                Name="SelectedCustomerNameTextBlock"
+                Padding="10"
+                RelativePanel.RightOf="CustomerSearchBox"
+                Text="{x:Bind ViewModel.SelectedCustomer.Name, Mode=OneWay}" />
 
-        </StackPanel>
+            <ComboBox
+                Name="TransactionTypeComboBox"
+                IsEditable="False"
+                RelativePanel.Below="CustomerSearchBox"
+                Text="{x:Bind ViewModel.TransactionType, Mode=TwoWay}">
+                <ComboBoxItem Content="Order" />
+                <ComboBoxItem Content="Invoice" />
+                <ComboBoxItem Content="Credit" />
+            </ComboBox>
+
+        </RelativePanel>
 
         <Grid Grid.Row="2">
 
@@ -141,14 +157,14 @@
                             <DataTemplate x:DataType="data:Product">
                                 <StackPanel Orientation="Horizontal" Spacing="10">
                                     <TextBlock Name="ProductCodeTextBlock" Text="{x:Bind ProductCode}" />
-                                    <TextBlock Text="{x:Bind ProductName}" />
+                                    <TextBlock Name="ProductNameTextBlock" Text="{x:Bind ProductName}" />
                                 </StackPanel>
                             </DataTemplate>
                         </AutoSuggestBox.ItemTemplate>
                     </AutoSuggestBox>
 
                     <TextBlock
-                        Name="ProductNameTextBlock"
+                        Name="SelectedProductNameTextBlock"
                         Padding="10"
                         VerticalAlignment="Bottom"
                         Text="{x:Bind ViewModel.SelectedTransactionDetail.ProductName, Mode=OneWay}" />
@@ -194,6 +210,7 @@
             </RelativePanel>
 
 
+
             <controls:DataGrid
                 Name="TransactionDetailsDataGrid"
                 Grid.Row="0"
@@ -203,6 +220,7 @@
                 ItemsSource="{x:Bind ViewModel.TransactionDetailsList}"
                 SelectionChanged="TransactionDetailsDataGrid_SelectionChanged"
                 SelectionMode="Single">
+
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn
                         Binding="{Binding ProductCode}"
@@ -224,23 +242,17 @@
                         Binding="{Binding Value}"
                         Header="Value"
                         IsReadOnly="True" />
-
                     <controls:DataGridTemplateColumn>
                         <controls:DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="viewmodels:EditTransactionWindowViewModel">
+
                                 <Button
                                     Name="TransactionDetailsDataGridEditButton"
                                     Click="TransactionDetailsDataGridEditButton_Click"
                                     Content="&#xE104;"
-                                    FontFamily="Segoe MDL2 Assets" />
-
-                                <!--<FontIcon
-                                    Name="TransactionDetailsDataGridEdit"
                                     FontFamily="Segoe MDL2 Assets"
-                                    Glyph="&#xE104;"
-                                    PointerEntered="TransactionDetailsDataGridIcon_PointerEntered"
-                                    PointerExited="TransactionDetailsDataGridIcon_PointerExited"
-                                    PointerPressed="TransactionDetailsDataGridEdit_PointerPressed" />-->
+                                    Visibility="{x:Bind TransactionDetailGridRowSelected, Mode=OneWay}" />
+
                             </DataTemplate>
                         </controls:DataGridTemplateColumn.CellTemplate>
                     </controls:DataGridTemplateColumn>

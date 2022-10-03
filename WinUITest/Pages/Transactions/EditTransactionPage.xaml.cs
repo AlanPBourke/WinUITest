@@ -21,8 +21,8 @@ public sealed partial class EditTransactionPage : Page
     private EditTransactionWindowViewModel ViewModel;
 
     public ICommand AddDetailLineCommand => new RelayCommand(NewTransactionDetail);
-    public ICommand SaveDetailLineCommand => new RelayCommand(SaveTransactionDetailChange);
-    public ICommand CancelDetailLineCommand => new RelayCommand(CancelTransactionDetailChange);
+    public ICommand SaveDetailLineCommand => new RelayCommand(SaveDetailLine);
+    public ICommand CancelDetailLineCommand => new RelayCommand(CancelDetailLine);
 
     public EditTransactionPage()
     {
@@ -67,22 +67,25 @@ public sealed partial class EditTransactionPage : Page
     }
 
 
-    private void SaveTransactionDetailChange()
+    private void SaveDetailLine()
     {
         if (ViewModel.SelectedTransactionDetail.HasErrors == false)
         {
             ViewModel.SaveTransactionDetailChange();
             ViewModel.SearchProductCode = string.Empty;
-            TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
+            //TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
+            SetFirstGridRow();
         }
 
     }
 
-    public void CancelTransactionDetailChange()
+    public void CancelDetailLine()
     {
         ViewModel.CancelTransactionDetailChange();
         ViewModel.SearchProductCode = string.Empty;
-        TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
+        //TransactionDetailsDataGrid.SelectedIndex = -1;      // Otherwise SelectionChanged won't fire when there is only 1 item.
+        SetFirstGridRow();
+
     }
 
 
@@ -90,7 +93,7 @@ public sealed partial class EditTransactionPage : Page
     {
         if (ViewModel.SelectedTransactionDetail != null)
         {
-            ViewModel.DeleteTransactionDetail();
+            ViewModel.DeleteSelectedDetailItem();
             // DeleteButton.Flyout.Hide();
         }
         //SetMode("navigate");
@@ -110,15 +113,23 @@ public sealed partial class EditTransactionPage : Page
         DataGrid g = sender as DataGrid;
         if (g != null && g.SelectedItem != null)
         {
+            Debug.WriteLine($"SelectionChanged, SelectedIndex:{TransactionDetailsDataGrid.SelectedIndex}");
             var txn = g.SelectedItem as TransactionDetailViewModel;
-            ViewModel.SetTransactionDetail(txn);
-            ViewModel.TransactionDetailGridRowSelected = true;
+            SetSelectedGridRow(txn);
         }
         else
         {
             ViewModel.TransactionDetailGridRowSelected = false;
         }
     }
+
+    private void SetSelectedGridRow(TransactionDetailViewModel t)
+    {
+        ProductSearchBox.Text = t.ProductCode;
+        ViewModel.SetTransactionDetail(t);
+        ViewModel.TransactionDetailGridRowSelected = true;
+    }
+
 
     private void Page_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
@@ -186,6 +197,8 @@ public sealed partial class EditTransactionPage : Page
             ViewModel.SetSelectedProduct2(product);
             //ViewModel.SetSelectedProduct(args.SelectedItem as Product);
             //ViewModel.SelectedTransactionDetail.Price = product.Price;
+            //ViewModel.SelectedTransactionDetail.Price = product.Price;
+            //ViewModel.SelectedTransactionDetail.Price = product.Price;
             //ViewModel.SelectedTransactionDetail.ProductCode = product.ProductCode;
         }
         else
@@ -213,7 +226,7 @@ public sealed partial class EditTransactionPage : Page
         if (args.ChosenSuggestion != null && args.ChosenSuggestion is Customer)
         {
             //User selected an item, take an action
-            ViewModel.SetSelectedCustomer(args.ChosenSuggestion as Customer);
+            SetSelectedCustomer(args.ChosenSuggestion as Customer);
 
         }
         else if (!string.IsNullOrEmpty(args.QueryText))
@@ -222,7 +235,7 @@ public sealed partial class EditTransactionPage : Page
             var suggestions = ViewModel.SearchCustomers(sender.Text);
             if (suggestions.Count > 0)
             {
-                ViewModel.SetSelectedCustomer(suggestions.FirstOrDefault());
+                SetSelectedCustomer(suggestions.FirstOrDefault());
             }
         }
     }
@@ -232,7 +245,7 @@ public sealed partial class EditTransactionPage : Page
         if (args.SelectedItem is Customer customer)
         {
             sender.Text = customer.CustomerCode;
-            ViewModel.SetSelectedCustomer(args.SelectedItem as Customer);
+            SetSelectedCustomer(args.SelectedItem as Customer);
         }
     }
 
@@ -249,28 +262,43 @@ public sealed partial class EditTransactionPage : Page
         }
     }
 
+    private void SetSelectedCustomer(Customer c)
+    {
+        ViewModel.SetSelectedCustomer(c);
+    }
+
     private void SetFirstGridRow()
     {
         if (ViewModel.TransactionDetailsList.Count > 0)
         {
             TransactionDetailsDataGrid.SelectedIndex = 0;
         }
+        else
+        {
+            TransactionDetailsDataGrid.SelectedIndex = -1;
+        }
     }
 
     private void TransactionDetailsDataGridEditButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
+        //TransactionDetailsDataGrid.SelectionChanged(sender);
         if (TransactionDetailsDataGrid.SelectedItem != null)
         {
             var txn = TransactionDetailsDataGrid.SelectedItem as TransactionDetailViewModel;
             ViewModel.EditTransactionDetail(txn);
+            SetFirstGridRow();
         }
     }
 
     private void TransactionDetailsDataGridDeleteButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
+
         if (TransactionDetailsDataGrid.SelectedItem != null)
         {
-            ViewModel.DeleteTransactionDetail();
+            //var selected = TransactionDetailsDataGrid.SelectedItem as TransactionDetailViewModel;
+            //ViewModel.DeleteSelectedDetailItem(seleceted.);
+            ViewModel.DeleteSelectedDetailItem();
+            SetFirstGridRow();
         }
     }
 }
